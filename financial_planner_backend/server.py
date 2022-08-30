@@ -40,24 +40,22 @@ def save_user():
     except Exception as e:
         return Response(f"Unexpected error: {e}", status=500)
 
-@app.get("/user")
-
-def get_user():
+@app.post("/user/<user_name>")
+def get_user(user_name):
     print("this works")
     try:
-        attempt = request.get_json()
-        print(attempt)
-        user = database.users.find({"user_name":attempt["user_name"]})
-        print(user)
+        data = request.get_json()
+        print(data['user_name'])
+        user = database.users.find_one({"user_name": user_name})
+    
         if not user:
-            return abort (404, "Account not found")
-        # if user_password != user["user_password"]:
-        #     return abort(404, "Password does't match")
-
-        user["_id"] = str(user["_id"])
-
+            return abort(400, "User not valid")
+        
+        if user['user_password'] != data['user_password']:
+            return abort(400, "Incorrect password")
+        
+        user['_id'] = str(user['_id'])
         return json.dumps(user)
-        # return True
 
     except Exception as e:
         return Response(f"Unexpected error: {e}", status=500)

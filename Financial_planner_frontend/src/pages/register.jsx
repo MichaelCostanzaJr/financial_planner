@@ -1,9 +1,12 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import DataService from "../services/dataService"
 
 
 const Register = () => {
     const [user,setUser] = useState({})
+
+    let  navigate = useNavigate()
 
     const onChange = (e) => {
         let name = e.target.name
@@ -14,12 +17,15 @@ const Register = () => {
 
     const saveUser = async() => {
         let service = new DataService()
-        if (user.user_password != user.user_re_password){
+        if (user.user_password !== user.user_re_password){
             alert("Passwords don't match")
             return
         }
         console.log(user)
-        let data = await service.postUser(user)
+        await service.postUser(user)
+
+        let path = ('/')
+        navigate(path)
     }
 
 

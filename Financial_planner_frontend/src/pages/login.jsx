@@ -15,13 +15,17 @@ const Login = () => {
         setUser(prev => ({...prev, [name]:val}))
     }
 
-    const login = async() => {
-        console.log(user.user_name)
+    const login = async(e) => {
+        e.preventDefault()
         let service = new DataService()
-        let data = await service.login(user)
+        let data = await service.login({
+            "user_name": user.user_name,
+            "user_password": user.user_password
+        })
+
         console.log(data)
 
-        if(data["user_name" === user.user_name]){
+        if(data["user_name"] === user.user_name){
             let path = "/home"
             navigate(path)
         }
