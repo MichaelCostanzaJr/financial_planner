@@ -42,9 +42,11 @@ def save_user():
 
 @app.get("/user")
 
-def get_user(attempt):
+def get_user():
     print("this works")
     try:
+        attempt = request.get_json()
+        print(attempt)
         user = database.users.find({"user_name":attempt["user_name"]})
         print(user)
         if not user:
