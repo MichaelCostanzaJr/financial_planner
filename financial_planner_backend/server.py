@@ -4,6 +4,7 @@ from flask import Flask, Response, abort, request
 from config import database
 from bson import ObjectId
 from flask_cors import CORS
+import hashlib
 
 app = Flask("Financial_Planner_React")
 CORS(app)
@@ -30,10 +31,14 @@ def save_user():
         if not "user_password" in user or len(user["user_password"]) < 6:
             return abort(400, "You must have a password with at least 6 characters")
 
+        # Encrypt password
+        password = user['user_password'].encode()
+        hashPassword = hashlib.sha256(password)
+        hashPassword = hashPassword.hexdigest()
+        user["user_password"] = str(hashPassword)
         database.users.insert_one(user)
-
+        
         user["_id"] = str(user["_id"])
-
         print(user)
         return json.dumps(user)
     
@@ -45,12 +50,20 @@ def get_user(user_name):
     print("this works")
     try:
         data = request.get_json()
-        print(data['user_name'])
+        print(data)
         user = database.users.find_one({"user_name": user_name})
     
         if not user:
             return abort(400, "User not valid")
         
+        password = data['user_password'].encode()
+        hashPassword = hashlib.sha256(password)
+        hashPassword = hashPassword.hexdigest()
+        data["user_password"] = str(hashPassword)
+        
+        print(hashPassword)
+        print("\n")
+        print(user['user_password'])
         if user['user_password'] != data['user_password']:
             return abort(400, "Incorrect password")
         

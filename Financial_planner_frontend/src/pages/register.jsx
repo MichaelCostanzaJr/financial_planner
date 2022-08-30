@@ -21,8 +21,10 @@ const Register = () => {
             alert("Passwords don't match")
             return
         }
+        let copy = {...user}
+        copy['user_re_password'] = ""
         console.log(user)
-        await service.postUser(user)
+        await service.postUser(copy)
 
         let path = ('/')
         navigate(path)
