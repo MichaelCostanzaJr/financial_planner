@@ -40,8 +40,8 @@ const Register = () => {
                 <div className="form">
                     <input type="text" name="user_email" onChange={onChange} placeholder='Enter Your Email' />
                     <input type="text" name="user_name" onChange={onChange} placeholder='Create a User Name' />
-                    <input type="text" name="user_password" onChange={onChange} placeholder='Enter a Password' />
-                    <input type="text" name="user_re_password" onChange={onChange} placeholder='Re Enter Password' />
+                    <input type="password" name="user_password" onChange={onChange} placeholder='Enter a Password' />
+                    <input type="password" name="user_re_password" onChange={onChange} placeholder='Re Enter Password' />
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={saveUser}>Register</button>

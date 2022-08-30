@@ -40,7 +40,7 @@ const Login = () => {
             <div className="container">
                 <div className="form">
                     <input type="text" name="user_name" onChange={onChange} placeholder="Username" />
-                    <input type="text" name="user_password" onChange={onChange} placeholder="Password" />
+                    <input type="password" name="user_password" onChange={onChange} placeholder="Password" />
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={login}>Login</button>
