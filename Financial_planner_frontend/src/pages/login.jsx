@@ -49,6 +49,15 @@ const Login = () => {
         navigate(path)
     }
 
+    const recoverUsername = () => {
+        let path = "/recovery/username"
+        navigate(path)
+    }
+
+    const recoverPassword = () => {
+        let path = "/recovery/password"
+        navigate(path)
+    }
 
     return (
 
@@ -65,8 +74,8 @@ const Login = () => {
                     <button className="btn" onClick={register}>Register</button>
                 </div>
                 <div className="recovery">
-                    <button className="btn-recovery">Forgot User Name</button>
-                    <button className="btn-recovery">Forgot Password</button>
+                    <button className="btn-recovery" onClick={recoverUsername}>Forgot User Name</button>
+                    <button className="btn-recovery" onClick={recoverPassword}>Forgot Password</button>
                 </div>
             </div>
                 

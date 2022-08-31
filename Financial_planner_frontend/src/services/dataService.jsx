@@ -22,6 +22,26 @@ class DataService{
         return newdata
     }
 
+    async recoverUsername(email){
+        console.log("Attempting to send recovery email..")
+        let data
+        await axios.post("http://127.0.0.1:5000/api/recover-username", email).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
+        return data
+    }
+
+    async recoverPassword(user){
+        console.log("Attempting to recover password..")
+        let data
+        await axios.post('http://127.0.0.1:5000/api/recover-password', user).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
+        return data
+    }
+
     async getBudgets(){
         let response = await axios.get('http://127.0.0.1:5000/api/budgets')
         let data = response.data

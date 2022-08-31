@@ -6,6 +6,9 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Home from "./pages/home";
 import Navbar from "./components/navbar";
+import RecoverUsername from "./pages/forgotUsername";
+import RecoverPassword from "./pages/recoverPassword";
+import RecoverSuccess from "./pages/recoverSuccess";
 
 
 function App() {
@@ -17,6 +20,9 @@ function App() {
             <Route path= "/" exact element= {<Login/>}/>
             <Route path= "/register" exact element= {<Register/>}/>
             <Route path= "/home" exact element= {<Home/>}/>
+            <Route path= "/recovery/username" exact element= {<RecoverUsername/>}/>
+            <Route path= "/recovery/password" exact element= {<RecoverPassword/>}/>
+            <Route path= "/recovery/success" exact element= {<RecoverSuccess/>}/>
           </Routes>
       </Router>
     </div>

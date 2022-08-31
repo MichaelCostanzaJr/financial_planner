@@ -5,6 +5,9 @@ from config import database
 from bson import ObjectId
 from flask_cors import CORS
 import hashlib
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 app = Flask("Financial_Planner_React")
 CORS(app)
@@ -113,9 +116,82 @@ def save_budget():
     except Exception as e:
         return Response(f"Unexpected error: {e}", status=500)
 
-
+@app.post('/api/recover-username')
+def send_recovery():
+    responseData = []
+    data = request.get_json()
+    user = database.users.find_one({"user_email": data['user_email']})
+    
+    if not user:
+        responseData.append(False)
+        responseData.append("Email not found...")
+        return json.dumps(responseData)
+    
+    username = user['user_name']
+    message = Mail(
+        from_email ='finsternavy@gmail.com',
+        to_emails = str(user['user_email']),
+        subject='Financial Planner Account Recovery',
+        html_content=f'<strong>Your username is: {username}</strong>'
+    )
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
         
-
+        responseData.append(True)
+        return json.dumps(responseData)
+    
+    except Exception as e:
+        return Response(f"Unexpected error: {e}", status=500)
+        
+@app.post('/api/recover-password')
+def send_password_recovery():
+    recoverData = []
+    data = request.get_json()
+    user = database.users.find_one({"user_email": data['user_email']})
+    
+    if not user:
+        recoverData.append(False)
+        recoverData.append("The data you entered does not match our records...")
+        return json.dumps(recoverData)
+    
+    if user['user_name'] != data['user_name']:
+        recoverData.append(False)
+        recoverData.append("The data you entered does not match our records...")
+        return json.dumps(recoverData)
+    
+    # make a copy of the user to replace later
+    update = user
+    
+    # change user's password to 'reset' encrypted.
+    password = 'reset'.encode()
+    hashPassword = hashlib.sha256(password)
+    hashPassword = hashPassword.hexdigest()
+    update["user_password"] = str(hashPassword)
+    
+    database.users.find_one_and_replace({'user_name': data['user_name']}, update)
+    
+    message = Mail(
+        from_email ='finsternavy@gmail.com',
+        to_emails = str(user['user_email']),
+        subject='Financial Planner Account Recovery',
+        html_content=f'<strong>Your temporary password is: reset </strong>'
+    )
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+        
+        recoverData.append(True)
+        return json.dumps(recoverData)
+    
+    except Exception as e:
+        return Response(f"Unexpected error: {e}", status=500)
         
         
     
