@@ -79,6 +79,7 @@ def get_user(user_name):
         
         user['_id'] = str(user['_id'])
         returnData.append(True)
+        returnData.append({'user_name': user['user_name'], "user_email": user['user_email']})
         return json.dumps(returnData)
 
     except Exception as e:

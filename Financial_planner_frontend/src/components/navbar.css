@@ -120,7 +120,7 @@
     color: var(--secondary-color);
     margin-bottom: 10px;
     border-radius: 10px;
-    font-size: 1.4rem;
+    font-size: 1rem;
 }
 .pop-out-link > .dont-disable:hover{
     color: var(--primary-color);
@@ -136,4 +136,11 @@
 }
 .pop-out-link .reg-btn{
     cursor: pointer;
+}
+.horizontal-line{
+    border: none;
+    border-bottom: 1px solid var(--primary-color);
+}
+.user-info{
+    color: var(--income-primary-color);
 }

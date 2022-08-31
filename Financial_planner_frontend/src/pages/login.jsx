@@ -1,6 +1,7 @@
 import logo from "../img/logo-no-bg.png"
 import DataService from "../services/dataService"
-import { useState } from 'react';
+import DataContext from "../context/dataContext";
+import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import "../components/login.css"
 
@@ -8,6 +9,8 @@ const Login = () => {
 
     const[user, setUser] = useState({})
     let navigate = useNavigate()
+    let currentUser = useContext(DataContext).loginUser
+    let toggleActiveUser = useContext(DataContext).toggleActiveUser
 
     const onChange = (e) => {
         let name = e.target.name
@@ -39,6 +42,8 @@ const Login = () => {
             userPassword.classList.add("error")
         }
         if (data[0] === true){
+            currentUser(data[1])
+            toggleActiveUser()
             let path = "/home"
             navigate(path)
         }
