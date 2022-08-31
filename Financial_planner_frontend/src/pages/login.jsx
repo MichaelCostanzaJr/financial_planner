@@ -2,6 +2,7 @@ import logo from "../img/logo-no-bg.png"
 import DataService from "../services/dataService"
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import "../components/login.css"
 
 const Login = () => {
 
@@ -18,14 +19,26 @@ const Login = () => {
     const login = async(e) => {
         e.preventDefault()
         let service = new DataService()
-        let data = await service.login({
-            "user_name": user.user_name,
-            "user_password": user.user_password
-        })
+        let data
+        if (!user.user_name || !user.user_password){
+            data = await service.login({
+                "user_name": "f",
+                "user_password": "f"
+            })
+        }else{
+            data = await service.login({
+                "user_name": user.user_name,
+                "user_password": user.user_password
+            })
+        }
 
-        console.log(data)
-
-        if(data["user_name"] === user.user_name){
+        if (data[0] === false){
+            let userName = document.querySelector('.user-name')
+            userName.classList.add("error")
+            let userPassword = document.querySelector('.user-password')
+            userPassword.classList.add("error")
+        }
+        if (data[0] === true){
             let path = "/home"
             navigate(path)
         }
@@ -44,8 +57,8 @@ const Login = () => {
             <img src={logo} alt="" className="logo" />
             <div className="container">
                 <div className="form">
-                    <input type="text" name="user_name" onChange={onChange} placeholder="Username" />
-                    <input type="password" name="user_password" onChange={onChange} placeholder="Password" />
+                    <input type="text" className="user-name" name="user_name" onChange={onChange} placeholder="Username" />
+                    <input type="password" className="user-password" name="user_password" onChange={onChange} placeholder="Password" />
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={login}>Login</button>

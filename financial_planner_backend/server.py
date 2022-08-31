@@ -52,23 +52,31 @@ def get_user(user_name):
         data = request.get_json()
         print(data)
         user = database.users.find_one({"user_name": user_name})
+        returnData = []
     
         if not user:
-            return abort(400, "User not valid")
-        
+            returnData.append(False)
+            returnData.append("Invalid user")
+            return json.dumps(returnData)
+            # return abort(400, "User not valid")
+            
         password = data['user_password'].encode()
         hashPassword = hashlib.sha256(password)
         hashPassword = hashPassword.hexdigest()
         data["user_password"] = str(hashPassword)
         
-        print(hashPassword)
-        print("\n")
-        print(user['user_password'])
+        # print(hashPassword)
+        # print("\n")
+        # print(user['user_password'])
         if user['user_password'] != data['user_password']:
-            return abort(400, "Incorrect password")
+            returnData.append(False)
+            returnData.append("Incorrect Password")
+            return json.dumps(returnData)
+            # return abort(400, "Incorrect password")
         
         user['_id'] = str(user['_id'])
-        return json.dumps(user)
+        returnData.append(True)
+        return json.dumps(returnData)
 
     except Exception as e:
         return Response(f"Unexpected error: {e}", status=500)
