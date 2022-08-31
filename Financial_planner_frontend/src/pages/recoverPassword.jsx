@@ -31,7 +31,7 @@ function RecoverPassword() {
         }
         
         if (response[0] === true){
-            let path = '/recovery/success'
+            let path = '/recovery/reset-password'
             navigate(path)
         }else{
             let userName = document.querySelector('.user-name')

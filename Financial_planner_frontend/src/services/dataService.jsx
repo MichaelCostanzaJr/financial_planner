@@ -42,6 +42,17 @@ class DataService{
         return data
     }
 
+    async resetPassword(passwordData){
+        console.log("Attempting to reset password...")
+        let data
+        await axios.post('http://127.0.0.1:5000/api/reset-password', passwordData).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
+
+        return data
+    }
+
     async getBudgets(){
         let response = await axios.get('http://127.0.0.1:5000/api/budgets')
         let data = response.data

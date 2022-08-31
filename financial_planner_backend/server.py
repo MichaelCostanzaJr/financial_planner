@@ -194,9 +194,32 @@ def send_password_recovery():
         return Response(f"Unexpected error: {e}", status=500)
         
         
+@app.post('/api/reset-password')
+def reset_password():
+    recoverData = []
     
+    data = request.get_json()
+    
+    password = data['temp_password'].encode()
+    hashPassword = hashlib.sha256(password)
+    hashPassword = hashPassword.hexdigest()
+    data["temp_password"] = str(hashPassword)
+    
+    user = database.users.find_one({"user_password": hashPassword})
+    
+    if not user:
+        recoverData.append(False)
+        recoverData.append("Incorrect temporary password. Please verify and try again.")
+        return json.dumps(recoverData)
+    
+    newPassword = data['new_password'].encode()
+    hashNewPassword = hashlib.sha256(newPassword).hexdigest()
+    
+    
+    database.users.find_one_and_update({"user_password": data['temp_password']}, { '$set' : {'user_password': hashNewPassword}})
 
-
+    recoverData.append(True)
+    return json.dumps(recoverData)
 
 
 app.run(debug=True)
