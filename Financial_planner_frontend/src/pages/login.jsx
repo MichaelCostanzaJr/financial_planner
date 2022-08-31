@@ -31,6 +31,11 @@ const Login = () => {
         }
     }
 
+    const register = () => {
+        let path = "/register"
+        navigate(path)
+    }
+
 
     return (
 
@@ -44,7 +49,7 @@ const Login = () => {
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={login}>Login</button>
-                    <button className="btn">Register</button>
+                    <button className="btn" onClick={register}>Register</button>
                 </div>
                 <div className="recovery">
                     <button className="btn-recovery">Forgot User Name</button>

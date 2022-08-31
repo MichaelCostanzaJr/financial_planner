@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import DataService from "../services/dataService"
+import "../components/register.css"
 
 
 const Register = () => {
@@ -30,7 +31,10 @@ const Register = () => {
         navigate(path)
     }
 
-
+    const cancel = () => {
+        let path = "/"
+        navigate(path)
+    }
 
 
     return (
@@ -45,7 +49,7 @@ const Register = () => {
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={saveUser}>Register</button>
-                    <button className="btn">Cancel</button>
+                    <button className="btn" onClick={cancel}>Cancel</button>
                 </div>
             </div>
         </div>
