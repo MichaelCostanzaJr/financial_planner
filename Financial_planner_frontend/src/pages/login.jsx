@@ -45,9 +45,9 @@ const Login = () => {
         if (data[0] === true){
             currentUser(data[1])
             toggleActiveUser()
-            let budgets = await service.getBudgets()
-            setBudgets(budgets)
-            setBudgets()
+            // let budgets = await service.getBudgets()
+            // setBudgets(budgets)
+            // setBudgets()
             let path = "/home"
             navigate(path)
         }
