@@ -61,21 +61,16 @@ def get_user(user_name):
             returnData.append(False)
             returnData.append("Invalid user")
             return json.dumps(returnData)
-            # return abort(400, "User not valid")
             
         password = data['user_password'].encode()
         hashPassword = hashlib.sha256(password)
         hashPassword = hashPassword.hexdigest()
         data["user_password"] = str(hashPassword)
         
-        # print(hashPassword)
-        # print("\n")
-        # print(user['user_password'])
         if user['user_password'] != data['user_password']:
             returnData.append(False)
             returnData.append("Incorrect Password")
             return json.dumps(returnData)
-            # return abort(400, "Incorrect password")
         
         user['_id'] = str(user['_id'])
         returnData.append(True)
@@ -85,7 +80,7 @@ def get_user(user_name):
     except Exception as e:
         return Response(f"Unexpected error: {e}", status=500)
 
-#get budgets from the database
+
 @app.get("/api/budgets")
 def get_budgets():
     results = []
@@ -97,7 +92,6 @@ def get_budgets():
     return json.dumps(results)
 
 
-# Add a budget to the database
 @app.post("/api/budgets")
 def save_budget():
     try:
@@ -171,9 +165,8 @@ def send_password_recovery():
     password = 'reset'.encode()
     hashPassword = hashlib.sha256(password)
     hashPassword = hashPassword.hexdigest()
-    update["user_password"] = str(hashPassword)
     
-    database.users.find_one_and_replace({'user_name': data['user_name']}, update)
+    database.users.find_one_and_update({'user_name': data['user_name']}, { '$set': {'user_password': hashPassword}})
     
     message = Mail(
         from_email ='finsternavy@gmail.com',

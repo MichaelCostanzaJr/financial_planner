@@ -11,6 +11,7 @@ const Login = () => {
     let navigate = useNavigate()
     let currentUser = useContext(DataContext).loginUser
     let toggleActiveUser = useContext(DataContext).toggleActiveUser
+    let setBudgets = useContext(DataContext).setUserBudgets
 
     const onChange = (e) => {
         let name = e.target.name
@@ -44,6 +45,9 @@ const Login = () => {
         if (data[0] === true){
             currentUser(data[1])
             toggleActiveUser()
+            let budgets = await service.getBudgets()
+            setBudgets(budgets)
+            setBudgets()
             let path = "/home"
             navigate(path)
         }
@@ -83,7 +87,6 @@ const Login = () => {
                     <button className="btn-recovery" onClick={recoverPassword}>Forgot Password</button>
                 </div>
             </div>
-                
         </div>
 
     )

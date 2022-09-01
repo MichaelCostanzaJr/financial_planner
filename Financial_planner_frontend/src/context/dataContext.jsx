@@ -5,10 +5,13 @@ let DataContext = createContext({
 
     user: {},
     activeUser: false,
+    userBudgets: [],
 
     loginUser: () => {},
     logoutUser: () => {},
-    toggleActiveUser: () => {}
+    toggleActiveUser: () => {},
+    setUserBudgets: () => {},
+    dumpUserBudgets: () => {}
 })
 
 export default DataContext

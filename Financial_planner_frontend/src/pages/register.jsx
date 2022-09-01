@@ -69,7 +69,7 @@ const Register = () => {
                         <option value="@gmail.com">@gmail.com</option>
                         <option value="@outlook.com">@outlook.com</option>
                         <option value="@aol.com">@aol.com</option>
-                        <option value="@icloud.com">@cloud.com</option>
+                        <option value="@icloud.com">@icloud.com</option>
                         <option value="@yahoo.com">@yahoo.com</option>
                         <option value="@hotmail.com">@hotmail.com</option>
                         <option value="@protonmail.com">@protonmail.com</option>

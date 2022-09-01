@@ -31,7 +31,13 @@ const Navbar = () => {
             let path = '/register'
             navigate(path)
 
-        }else if (e.target.matches('.log-out')){
+        }else if(e.target.matches(".log-in")){
+
+            toggle_menu(e, currentDropDown)
+            let path = '/'
+            navigate(path)
+
+        } else if (e.target.matches('.log-out')){
 
             logUserOut()
             toggleActiveUser()
@@ -91,7 +97,7 @@ const Navbar = () => {
         })
     }
 
-    
+
 
     return (
         <div className="navbar">
@@ -104,13 +110,13 @@ const Navbar = () => {
                     <Toggle/>
                     {/* This section will contain javascript to check if user is logged in and display different buttons depending on if user logged in or not */}
                     {!activeUser  &&
-                        <div className="pop-out-link">
-                            <div onClick={menu_Click} className="dont-disable log-out">Login</div>
+                        <>
+                            <div onClick={menu_Click} className="dont-disable log-in">Login</div>
                             <div onClick={menu_Click} className="dont-disable reg-btn">Register</div>
-                        </div>
+                        </>
                     }
                     {activeUser &&
-                        <div className="pop-out-link">
+                        <>
                             <div onClick={menu_Click} className="dont-disable log-out">Logout</div>
                             <hr className="horizontal-line" />
                             <div onClick={menu_Click} className="dont-disable home">Home</div>
@@ -123,7 +129,7 @@ const Navbar = () => {
                             <h3>Account Info</h3>
                             <h4 className="user-info">Welcome {currentUser.user_name}!</h4>
                             <div onClick={menu_Click} className="dont-disable change-password" >Change Password</div>
-                        </div>
+                        </>
                     }
                 </div>
                 

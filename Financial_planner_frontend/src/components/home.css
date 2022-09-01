@@ -7,7 +7,7 @@
     max-height: 100vh;
 }
 
-.home .container .tile{
+.tile{
     position: relative;
     font-size: 1em;
     padding-block: calc(50% - 30px);

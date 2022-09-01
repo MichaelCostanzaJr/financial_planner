@@ -5,6 +5,7 @@ const GlobalDataProvider = (props) => {
 
     const [user, setUser] = useState({})
     const [activeUser, setActiveUser] = useState(false)
+    const [budgets, setBudgets] = useState([])
 
     const loginUser = (currentUser) => {
         console.log("Global user logging in")
@@ -18,16 +19,19 @@ const GlobalDataProvider = (props) => {
     }
 
     const toggleActiveUser = () => {
-
         if (activeUser === false){
-
             setActiveUser(true)
-            
         }else{
-
             setActiveUser(false)
-            
         }
+    }
+
+    const setUserBudgets = (budgets) => {
+        setUserBudgets(budgets)
+    }
+
+    const dumpUserBudgets = () => {
+
     }
 
     return (
@@ -35,10 +39,13 @@ const GlobalDataProvider = (props) => {
 
             user: user,
             activeUser: activeUser,
+            userBudgets: budgets,
 
             loginUser: loginUser,
             logoutUser: logoutUser,
-            toggleActiveUser: toggleActiveUser
+            toggleActiveUser: toggleActiveUser,
+            setUserBudgets: setUserBudgets,
+            dumpUserBudgets: dumpUserBudgets
 
         }}>
             {props.children}
