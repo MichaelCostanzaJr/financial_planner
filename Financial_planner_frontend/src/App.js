@@ -12,6 +12,7 @@ import RecoverPassword from "./pages/recoverPassword";
 import RecoverSuccess from "./pages/recoverSuccess";
 import RecoverPasswordReset from "./pages/recoverPasswordReset";
 import RecoverPasswordResetSuccess from "./pages/recoveryPasswordResetSuccess";
+import MortgageCalculator from "./pages/mortgageCalc";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
               <Route path= "/recovery/success" exact element= {<RecoverSuccess/>}/>
               <Route path= "/recovery/reset-password" exact element= {<RecoverPasswordReset/>}/>
               <Route path= "/recovery/reset-password-success" exact element= {<RecoverPasswordResetSuccess/>}/>
+              <Route path= "/mortgage-calculator" exact element= {<MortgageCalculator/>}/>
             </Routes>
         </Router>
       </GlobalDataProvider>
