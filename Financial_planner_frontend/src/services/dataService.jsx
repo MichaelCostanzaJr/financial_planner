@@ -54,10 +54,12 @@ class DataService{
     }
 
     // will need to change this in the backend to get only budgtes belonging to the logged in user
-    async getBudgets(id){
-        let response = await axios.get('http://127.0.0.1:5000/api/budgets/' + id)
-        let data = response.data
-        console.log(data)
+    async getBudgets(user_name){
+        let data
+        await axios.get('http://127.0.0.1:5000/api/budgets/' + user_name).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
 
         return data
     }

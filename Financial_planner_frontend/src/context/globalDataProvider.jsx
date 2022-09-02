@@ -9,9 +9,10 @@ const GlobalDataProvider = (props) => {
 
     const loginUser = (currentUser) => {
         console.log("Global user logging in")
-
+        
         setUser(currentUser)
-
+        
+        console.log(currentUser)
     }
 
     const logoutUser = () => {
@@ -27,7 +28,7 @@ const GlobalDataProvider = (props) => {
     }
 
     const setUserBudgets = (budgets) => {
-        setUserBudgets(budgets)
+        setBudgets(budgets)
     }
 
     const dumpUserBudgets = () => {

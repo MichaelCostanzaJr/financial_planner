@@ -57,7 +57,9 @@ const Navbar = () => {
             }
 
         }else if(e.target.matches('.budget-home')){
-
+            toggle_menu(e, currentDropDown)
+            let path = "/budget/home"
+            navigate(path)
             
 
         }else if(e.target.matches('.debt-snowball')){

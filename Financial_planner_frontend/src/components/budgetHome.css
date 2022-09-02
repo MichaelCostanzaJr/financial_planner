@@ -1,4 +1,24 @@
-.budget-home .container .tile .tile-btn{
-    width: 100%;
-    min-height: 100%;
+.budget-home .container{
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - 10px));
+    gap: 20px;
+}
+
+.budget-home .container .sub-tile{
+    background-color: var(--nav-light);
+}
+
+.new-tile{
+    grid-column: 1 / 3;
+    padding: 50px;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.view-span{
+    position: absolute;
+    top: calc(50% - 20px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--secondary-color);
 }

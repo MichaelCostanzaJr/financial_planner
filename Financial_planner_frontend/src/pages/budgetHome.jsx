@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import DataContext from "../context/dataContext"
 import DataService from "../services/dataService"
 import "../components/budgetHome.css"
@@ -6,25 +6,46 @@ import "../components/budgetHome.css"
 
 const BudgetHome = () => {
 
-    let budgets = useContext(DataContext).userBudgets
+    let setUserBudgets = useContext(DataContext).setUserBudgets
+    let userBudgets = useContext(DataContext).userBudgets
+    let user = useContext(DataContext).user
+
+    const loadUserBudgets = async() => {
+        let service = new DataService()
+        let data = await service.getBudgets(user.user_name)
+
+        setUserBudgets(data)
+    }
+
+    useEffect(() => {
+        loadUserBudgets()
+    }, [])
+
+    const viewBudget = () => {
+
+    }
+
+    const newBudget = () => {
+
+    }
 
     return (
         <div className="budget-home">
             <div className="container">
-                <div className="tile">
-                    <button className="btn tile-btn">View Budget</button>
-                    <select className="budgets-dropdown" name="budget_list">
+                <div className="tile new-tile" onClick={newBudget}>New Budget</div>
+                    {/* <select className="budgets-dropdown" name="budget_list">
                         {
-                            budgets && // if budgets is not empty
-                            budgets.forEach(budget => {
-                                <option className="budget-option" key={budget.id} value={budget.id}>{budget.name}</option>
-                            })
+                            userBudgets.map(budget => (
+                                <option className="budget-option" key={budget._id} value={budget._id}>{budget.title}</option>
+                            ))
                         }
-                    </select>
-                </div>
-                <div className="tile">
-                    <button className="btn tile-btn">New Budget</button>
-                </div>
+                    </select> */}
+                    {
+                        userBudgets.map(budget => (
+                            <div  onClick={viewBudget} className="tile sub-tile" key={budget._id} value={budget._id}>
+                                <span className="view-span">View </span>{budget.title}</div>
+                        ))
+                    }
             </div>
         </div>
     )

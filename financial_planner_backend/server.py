@@ -81,14 +81,16 @@ def get_user(user_name):
         return Response(f"Unexpected error: {e}", status=500)
 
 
-@app.get("/api/budgets")
-def get_budgets():
+@app.get("/api/budgets/<user_name>")
+def get_budgets(user_name):
     results = []
-    cursor = database.budgets.find({})
+    cursor = database.budgets.find({"owner": user_name})
 
     for budget in cursor:
         budget["_id"] = str(budget["_id"])
         results.append(budget)
+        
+    print(results)
     return json.dumps(results)
 
 
