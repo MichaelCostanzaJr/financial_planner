@@ -31,24 +31,6 @@ const MortgageCalculator = () => {
                 <div className="btn-container">
                 <button className="btn">Calculate</button>
                 </div>
-            
-            
-                <table className="table">
-                    <tbody>
-                        <tr>
-                            <td>Estimated Mortgage</td><td>$1,700.00</td>
-                        </tr>
-                        <tr>
-                            <td>Estimated Mortgage</td><td>$1,700.00</td>
-                        </tr>
-                        <tr>
-                            <td>Estimated Mortgage</td><td>$1,700.00</td>
-                        </tr>
-                        <tr>
-                            <td>Estimated Mortgage</td><td className="surplus-data surplus">$1,700.00</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     )
