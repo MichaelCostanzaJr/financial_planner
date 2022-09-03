@@ -1,4 +1,5 @@
-import { useContext, useState, useEffect } from "react"
+import { useContext, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 import DataContext from "../context/dataContext"
 import DataService from "../services/dataService"
 import "../components/budgetHome.css"
@@ -7,8 +8,10 @@ import "../components/budgetHome.css"
 const BudgetHome = () => {
 
     let setUserBudgets = useContext(DataContext).setUserBudgets
+    let setActiveBudget = useContext(DataContext).updateActiveBudget
     let userBudgets = useContext(DataContext).userBudgets
     let user = useContext(DataContext).user
+    let navigate = useNavigate()
 
     const loadUserBudgets = async() => {
         let service = new DataService()
@@ -22,7 +25,8 @@ const BudgetHome = () => {
     }, [])
 
     const viewBudget = () => {
-
+        let path = "/view-budget"
+        navigate(path)
     }
 
     const newBudget = () => {
@@ -42,7 +46,11 @@ const BudgetHome = () => {
                     </select> */}
                     {
                         userBudgets.map(budget => (
-                            <div  onClick={viewBudget} className="tile sub-tile" key={budget._id} value={budget._id}>
+                            <div className="tile sub-tile" key={budget._id} value={budget._id} onClick={() => {
+                                setActiveBudget(budget)
+                                let path = "/view-budget"
+                                navigate(path)
+                            }}>
                                 <span className="view-span">View </span>{budget.title}</div>
                         ))
                     }

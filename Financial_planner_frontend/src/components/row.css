@@ -1,0 +1,35 @@
+.row{
+    display: grid;
+    grid-template-columns: 40px repeat(2, calc(50% - 45px)) 40px;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 4px;
+}
+
+.row > * {
+    height: 40px;
+    text-align: center;
+    
+}
+
+.row .btn{
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.row div{
+    padding-top: 7px;
+}
+
+.row .row-name{
+    background-color: var(--secondary-color);
+}
+
+.income{
+    background-color: var(--income-primary-color);
+}
+
+.expense{
+    background-color: var(--expense-primary-color);
+}

@@ -1,0 +1,63 @@
+.budget-title{
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.table-title{
+    margin: 0;
+    padding-block: 5px;
+    border: 1px solid var(--primary-color);
+    border-bottom: 5px solid var(--background-color);
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.income-table :nth-child(even) .income{
+    background-color: var(--income-secondary-color);
+}
+
+.expense-table :nth-child(odd) .expense{
+    background-color: var(--expense-secondary-color);
+}
+
+.divider{
+    margin-block: 40px;
+    border: none;
+    border-top: 3px solid var(--nav-light);
+    height: 3px;
+}
+
+.income-total,
+.expense-total{
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.income-total-label,
+.expense-total-label{
+    background-color: var(--primary-color);
+    padding-block: 5px;
+}
+
+.income-total-value,
+.expense-total-value{
+    padding-block: 5px;
+}
+
+.surplus-table{
+    border-radius: 10px;
+    overflow: hidden;
+}
+.surplus-table > * {
+    padding-block: 5px;
+}
+
+.surplus-title{
+    background-color: var(--primary-color);
+    padding-block: 5px;
+}
+
+.budget .btn-container{
+    margin-top: 40px;
+}
