@@ -71,11 +71,15 @@ const Navbar = () => {
             // add logic
 
         }else if(e.target.matches('.mortgage-calc')){
-
+            toggle_menu(e, currentDropDown)
+            let path = "/mortgage-calculator"
+            navigate(path)
             // add logic
 
         }else if(e.target.matches('.auto-calc')){
-
+            toggle_menu(e, currentDropDown)
+            let path = "/auto-calculator"
+            navigate(path)
             // add logic
 
         }else if(e.target.matches('.change-password')){
