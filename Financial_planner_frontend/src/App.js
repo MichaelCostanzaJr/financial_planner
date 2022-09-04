@@ -16,6 +16,7 @@ import MortgageCalculator from "./pages/mortgageCalc";
 import BudgetHome from "./pages/budgetHome";
 import ViewBudget from "./pages/viewBudget";
 import NewBudget from "./pages/newBudget"
+import AutoCalculator from "./pages/autoCalc";
 
 // add logic to get token when user logs in.  If no toke, prevent access to some pages and redirect to home if user attempts to access unauthorized pages
 
@@ -35,6 +36,7 @@ function App() {
               <Route path= "/recovery/reset-password" exact element= {<RecoverPasswordReset/>}/>
               <Route path= "/recovery/reset-password-success" exact element= {<RecoverPasswordResetSuccess/>}/>
               <Route path= "/mortgage-calculator" exact element= {<MortgageCalculator/>}/>
+              <Route path= "/auto-calculator" exact element= {<AutoCalculator/>}/>
               <Route path= "/budget/home" exact element= {<BudgetHome/>}/>
               <Route path= "/view-budget" exact element= {<ViewBudget/>}/>
               <Route path= "/new-budget" exact element= {<NewBudget/>}/>
