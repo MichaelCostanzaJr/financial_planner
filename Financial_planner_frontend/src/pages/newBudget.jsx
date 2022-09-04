@@ -48,13 +48,16 @@ const NewBudget = () => {
 
         <div className="view-budget">
             {!activeBudget.title &&
-            <div className="container">
-                <input type="text" onChange={onChange} placeholder="Enter Budget Name"/>
-                <div className="btn-container">
+            <>
+                <div className="container form">
+                    <input type="text" onChange={onChange} placeholder="Enter Budget Name"/>
+                </div>
+                <div className="container btn-container">
                     <button className="btn" onClick={updateTitle}>Apply Budget Name</button>
                 </div>
-            </div>
+            </>
             }
+            
             <Budget></Budget>
         </div>
     )
