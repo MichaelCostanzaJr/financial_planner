@@ -98,20 +98,32 @@ def get_budgets(user_name):
 def save_budget():
     try:
         budget = request.get_json()
-
-        # must have a title at least 3 chars long
-        if not "title" in budget or len(budget["title"]) < 3:
-            return abort(400, "Title is required and should have at least 3 chars")
-
+        response = []
+        old_budget = database.budgets.find_one({"title": budget['title']})
+        
+        if not old_budget:
+            
+            if not budget['title']:
+                response.append(False)
+                response.append("ERROR! Budget must have a title")
+                return json.dumps(response)
+                
+            database.budgets.insert_one(budget)
+            response.append(True)
+            response.append('New budget posted.')
+            return json.dumps(response)
+        
+        database.budgets.find_one_and_delete({"title": budget['title']})
         database.budgets.insert_one(budget)
-
-        budget["_id"] = str(budget["_id"])
-
-        print(budget)
-        return json.dumps(budget)
-
+        
+        message = "Budget has been updated successfully!"
+        response.append(True)
+        response.append(message)
+        return json.dumps(message)
+        
     except Exception as e:
-        return Response(f"Unexpected error: {e}", status=500)
+        return Response(f"Unexpected error: {e}", status=500) 
+
 
 @app.post('/api/recover-username')
 def send_recovery():

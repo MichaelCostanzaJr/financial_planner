@@ -30,7 +30,8 @@ const BudgetHome = () => {
     }
 
     const newBudget = () => {
-
+        let path = "/new-budget"
+        navigate(path)
     }
 
     return (
