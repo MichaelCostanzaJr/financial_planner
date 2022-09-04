@@ -13,24 +13,24 @@ const NewBudget = () => {
     const [title, setTitle] = useState('')
     
 
-    const newBudget = () => {
-        setActiveBudget({
-            "title": '',
-            "income": [],
-            "expenses": [],
-            "income_total": 0,
-            "expense_total": 0,
-            "surplus": 0,
-            "owner": activeUser['user_name'],
-            "next_index": 0
-        })
-    }
+    // const newBudget = () => {
+    //     setActiveBudget({
+    //         "title": '',
+    //         "income": [],
+    //         "expenses": [],
+    //         "income_total": 0.00,
+    //         "expense_total": 0.00,
+    //         "surplus": 0.00,
+    //         "owner": activeUser['user_name'],
+    //         "next_index": 0
+    //     })
+    // }
 
-    useEffect(() => {
-        newBudget()
-        console.log(activeBudget)
-        console.log(activeUser)
-    }, [])
+    // useEffect(() => {
+    //     newBudget()
+    //     console.log(activeBudget)
+    //     console.log(activeUser)
+    // }, [])
 
     const onChange = (e) => {
         let val = e.target.value

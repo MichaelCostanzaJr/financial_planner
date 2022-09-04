@@ -100,7 +100,7 @@ const AddRowTool = (props) => {
     const addIncomeRow = () => {
         if(incomeRow.source && incomeRow.value && incomeRow.frequency){
             let copy = {...incomeRow}
-            copy['value'] = convertToMonthly()
+            copy['value'] = parseFloat(convertToMonthly().toFixed(2))
             copy['index'] = props.index
             props.getIndex()
             insertIncomeRow(copy)
@@ -115,7 +115,8 @@ const AddRowTool = (props) => {
         if (expenseRow.expenseName && expenseRow.expenseValue && expenseRow.expensePriority){
             let copy = {...expenseRow}
             copy['index'] = props.index
-            copy['expenseValue'] = parseFloat(expenseRow['expenseValue'])
+            let expenseParsed = parseFloat(expenseRow['expenseValue'])
+            copy['expenseValue'] = parseFloat(expenseParsed.toFixed(2))
             props.getIndex()
             insertExpenseRow(copy)
             setExpenseRow({})
@@ -130,7 +131,13 @@ const AddRowTool = (props) => {
         let fields = document.querySelectorAll('.input')
         
         fields.forEach(element => {
-            element.value = null
+            element.value = ''
+            if (element.classList.contains("frequency")){
+                element.value = "default"
+            }
+            if (element.classList.contains("expensePriority")){
+                element.value = "default"
+            }
         })
     }
 
@@ -143,8 +150,8 @@ const AddRowTool = (props) => {
                     <div className="income-input-container">
                         <input name="source" type="text" className="source input" onChange={onChangeIncome} placeholder="Income Source"/>
                         <input name="value" type="number" className="value input" onChange={onChangeIncome} step={'0.01'} placeholder="$0.00"/>
-                        <select name="frequency" onChange={onChangeIncome} className="frequency input">
-                            <option value="">Frequency</option>
+                        <select name="frequency" onChange={onChangeIncome} className="frequency input dropdown">
+                            <option value="default">Frequency</option>
                             <option className="option" value="hr">hr</option>
                             <option className="option" value="weekly">weekly</option>
                             <option className="option" value="bi-weekly">bi-weekly</option>
@@ -169,6 +176,7 @@ const AddRowTool = (props) => {
                         <input name="expenseName" type="text" className="expenseName input" onChange={onChangeExpense} placeholder="Expense Name"/>
                         <input name="expenseValue" type="number" className="value input" onChange={onChangeExpense} step={'0.01'} placeholder="$0.00"/>
                         <select name="expensePriority" onChange={onChangeExpense} className="expensePriority input">
+                            <option value="default">Priority</option>
                             <option className="option" value="1">1 - required</option>
                             <option className="option" value="2">2 - financed</option>
                             <option className="option" value="3">3 - high</option>

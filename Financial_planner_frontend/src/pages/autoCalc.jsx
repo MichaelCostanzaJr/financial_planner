@@ -13,13 +13,13 @@ const AutoCalculator = () => {
                 <div className="form">
                     <input type="text" placeholder="Enter Car Price" className="price" />
                 <select className="dropdown" name="term" id="term">
-                <option value="" >Term</option>
-                <option value="12">12 Months</option>
-                <option value="24">24 Months</option>
-                <option value="36">36 Months</option>
-                <option value="48">48 Months</option>
-                <option value="60">60 Months</option>
-                <option value="72">72 Months</option>
+                    <option value="" >Term</option>
+                    <option value="12">12 Months</option>
+                    <option value="24">24 Months</option>
+                    <option value="36">36 Months</option>
+                    <option value="48">48 Months</option>
+                    <option value="60">60 Months</option>
+                    <option value="72">72 Months</option>
                 </select>
                 <input type="number" step={'0.01'} placeholder="APR %"/>
                 <input type="number" step={'0.01'} placeholder="Insurance Cost (Optional)"/>

@@ -8,6 +8,7 @@ import "../components/budgetHome.css"
 const BudgetHome = () => {
 
     let setUserBudgets = useContext(DataContext).setUserBudgets
+    let activeUser = useContext(DataContext).user
     let setActiveBudget = useContext(DataContext).updateActiveBudget
     let userBudgets = useContext(DataContext).userBudgets
     let user = useContext(DataContext).user
@@ -25,6 +26,16 @@ const BudgetHome = () => {
     }, [])
 
     const newBudget = () => {
+        setActiveBudget({
+            "title": '',
+            "income": [],
+            "expenses": [],
+            "income_total": 0.00,
+            "expense_total": 0.00,
+            "surplus": 0.00,
+            "owner": activeUser['user_name'],
+            "next_index": 0
+        })
         let path = "/new-budget"
         navigate(path)
     }

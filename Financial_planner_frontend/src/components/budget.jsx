@@ -52,7 +52,7 @@ const Budget = () => {
                     }
                     <div className="income-total">
                         <div className="income-total-label">Total Income</div>
-                        <div className="income income-total-value">${budget.income_total}</div>
+                        <div className="income income-total-value">${budget.income_total.toFixed(2)}</div>
                     </div>
                 </div>
                 <hr className="divider" />
@@ -66,7 +66,7 @@ const Budget = () => {
                     }
                     <div className="expense-total">
                         <div className="expense-total-label">Total expense</div>
-                        <div className="expense expense-total-value">${budget.expense_total}</div>
+                        <div className="expense expense-total-value">${budget.expense_total.toFixed(2)}</div>
                     </div>
                 </div>
                 <hr className="divider" />
@@ -76,7 +76,7 @@ const Budget = () => {
                         <div className="income">${budget.surplus}</div>
                     }
                     {budget.surplus < 0 &&
-                        <div className="expense">${budget.surplus}</div>
+                        <div className="expense">${(budget.surplus * -1).toFixed(2)} </div>
                     }
                 </div>
                 <div className="btn-container">

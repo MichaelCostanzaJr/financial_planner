@@ -14,18 +14,18 @@ const Row = (props) => {
         <div className="row">
             {props.type === 'income' &&
             <>
-                <button className="edit-btn btn">Edit</button>
+                <button className="edit-btn btn"><i className="far fa-edit"></i></button>
                 <div className="row-name budget-data">{props.data.source}</div>
-                <div className={props.type}>{props.data.value}</div>
-                <button className="delete-btn btn" onClick={deleteRow}>Delete</button>
+                <div className={props.type}>${props.data.value.toFixed(2)}</div>
+                <button className="delete-btn btn" onClick={deleteRow}><i className="fas fa-trash"></i></button>
             </>
             }
             {props.type === 'expense' &&
             <>
-                <button className="edit-btn btn">Edit</button>
+                <button className="edit-btn btn"><i className="far fa-edit"></i></button>
                 <div className="row-name budget-data">{props.data.expenseName} / {props.data.expensePriority}</div>
-                <div className={props.type}>{props.data.expenseValue}</div>
-                <button className="delete-btn btn" onClick={deleteRow}>Delete</button>
+                <div className={props.type}>${props.data.expenseValue.toFixed(2)}</div>
+                <button className="delete-btn btn" onClick={deleteRow}><i className="fas fa-trash-alt"></i></button>
             </>
             }
         </div>
