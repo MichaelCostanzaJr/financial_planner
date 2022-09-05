@@ -64,15 +64,16 @@ class DataService{
         return data
     }
 
-    // async overwriteBudget(budget){
-    //     let data
-    //     await axios.post('http://127.0.0.1:5000/api/budget/update', budget).then(res =>{
-    //         console.log(res.data)
-    //         data = res.data
-    //     })
+    async deleteActiveBudget(user_name, budget){
+        let data
+        console.log(budget)
+        await axios.post('http://127.0.0.1:5000/api/budget/delete/' + user_name, budget).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
 
-    //     return data
-    // }
+        return data
+    }
 
     async postBudget(budget){
         console.log("Attempting to post budget...")

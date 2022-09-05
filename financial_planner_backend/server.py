@@ -96,6 +96,7 @@ def get_budgets(user_name):
 
 @app.post("/api/budgets")
 def save_budget():
+    # need to modify to make sure the active user matches the owner of the budget
     try:
         budget = request.get_json()
         response = []
@@ -124,6 +125,43 @@ def save_budget():
     except Exception as e:
         return Response(f"Unexpected error: {e}", status=500) 
 
+
+@app.post('/api/budget/delete/<user_name>')
+def delete_budget(user_name):
+    try:
+        data = request.get_json()
+        response = []
+        
+        print(data)
+        cursor = database.budgets.find({"title": data['title']})
+        if not cursor:
+            response.append(False)
+            response.append("Budget does not exist")
+            return json.dumps(response)
+        
+        found = False
+        print(data['title'])
+        for budget in cursor:
+            print(budget['owner'])
+            if budget['owner'] == data['owner']:
+                found = True
+                # database.budgets.delete_one({'title':data['tile'], 'owner':data['owner']})
+        
+        if not found:
+            response.append(False)
+            response.append("You are not the owner of this budget")
+            return json.dumps(response)
+            
+        database.budgets.delete_one({'title':data['title'], 'owner':data['owner']})
+        
+        response.append(True)
+        response.append("Budget deleted successfully!")
+        
+        return json.dumps(response)
+        
+    except Exception as e:
+        return Response(f"Unexpected error: {e}", status=500)
+    
 
 @app.post('/api/recover-username')
 def send_recovery():

@@ -1,14 +1,17 @@
 import { useContext, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import DataContext from "../context/dataContext"
 import Row from "../components/row"
 import "../components/budget.css"
 import AddRowTool from "./addRowTool"
 import DataService from "../services/dataService"
+import { Navigate } from "react-router-dom"
 
 
 const Budget = () => {
 
     let budget = useContext(DataContext).activeBudget
+    let activeUser = useContext(DataContext).user
     let removeRow = useContext(DataContext).deleteRow
     let updateEditRow = useContext(DataContext).editRow
     let startingIndex = parseInt(budget['next_index'])
@@ -16,6 +19,8 @@ const Budget = () => {
     const [editIndex, setEditIndex] = useState(0)
     const [edit, setEdit] = useState(false)
     const [editRow, setEditRow] = useState({})
+
+    let navigate = useNavigate()
 
     const saveBudget = async() => {
 
@@ -61,6 +66,21 @@ const Budget = () => {
         }
 
         setEditIndex(id)
+    }
+
+    const deleteBudget = async() => {
+        let service = new DataService()
+        let response = await service.deleteActiveBudget(activeUser.user_name, budget)
+
+        if (!response[0]){
+            alert(response[1])
+            return
+        }
+        alert(response[1] + "\nClick ok to return to the budget home page.")
+
+        let path = '/budget/home'
+        navigate(path)
+
     }
 
     return (
@@ -123,6 +143,7 @@ const Budget = () => {
                 </div>
                 <div className="btn-container save-btn">
                     <button className="btn" onClick={saveBudget}>Save Budget</button>
+                    <button className="btn" onClick={deleteBudget}>Delete Budget</button>
                 </div>
             </div>
         </div>
