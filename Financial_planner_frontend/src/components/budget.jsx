@@ -10,8 +10,12 @@ const Budget = () => {
 
     let budget = useContext(DataContext).activeBudget
     let removeRow = useContext(DataContext).deleteRow
+    let updateEditRow = useContext(DataContext).editRow
     let startingIndex = parseInt(budget['next_index'])
     const [index, setIndex] = useState(startingIndex)
+    const [editIndex, setEditIndex] = useState(0)
+    const [edit, setEdit] = useState(false)
+    const [editRow, setEditRow] = useState({})
 
     const saveBudget = async() => {
 
@@ -27,6 +31,13 @@ const Budget = () => {
         }
     }
 
+    const onChange = (e) => {
+        let name = e.target.name
+        let val = e.target.value
+
+        setEditRow(prev => ({...prev, [name]:val}))
+    }
+
     const getIndex = () =>{
         let currentIndex = index
         setIndex(index + 1)
@@ -37,17 +48,48 @@ const Budget = () => {
         removeRow(id)
     }
 
+    const updateRow = () => {
+        updateEditRow(editIndex, editRow)
+        toggleEdit()
+    }
+
+    const toggleEdit = (id) => {
+        if (edit){
+            setEdit(false)
+        }else{
+            setEdit(true)
+        }
+
+        setEditIndex(id)
+    }
+
     return (
         <div className="budget">
+            {edit &&
+                <div className="edit-background">
+                    <div className="edit-container container">
+                        <h3 className="header">Edit Row</h3>
+                        <div className="edit-form form">
+                            <input name="name" className="edit-name-input input" type="text" onChange={onChange} placeholder="New Source"/>
+                            <input name="value" className="edit-value-input input" type="number" onChange={onChange} step={'0.01'} placeholder="New Value"/>
+                        </div>
+                        <div className="btn-container">
+                            <button className="btn" onClick={updateRow}>Apply</button>
+                            <button className="btn" onClick={toggleEdit}>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            }
+
             <div className="container">
                 <h2 className="budget-title">{budget.title}</h2>
                 
                 <AddRowTool getIndex={getIndex} index={index} type="income"/>
-                <h3 className="table-title">Income</h3>
+                <h4 className="table-title">Income</h4>
                 <div className="income-table">
                     {budget.income &&
                         budget.income.map(item => (
-                            <Row key={item.index} type="income" deleteRow={deleteRow} id={item.index} data={item}></Row>
+                            <Row key={item.index} type="income" updateRow={toggleEdit} deleteRow={deleteRow} id={item.index} data={item}></Row>
                         ))
                     }
                     <div className="income-total">
@@ -57,11 +99,11 @@ const Budget = () => {
                 </div>
                 <hr className="divider" />
                 <AddRowTool getIndex={getIndex} index={index} type="expense"/>
-                <h3 className="table-title">Expenses</h3>
+                <h4 className="table-title">Expenses</h4>
                 <div className="expense-table">
                     {budget.expenses &&
                         budget.expenses.map(item => (
-                            <Row key={item.index} type="expense" deleteRow={deleteRow} id={item.index} data={item}></Row>
+                            <Row key={item.index} type="expense" updateRow={toggleEdit} deleteRow={deleteRow} id={item.index} data={item}></Row>
                         ))
                     }
                     <div className="expense-total">
@@ -73,13 +115,13 @@ const Budget = () => {
                 <div className="surplus-table">
                     <div className="surplus-title">Surplus / Deficit</div>
                     {budget.surplus >= 0 &&
-                        <div className="income">${budget.surplus}</div>
+                        <div className="income">${budget.surplus.toFixed(2)}</div>
                     }
                     {budget.surplus < 0 &&
                         <div className="expense">${(budget.surplus * -1).toFixed(2)} </div>
                     }
                 </div>
-                <div className="btn-container">
+                <div className="btn-container save-btn">
                     <button className="btn" onClick={saveBudget}>Save Budget</button>
                 </div>
             </div>

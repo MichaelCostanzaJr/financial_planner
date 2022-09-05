@@ -119,6 +119,69 @@ const GlobalDataProvider = (props) => {
         
     }
 
+    const editRow = (editIndex, editRow) => {
+        console.log("Attempting to edit row with index: " + editIndex)
+
+        let copy = {...activeBudget}
+        let found = false
+        let incomeChanged = false
+        let expensesChanged = false
+
+        copy['income'].forEach(element => {
+            if (element.index === editIndex){
+                if (editRow['name']){
+                    element['source'] = editRow['name']
+                }
+                if (editRow['value']){
+                    element['value'] = parseFloat(editRow['value'])
+                }
+                found = true
+                incomeChanged = true
+            }
+        })
+
+        if (!found){
+            copy['expenses'].forEach(element => {
+                if (element.index === editIndex){
+                    if (editRow['name']){
+                        element['expenseName'] = editRow['name']
+                    }
+                    if (editRow['value']){
+                        element['expenseValue'] = parseFloat(editRow['value'])
+                    }
+                    found = true
+                    expensesChanged = true
+                }
+            })
+        }
+
+        if (incomeChanged){
+            // calculate new income total
+            let newIncomeTotal = 0
+            copy['income'].forEach(element => {
+                newIncomeTotal += element['value']
+            })
+            copy['income_total'] = newIncomeTotal
+        }
+        
+        if (expensesChanged){
+            // calculate new expense total
+            let newExpenseTotal = 0
+            copy['expenses'].forEach(element => {
+                newExpenseTotal += element['expenseValue']
+            })
+            copy['expense_total'] = newExpenseTotal
+        }
+
+        if (incomeChanged || expensesChanged){
+            // calculate new surplus
+            let newSurplus = copy['income_total'] - copy['expense_total']
+            copy['surplus'] = parseFloat(newSurplus.toFixed(2))
+        }
+
+        setActiveBudget(copy)
+    }
+
     const dumpActiveBudget = () => {
         setActiveBudget({})
     }
@@ -140,7 +203,8 @@ const GlobalDataProvider = (props) => {
             dumpActiveBudget: dumpActiveBudget,
             addIncomeRow: addIncomeRow,
             addExpenseRow: addExpenseRow,
-            deleteRow: deleteRow
+            deleteRow: deleteRow,
+            editRow: editRow
 
         }}>
             {props.children}

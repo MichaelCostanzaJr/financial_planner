@@ -17,7 +17,11 @@ const AddRowTool = (props) => {
         "frequency": "",
         "source": "",
         "value": 0,
-        "index": props.index
+        "index": props.index,
+        "fed_income_tax": 0,
+        "state_income_tax": 0,
+        "social_security": 0,
+        "medicare": 0
     })
     const [expenseRow, setExpenseRow] = useState({
         "apr": 0,
@@ -74,11 +78,10 @@ const AddRowTool = (props) => {
 
     const convertToMonthly = () => {
 
-        
         let value = parseFloat(incomeRow.value)
         let hours = incomeRow.hours
-        console.log('value: ' + value)
         let newValue = 0
+        let deductions = 0
         if (incomeRow.frequency === "monthly"){
             newValue = value
         }else if (incomeRow.frequency === 'hr'){
@@ -92,7 +95,12 @@ const AddRowTool = (props) => {
         }else if (incomeRow.frequency === "annually"){
             newValue = value / 12
         }
-        console.log(newValue)
+
+        newValue = newValue - (
+            parseFloat(incomeRow['fed_income_tax']) + 
+            parseFloat(incomeRow['state_income_tax']) + 
+            parseFloat(incomeRow['social_security']) + 
+            parseFloat(incomeRow['medicare']))
 
         return parseFloat(newValue.toFixed(2))
     }
@@ -131,13 +139,25 @@ const AddRowTool = (props) => {
         let fields = document.querySelectorAll('.input')
         
         fields.forEach(element => {
-            element.value = ''
+            element.value = null
             if (element.classList.contains("frequency")){
                 element.value = "default"
             }
             if (element.classList.contains("expensePriority")){
                 element.value = "default"
             }
+        })
+
+        setIncomeRow({
+            "hours": 0,
+            "frequency": "",
+            "source": "",
+            "value": 0,
+            "index": props.index,
+            "fed_income_tax": 0,
+            "state_income_tax": 0,
+            "social_security": 0,
+            "medicare": 0
         })
     }
 
@@ -146,11 +166,12 @@ const AddRowTool = (props) => {
             <div className="toggle-container">
                 {props.type === 'income' &&
                 <>
-                <button className="toggle-show-btn income-show-btn" onClick={toggle}>Open Add Income Tool</button>
+                    <button className="toggle-show-btn income-show-btn" onClick={toggle}>Open Add Income Tool</button>
                     <div className="income-input-container">
-                        <input name="source" type="text" className="source input" onChange={onChangeIncome} placeholder="Income Source"/>
-                        <input name="value" type="number" className="value input" onChange={onChangeIncome} step={'0.01'} placeholder="$0.00"/>
-                        <select name="frequency" onChange={onChangeIncome} className="frequency input dropdown">
+                        <div className="note">Fields with a red border are required</div>
+                        <input name="source" type="text" className="source input required" onChange={onChangeIncome} placeholder="Income Source"/>
+                        <input name="value" type="number" className="value input required number" onChange={onChangeIncome} step={'0.01'} placeholder="$0.00"/>
+                        <select name="frequency" onChange={onChangeIncome} className="frequency input dropdown required">
                             <option value="default">Frequency</option>
                             <option className="option" value="hr">hr</option>
                             <option className="option" value="weekly">weekly</option>
@@ -160,11 +181,17 @@ const AddRowTool = (props) => {
                             <option className="option" value="annually">annually</option>
                         </select>
                         {incomeRow.frequency === 'hr' &&
-                        <>
-                            <div>Hours a week:</div>
-                            <input name="hours" type='number' onChange={onChangeIncome} className='input' step={'1'} placeholder="# of hours a week"/>
-                        </>
+                        <div className="pop-out">
+                            <div className="label hours-label">Hours a week:</div>
+                            <input name="hours" type='number' onChange={onChangeIncome} className='input required' step={'1'} placeholder="Hours"/>
+                        </div>
                         }
+                        <div className="label tax-label">Income Tax</div>
+                        <input name="fed_income_tax" type="number" className="fed-tax input number" onChange={onChangeIncome} step={'0.01'} placeholder='Federal'/>
+                        <input name="state_income_tax" type="number" className="state-tax input number" onChange={onChangeIncome} step={'0.01'} placeholder='State'/>
+                        <div className="fica-label">FICA</div>
+                        <input name="social_security" type="number" className="fica-ss input number" onChange={onChangeIncome} step={'0.01'} placeholder='Social Security'/>
+                        <input name="medicare" type="number" className="fica-medicare input number" onChange={onChangeIncome} step={'0.01'} placeholder='Medicare'/>
                         <button className="add-row-btn" onClick={addIncomeRow}>Add Row</button>
                     </div>
                 </>
@@ -173,9 +200,10 @@ const AddRowTool = (props) => {
                 <>
                 <button className="toggle-show-btn expense-show-btn" onClick={toggle}>Open Add Expense Tool</button>
                     <div className="expense-input-container">
-                        <input name="expenseName" type="text" className="expenseName input" onChange={onChangeExpense} placeholder="Expense Name"/>
-                        <input name="expenseValue" type="number" className="value input" onChange={onChangeExpense} step={'0.01'} placeholder="$0.00"/>
-                        <select name="expensePriority" onChange={onChangeExpense} className="expensePriority input">
+                    <div className="note">Fields with a red border are required</div>
+                        <input name="expenseName" type="text" className="expenseName input required" onChange={onChangeExpense} placeholder="Expense Name"/>
+                        <input name="expenseValue" type="number" className="value input required" onChange={onChangeExpense} step={'0.01'} placeholder="$0.00"/>
+                        <select name="expensePriority" onChange={onChangeExpense} className="expensePriority input required">
                             <option value="default">Priority</option>
                             <option className="option" value="1">1 - required</option>
                             <option className="option" value="2">2 - financed</option>
@@ -186,7 +214,7 @@ const AddRowTool = (props) => {
                         </select>
                         {expenseRow.expensePriority == '2' &&
                         <>
-                            <div>Loan data</div>
+                            <div className="label">Loan data</div>
                             <input name="apr" type='number' onChange={onChangeExpense} className='input' step={'0.01'} placeholder="APR %"/>
                             <input name="term" type="number" onChange={onChangeExpense} className='input' step={'1'} placeholder="Payment Months Remaining"/>
                         </>
