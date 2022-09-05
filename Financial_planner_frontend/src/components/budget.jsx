@@ -5,7 +5,6 @@ import Row from "../components/row"
 import "../components/budget.css"
 import AddRowTool from "./addRowTool"
 import DataService from "../services/dataService"
-import { Navigate } from "react-router-dom"
 
 
 const Budget = () => {
@@ -68,21 +67,6 @@ const Budget = () => {
         setEditIndex(id)
     }
 
-    const deleteBudget = async() => {
-        let service = new DataService()
-        let response = await service.deleteActiveBudget(activeUser.user_name, budget)
-
-        if (!response[0]){
-            alert(response[1])
-            return
-        }
-        alert(response[1] + "\nClick ok to return to the budget home page.")
-
-        let path = '/budget/home'
-        navigate(path)
-
-    }
-
     return (
         <div className="budget">
             {edit &&
@@ -141,9 +125,9 @@ const Budget = () => {
                         <div className="expense">${(budget.surplus * -1).toFixed(2)} </div>
                     }
                 </div>
+                
                 <div className="btn-container save-btn">
                     <button className="btn" onClick={saveBudget}>Save Budget</button>
-                    <button className="btn" onClick={deleteBudget}>Delete Budget</button>
                 </div>
             </div>
         </div>
