@@ -1,10 +1,28 @@
+import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import "../components/home.css"
+import DataContext from "../context/dataContext"
+import DataService from "../services/dataService"
 
 
 const Home = () => {
 
     let navigate = useNavigate()
+    let setUserBudgets = useContext(DataContext).setUserBudgets
+    let activeBudget = useContext(DataContext).updateActiveBudget
+    let user = useContext(DataContext).user
+
+    const loadUserBudgets = async() => {
+        let service = new DataService()
+        let data = await service.getBudgets(user.user_name)
+
+        setUserBudgets(data)
+        activeBudget(data[0])
+    }
+
+    useEffect(() => {
+        loadUserBudgets()
+    }, [])
 
     const budgetHome = () => {
         let path = '/budget/home'
@@ -20,12 +38,17 @@ const Home = () => {
         navigate(path)
     }
 
+    const budgetOptimizer = () => {
+        let path = '/budget-optimizer'
+        navigate(path)
+    }
+
     return (
         <div className="home">
             <div className="container">
                 <button className="tile budget-btn" onClick={budgetHome}>Budget</button>
                 <button className="tile alt-tile">Debt Snowball</button>
-                <button className="tile alt-tile">Budget Optimization</button>
+                <button className="tile alt-tile" onClick={budgetOptimizer}>Budget Optimization</button>
                 <button className="tile " onClick={mortgageCalculator}>Mortgage Calculator</button>
                 <button className="tile " onClick={autoCalculator}>Auto Finance Calculator</button>
             </div>

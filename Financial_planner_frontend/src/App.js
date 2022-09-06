@@ -17,6 +17,7 @@ import BudgetHome from "./pages/budgetHome";
 import ViewBudget from "./pages/viewBudget";
 import NewBudget from "./pages/newBudget"
 import AutoCalculator from "./pages/autoCalc";
+import BudgetOptimizer from "./pages/budgetOptimizer";
 
 // add logic to get token when user logs in.  If no toke, prevent access to some pages and redirect to home if user attempts to access unauthorized pages
 
@@ -40,6 +41,7 @@ function App() {
               <Route path= "/budget/home" exact element= {<BudgetHome/>}/>
               <Route path= "/view-budget" exact element= {<ViewBudget/>}/>
               <Route path= "/new-budget" exact element= {<NewBudget/>}/>
+              <Route path= "/budget-optimizer" exact element= {<BudgetOptimizer/>}/>
             </Routes>
         </Router>
       </GlobalDataProvider>
