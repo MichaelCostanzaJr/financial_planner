@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 import DataContext from "../context/dataContext"
 import "../components/budgetOptimizer.css"
 
@@ -14,18 +15,25 @@ const BudgetOptimizer = () => {
     let [optimizationMethod, setOptimizationMethod] = useState('')
     let [goal, setGoal] = useState(0)
 
+    let navigate = useNavigate()
+
     // const [activeBudget, setActiveBudget] = useState({})
 
     const loadUserBudget = () => {
         let copy = {...activeBudget}
-        copy.expenses.forEach(expense => {
-            expense['new_value'] = expense['expenseValue']
-        })
-        setBudget(copy)
+        if (copy.expenses){
+            copy.expenses.forEach(expense => {
+                expense['new_value'] = expense['expenseValue']
+            })
+            setBudget(copy)
+        }
     }
 
     useEffect(() => {
-        loadUserBudget()
+        if(budgets){
+
+            loadUserBudget()
+        }
     }, [])
 
     const onChange = (e) => {
@@ -115,7 +123,24 @@ const BudgetOptimizer = () => {
         }
     }
 
+    const budgetHome = () => {
+        let path = "/budget/home"
+        navigate(path)
+    }
+
     return (
+        <>
+        {!budgets.expenses &&
+            <div className="container">
+                <h1 className="header">You must create a budget nefore using this tool.</h1>
+                <div className="btn-container">
+                    <button className="btn" onClick={budgetHome}>Budget Home</button>
+                </div>
+
+            </div>
+        }
+        {budgets.expenses &&
+
         <div className="budget-optimizer container">
             <h1 className="header">Budget Optimizer</h1>
             <div className="budgets">
@@ -138,11 +163,11 @@ const BudgetOptimizer = () => {
                 </select>
                 {optimizationMethod === 'surplus' &&
                     <div className="form">
-                        <input type="number" placeholder="Enter Your Surplus Goal" step={'0.01'} onChange={onGoalChange}/>
                         <select name="surplus-type" className="optimization-option surplus-option">
                             <option value="priority">By Priority</option>
                             <option value="spread">Spread Out</option>
                         </select>
+                        <input type="number" placeholder="Enter Your Surplus Goal" step={'0.01'} onChange={onGoalChange}/>
                     </div>
                 }
                 <div className="btn-container">
@@ -161,7 +186,7 @@ const BudgetOptimizer = () => {
                         budget.expenses.map(item => (
                             // <Row key={item.index} type="expense" id={item.index} data={item}></Row>
                             <div key={item.index + 'new'} className="expense-container">
-                                <div key={item.expenseName + 'old'} className="row-name budget-data">{item.expenseName}</div>
+                                <div key={item.expenseName + 'old'} className="row-name budget-data">{item.expenseName} / {item.expensePriority}</div>
                                 <div key={item.index + item.expenseName} className="expense">${parseFloat(item.expenseValue).toFixed(2)}</div>
                                 {
                                     item.expenseValue > item.new_value &&
@@ -182,6 +207,8 @@ const BudgetOptimizer = () => {
                 </div>
             </div>
         </div>
+        }
+    </>
     )
 }
 
