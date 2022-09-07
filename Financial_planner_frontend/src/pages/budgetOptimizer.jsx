@@ -11,13 +11,25 @@ const BudgetOptimizer = () => {
     let budgets = useContext(DataContext).userBudgets
     let updateActiveBudget = useContext(DataContext).updateActiveBudget
     let activeBudget = useContext(DataContext).activeBudget
+    let [userBudgets, setUserBudgets] = useState({})
     let [budget, setBudget] = useState({})
     let [optimizationMethod, setOptimizationMethod] = useState('')
     let [goal, setGoal] = useState(0)
+    let [surplusOption, setSurplusOption] = useState('')
 
     let navigate = useNavigate()
 
     // const [activeBudget, setActiveBudget] = useState({})
+
+    const populateNewExpenseValueFields = () => {
+        let copy = [...budgets]
+        copy.forEach(budget => {
+            budget.expenses.forEach(expense => {
+                expense['new_value'] = expense['expenseValue']
+            })
+        })
+        setUserBudgets(copy)
+    }
 
     const loadUserBudget = () => {
         let copy = {...activeBudget}
@@ -25,13 +37,14 @@ const BudgetOptimizer = () => {
             copy.expenses.forEach(expense => {
                 expense['new_value'] = expense['expenseValue']
             })
+            console.log(copy)
             setBudget(copy)
         }
     }
 
     useEffect(() => {
         if(budgets){
-
+            populateNewExpenseValueFields()
             loadUserBudget()
         }
     }, [])
@@ -56,6 +69,11 @@ const BudgetOptimizer = () => {
         setOptimizationMethod(val)
     }
 
+    const onSurplusOptionChange = (e) => {
+        let val = e.target.value
+        setSurplusOption(val)
+    }
+
     const onGoalChange = (e) => {
         let val = e.target.value
         setGoal(val)
@@ -75,35 +93,42 @@ const BudgetOptimizer = () => {
         let message = ''
 
         if (optimizationMethod === 'surplus'){
-            let option = document.querySelector('.surplus-option').value
-            if (option === 'priority'){
+            console.log(surplusOption)
+            if (surplusOption === 'priority'){
                 copy.expenses.forEach(expense => {
-                    if (expense.expensePriority === '6'){
-                        neededCuts = neededCuts - expense.expenseValue
-                        expense['new_value'] = 0
-                        if(neededCuts <= 0){
-                            return alert("New budget calculated! Check it out!")
+                    if (neededCuts > 0){
+                        if (expense.expensePriority === '6'){
+                            neededCuts = neededCuts - expense.expenseValue
+                            expense['new_value'] = 0
                         }
                     }
                 })
-                copy.expenses.forEach(expense => {
-                    if (expense.expensePriority === '5'){
-                        neededCuts = neededCuts - expense.expenseValue
-                        expense['new_value'] = 0
-                        if(neededCuts <= 0){
-                            return alert("New budget calculated! Check it out!")
+                if (neededCuts > 0){
+                    copy.expenses.forEach(expense => {
+                        if (neededCuts > 0){
+                            if (expense.expensePriority === '5'){
+                                neededCuts = neededCuts - expense.expenseValue
+                                expense['new_value'] = 0
+                                if(neededCuts <= 0){
+                                    return 
+                                }
+                            }
                         }
-                    }
-                })
-                copy.expenses.forEach(expense => {
-                    if (expense.expensePriority === '4'){
-                        neededCuts = neededCuts - expense.expenseValue
-                        expense['new_value'] = 0
-                        if(neededCuts <= 0){
-                            return alert("New budget calculated! Check it out!")
+                    })
+                }
+                if (neededCuts > 0){
+                    copy.expenses.forEach(expense => {
+                        if (neededCuts > 0){
+                            if (expense.expensePriority === '4'){
+                                neededCuts = neededCuts - expense.expenseValue
+                                expense['new_value'] = 0
+                                if(neededCuts <= 0){
+                                    return 
+                                }
+                            }
                         }
-                    }
-                })
+                    })
+                }
 
                 if (neededCuts > 0){
                     return alert("Unable to optimize your budget. Make more money or input a more realistic goal")
@@ -119,7 +144,145 @@ const BudgetOptimizer = () => {
                 copy['new_surplus'] = newSurplus
                 console.log(copy)
                 setBudget(copy)
+            }else{
+                let luxuryValue = 0
+                let luxuryCount = 0
+                let luxurySpread = 0
+                let lowValue = 0
+                let lowCount = 0
+                let lowSpread = 0
+                let mediumValue = 0
+                let mediumCount = 0
+                let mediumSpread = 0
+
+                copy.expenses.forEach(expense => {
+                    if (expense.expensePriority === '6'){
+                        luxuryValue += expense.expenseValue
+                        luxuryCount += 1
+                    }
+                    if (expense.expensePriority === '5'){
+                        lowValue += expense.expenseValue
+                        lowCount += 1
+                    }
+                    if (expense.expensePriority === '4'){
+                        mediumValue += expense.expenseValue
+                        mediumCount += 1
+                    }
+                })
+
+                if (luxuryValue >= neededCuts){
+                    luxurySpread = neededCuts / luxuryCount
+                    neededCuts = 0
+                }else{
+                    luxurySpread = luxuryValue / luxuryCount
+                    neededCuts -= luxuryValue
+                }
+                console.log("Needed cuts: " + neededCuts)
+                let topup = 0
+                if (luxuryCount > 0){
+                    copy.expenses.forEach(expense => {
+                        if(expense.expensePriority === '6'){
+                            luxuryCount -= 1
+                            if( expense['expenseValue'] < luxurySpread){
+                                topup = luxurySpread - expense['new_value']
+                                if (luxuryCount > 1){
+                                    luxurySpread = luxurySpread + (topup / luxuryCount)
+                                }else{
+                                    luxurySpread += topup
+                                }
+                                
+                                expense['new_value'] = 0
+                            }else{
+                                expense['new_value'] -= luxurySpread
+                            }
+                            topup = 0
+                        }
+                    })
+                }
+                
+                if (neededCuts > 0 && lowCount > 0) {
+                    console.log("Low Spread: " + lowSpread)
+                    if (lowValue >= neededCuts){
+                        lowSpread = neededCuts / lowCount
+                        neededCuts = 0
+                    }else{
+                        lowSpread = lowValue / lowCount
+                        neededCuts -= lowValue
+                    }
+                    copy.expenses.forEach(expense => {
+                        if(expense.expensePriority === '5') {
+                            lowCount -= 1
+                            if( expense['new_value'] < lowSpread){
+                                topup = lowSpread - expense['new_value']
+                                if (lowCount > 1){
+                                    lowSpread = lowSpread + (topup / lowCount)
+                                }
+                                topup = 0
+                                expense['new_value'] = 0
+                            }else{
+                                expense['new_value'] = expense['expenseValue'] - lowSpread
+                            }
+                        }
+                    })
+                }
+                if (neededCuts > 0 && mediumCount > 0){
+                    console.log("Low Spread: " + mediumSpread)
+                    if (mediumValue >= neededCuts){
+                        mediumSpread = neededCuts / mediumCount
+                        neededCuts = 0
+                    }else{
+                        mediumSpread = mediumValue / mediumCount
+                        neededCuts -= mediumValue
+                    }
+                    copy.expenses.forEach(expense => {
+                        if(expense.expensePriority === '5') {
+                            mediumCount -= 1
+                            if( expense['new_value'] < mediumSpread){
+                                topup = mediumSpread - expense['new_value']
+                                if (mediumCount > 1){
+                                    mediumSpread = mediumSpread + (topup / mediumCount)
+                                }
+                                topup = 0
+                                expense['new_value'] = 0
+                            }else{
+                                expense['new_value'] = expense['expenseValue'] - mediumSpread
+                            }
+                        }
+                    })
+                }
+                if (neededCuts <= 0){
+                    let newExpenseTotal = 0
+                    copy.expenses.forEach(expense => {
+                        newExpenseTotal += expense['new_value']
+                    })
+
+                    let newSurplus = 0
+                    newSurplus = copy.income_total - newExpenseTotal
+                    copy['new_surplus'] = newSurplus
+                    setBudget(copy)
+                    return
+
+                }
+                alert("Unable to optimize budgets. Make more money or adjust your priorities!")
             }
+        }else if (optimizationMethod === 'luxuries'){
+            let copy = {...activeBudget}
+            copy.expenses.forEach(expense => {
+                if (expense.expensePriority === '6'){
+                    expense['new_value'] = 0
+                }
+
+            })
+            let newExpenseTotal = 0
+            copy.expenses.forEach(expense => {
+                newExpenseTotal += expense['new_value']
+            })
+
+            let newSurplus = 0
+            newSurplus = copy.income_total - newExpenseTotal
+            copy['new_surplus'] = newSurplus
+            setBudget(copy)
+            return
         }
     }
 
@@ -130,7 +293,7 @@ const BudgetOptimizer = () => {
 
     return (
         <>
-        {!budgets.expenses &&
+        {!activeBudget &&
             <div className="container">
                 <h1 className="header">You must create a budget nefore using this tool.</h1>
                 <div className="btn-container">
@@ -139,7 +302,7 @@ const BudgetOptimizer = () => {
 
             </div>
         }
-        {budgets.expenses &&
+        {activeBudget &&
 
         <div className="budget-optimizer container">
             <h1 className="header">Budget Optimizer</h1>
@@ -163,7 +326,7 @@ const BudgetOptimizer = () => {
                 </select>
                 {optimizationMethod === 'surplus' &&
                     <div className="form">
-                        <select name="surplus-type" className="optimization-option surplus-option">
+                        <select name="surplus-type" className="optimization-option surplus-option" onChange={onSurplusOptionChange}>
                             <option value="priority">By Priority</option>
                             <option value="spread">Spread Out</option>
                         </select>
@@ -181,7 +344,7 @@ const BudgetOptimizer = () => {
                     <div className="header">Current</div>
                     <div className="header header-3">New</div>
                 </div>
-                <div className="expense-table">
+                <div className="expense-optimizer-table expense-table">
                     {budget.expenses &&
                         budget.expenses.map(item => (
                             // <Row key={item.index} type="expense" id={item.index} data={item}></Row>

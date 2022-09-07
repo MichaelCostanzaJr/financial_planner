@@ -21,7 +21,7 @@ const Row = (props) => {
                 <button className="edit-btn btn" onClick={updateRow}><i className="far fa-edit"></i></button>
                 <div className="row-name budget-data">{props.data.source}</div>
                 <div className={props.type}>${props.data.value.toFixed(2)}</div>
-                <button className="delete-btn btn" onClick={deleteRow}><i className="fas fa-trash"></i></button>
+                <button className="delete-btn btn" onClick={deleteRow}><i className="fas fa-trash-alt"></i></button>
             </>
             }
             {props.type === 'expense' &&

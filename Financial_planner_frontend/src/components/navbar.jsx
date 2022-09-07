@@ -67,7 +67,9 @@ const Navbar = () => {
             // add logic
 
         }else if(e.target.matches('.budget-optimizer')){
-
+            toggle_menu(e, currentDropDown)
+            let path = "/budget-optimizer"
+            navigate(path)
             // add logic
 
         }else if(e.target.matches('.mortgage-calc')){

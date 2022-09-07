@@ -64,11 +64,11 @@
     width: 100%;
 }
 
-.expense-table > :nth-last-child(1) :nth-child(1){
+.expense-optimizer-table > :nth-last-child(1) :nth-child(1){
     border-radius: 0 0 0 20px;
 }
 
-.expense-table > :nth-last-child(1) :nth-last-child(1){
+.expense-optimizer-table > :nth-last-child(1) :nth-last-child(1){
     border-radius: 0 0 20px 0;
 }
 
@@ -102,6 +102,7 @@
     border-radius: 20px;
     border: 1px solid var(--primary-color);
     overflow: hidden;
+    margin-bottom: 50px;
 }
 
 .new-surplus-container > * {
