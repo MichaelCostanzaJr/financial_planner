@@ -54,7 +54,7 @@ const BudgetOptimizer = () => {
 
         budgets.forEach(budget => {
             if (budget.title === val){
-                updateActiveBudget(budget)
+                // updateActiveBudget(budget)
                 setBudget(budget)
             }
         })
@@ -81,18 +81,17 @@ const BudgetOptimizer = () => {
 
     const optimize = () => {
 
-        if (goal < activeBudget.surplus){
-            return alert("You are already meeting your goal. Great job!")
-        }
-
         let neededCuts = goal - activeBudget.surplus
         let luxuryExpenses = []
         let lowPriorityExpenses = []
         let mediumPriorityExpenses = []
         let copy = {...activeBudget}
         let message = ''
-
+        
         if (optimizationMethod === 'surplus'){
+            if (goal < activeBudget.surplus){
+                return alert("You are already meeting your goal. Great job!")
+            }
             console.log(surplusOption)
             if (surplusOption === 'priority'){
                 copy.expenses.forEach(expense => {
@@ -109,9 +108,6 @@ const BudgetOptimizer = () => {
                             if (expense.expensePriority === '5'){
                                 neededCuts = neededCuts - expense.expenseValue
                                 expense['new_value'] = 0
-                                if(neededCuts <= 0){
-                                    return 
-                                }
                             }
                         }
                     })
@@ -122,15 +118,13 @@ const BudgetOptimizer = () => {
                             if (expense.expensePriority === '4'){
                                 neededCuts = neededCuts - expense.expenseValue
                                 expense['new_value'] = 0
-                                if(neededCuts <= 0){
-                                    return 
-                                }
                             }
                         }
                     })
                 }
 
                 if (neededCuts > 0){
+                    setBudget(activeBudget)
                     return alert("Unable to optimize your budget. Make more money or input a more realistic goal")
                 }
 
@@ -282,8 +276,11 @@ const BudgetOptimizer = () => {
             newSurplus = copy.income_total - newExpenseTotal
             copy['new_surplus'] = newSurplus
             setBudget(copy)
-            return
         }
+    }
+
+    const reset = () => {
+        loadUserBudget()
     }
 
     const budgetHome = () => {
@@ -327,6 +324,7 @@ const BudgetOptimizer = () => {
                 {optimizationMethod === 'surplus' &&
                     <div className="form">
                         <select name="surplus-type" className="optimization-option surplus-option" onChange={onSurplusOptionChange}>
+                            <option value=""></option>
                             <option value="priority">By Priority</option>
                             <option value="spread">Spread Out</option>
                         </select>
@@ -335,6 +333,7 @@ const BudgetOptimizer = () => {
                 }
                 <div className="btn-container">
                     <button onClick={optimize}>OPTIMIZE</button>
+                    <button onClick={reset} >RESET</button>
                 </div>
             </div>
             <div className="active-budget">
