@@ -54,7 +54,7 @@ const BudgetOptimizer = () => {
 
         budgets.forEach(budget => {
             if (budget.title === val){
-                // updateActiveBudget(budget)
+                updateActiveBudget(budget)
                 setBudget(budget)
             }
         })
