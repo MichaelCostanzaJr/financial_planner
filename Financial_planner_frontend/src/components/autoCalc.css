@@ -3,3 +3,7 @@
     color: var(--primary-color);
     font-size: 1.4rem;
 }
+.note {
+    color: var(--secondary-color);
+    background-color: var(--background-color)!important;
+}

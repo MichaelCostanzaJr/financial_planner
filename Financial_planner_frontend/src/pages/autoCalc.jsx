@@ -10,7 +10,9 @@ const AutoCalculator = () => {
 
     let navigate = useNavigate()
 
-    const [autoRow, setAutoRow] = useState({})
+    const [autoRow, setAutoRow] = useState({
+        "insurance": 147.58
+    })
     const [monthlyPayment, setMonthlyPayment] = useState(0)
 
     const onChangeAuto = (e) => {
@@ -63,9 +65,9 @@ const AutoCalculator = () => {
 
     return (
         <div className="auto-calulator">
+            <div className="container">
             <h1 className="header">Auto Calculator</h1>
             <h3 className="note">Optional fields use national average if no value is provided.</h3>
-            <div className="container">
                 <div className="form">
                     <input name="principle" type="number" placeholder="Enter Car Price" className="price" onChange={onChangeAuto}/>
                     <select className="dropdown" name="term" id="term" onChange={onChangeAuto}>

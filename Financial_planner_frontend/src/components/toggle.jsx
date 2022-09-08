@@ -20,6 +20,7 @@ function Toggle(){
         root.style.setProperty('--accent-color', '#e8e8e8')
         root.style.setProperty('--accent-color-2', '#bababa')
         root.style.setProperty('--text-light', '#000000')
+        root.style.setProperty('--income-primary-color', '#88FFB5')
     }
 
     const toggleBtn = async(e) => {
