@@ -96,22 +96,72 @@ def get_budgets(user_name):
 
 @app.post("/api/budgets")
 def save_budget():
+    # need to modify to make sure the active user matches the owner of the budget
     try:
         budget = request.get_json()
-
-        # must have a title at least 3 chars long
-        if not "title" in budget or len(budget["title"]) < 3:
-            return abort(400, "Title is required and should have at least 3 chars")
-
+        response = []
+        old_budget = database.budgets.find_one({"title": budget['title']})
+        
+        if not old_budget:
+            
+            if not budget['title']:
+                response.append(False)
+                response.append("ERROR! Budget must have a title")
+                return json.dumps(response)
+                
+            database.budgets.insert_one(budget)
+            response.append(True)
+            response.append('New budget posted.')
+            return json.dumps(response)
+        
+        database.budgets.find_one_and_delete({"title": budget['title']})
         database.budgets.insert_one(budget)
+        
+        message = "Budget has been updated successfully!"
+        response.append(True)
+        response.append(message)
+        return json.dumps(message)
+        
+    except Exception as e:
+        return Response(f"Unexpected error: {e}", status=500) 
 
-        budget["_id"] = str(budget["_id"])
 
-        print(budget)
-        return json.dumps(budget)
-
+@app.post('/api/budget/delete/<user_name>')
+def delete_budget(user_name):
+    try:
+        data = request.get_json()
+        response = []
+        
+        print(data)
+        cursor = database.budgets.find({"title": data['title']})
+        if not cursor:
+            response.append(False)
+            response.append("Budget does not exist")
+            return json.dumps(response)
+        
+        found = False
+        print(data['title'])
+        for budget in cursor:
+            print(budget['owner'])
+            if budget['owner'] == data['owner']:
+                found = True
+                # database.budgets.delete_one({'title':data['tile'], 'owner':data['owner']})
+        
+        if not found:
+            response.append(False)
+            response.append("You are not the owner of this budget")
+            return json.dumps(response)
+            
+        database.budgets.delete_one({'title':data['title'], 'owner':data['owner']})
+        
+        response.append(True)
+        response.append("Budget deleted successfully!")
+        
+        return json.dumps(response)
+        
     except Exception as e:
         return Response(f"Unexpected error: {e}", status=500)
+    
 
 @app.post('/api/recover-username')
 def send_recovery():

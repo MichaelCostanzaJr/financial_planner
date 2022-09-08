@@ -14,7 +14,11 @@ let DataContext = createContext({
     setUserBudgets: () => {},
     dumpUserBudgets: () => {},
     updateActiveBudget: () => {},
-    dumpActiveBudget: () => {}
+    dumpActiveBudget: () => {},
+    addIncomeRow: () => {},
+    addExpenseRow: () => {},
+    deleteRow: () => {},
+    editRow: () => {}
 })
 
 export default DataContext
