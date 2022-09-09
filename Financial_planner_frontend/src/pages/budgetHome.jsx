@@ -41,21 +41,21 @@ const BudgetHome = () => {
     }
 
     return (
-        <div className="budget-home">
-            <div className="tile new-tile" onClick={newBudget}>New Budget</div>
-            <div className="container">
+        <div className="budget-home container">
+            <div className="budget-tiles">
+                <div className="tile new-tile" onClick={newBudget}>New Budget</div>
                 
-                    {
-                        userBudgets.map(budget => (
-                            <div className="sub-tile" key={budget._id} value={budget._id} onClick={() => {
-                                setActiveBudget(budget)
-                                let path = "/view-budget"
-                                navigate(path)
-                            }}>
-                                <span className="view-span">View {budget.title}</span>
-                            </div>
-                        ))
-                    }
+                {
+                    userBudgets.map(budget => (
+                        <div className="sub-tile" key={budget._id} value={budget._id} onClick={() => {
+                            setActiveBudget(budget)
+                            let path = "/view-budget"
+                            navigate(path)
+                        }}>
+                            <span className="view-span">View {budget.title}</span>
+                        </div>
+                    ))
+                }
                 
             </div>
         </div>

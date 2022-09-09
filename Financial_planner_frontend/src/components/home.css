@@ -23,12 +23,22 @@
 
 .home .container .budget-btn{
     grid-column: 1 / 3;
-    padding-block: 25%;
+    padding-block: 10%;
     color: var(--background-color);
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     font-weight: 700;
     font-size: 1.5em;
+}
+
+.home .container .goals-btn{
+    grid-column: 1 / 3;
+    padding-block: 10%;
+    /* background-color: var(--income-secondary-color); */
+    color: var(--income-secondary-color);
+    border-color: var(--income-secondary-color);
+    font-weight: 700;
+    font-size: 1.25em;
 }
 
 .home .container .alt-tile{
