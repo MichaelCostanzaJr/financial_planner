@@ -22,6 +22,19 @@ const FinancialGoals = () => {
                 if (expense.expensePriority === '2'){
                     expense['debt_index'] = debtIndex
                     debtIndex += 1
+                    let today = new Date()
+                    let start = new Date(expense.start_date)
+                    let paidYears = today.getFullYear() - start.getFullYear()
+                    let paidMonths = today.getMonth() - start.getMonth()
+                    if (paidMonths < 0){
+                        paidYears -= 1
+                    }
+                    let monthsPaid = (paidYears * 12) + paidMonths
+                    console.log("years paid: " + paidYears)
+                    console.log(monthsPaid)
+                    let paidValue = monthsPaid * expense.expenseValue
+                    expense['paid_value'] = paidValue
+                    expense['last_updated_date'] = today.toUTCString()
                     debtsCopy.push(expense)
                 }
             })
@@ -31,6 +44,7 @@ const FinancialGoals = () => {
     }
 
     useEffect(() => {
+        if (userDebts.length < 1)
         getUserDebts()
     }, [])
 
@@ -73,6 +87,17 @@ const FinancialGoals = () => {
         let btn = document.querySelector('.open-add-goal-tool-btn')
         element.classList.toggle('open')
         btn.classList.toggle('open')
+    }
+
+    const updateProgressValue = () => {
+        let element = document.querySelector('.progress-bar')
+        let newWidth = 100 - (((userDebts[inputData.debt_index].pay_off_value - userDebts[inputData.debt_index].paid_value) / userDebts[inputData.debt_index].pay_off_value) * 100)
+        console.log(newWidth)
+        element.style.width =  newWidth + '%'
+    }
+
+    const submitGoal = () => {
+        updateProgressValue()
     }
 
     return (
@@ -122,7 +147,7 @@ const FinancialGoals = () => {
                     }
                 </div>
                 <div className="btn-container">
-                    <button className="add-goal-btn">Submit Goal</button>
+                    <button className="add-goal-btn" onClick={submitGoal}>Submit Goal</button>
                 </div>
             </div>
             <div className="goals-container">
@@ -136,8 +161,10 @@ const FinancialGoals = () => {
                             <label>${userDebts[inputData.debt_index].expenseValue * userDebts[inputData.debt_index].term}</label>
                             <label>0</label>
                         </div>
-                        <div className="progress-bar">
-                            Monthly payment: {userDebts[inputData.debt_index].expenseValue}
+                        <div className="progress-bar-container">
+                            <div className="progress-bar">
+                                Monthly payment: {userDebts[inputData.debt_index].paid_value}
+                            </div>
                         </div>
                         <div className="time-to-goal">You will reach your goal in: {userDebts[inputData.debt_index].term} months.</div>
                     </>

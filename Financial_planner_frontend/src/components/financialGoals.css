@@ -76,22 +76,16 @@
     justify-content: space-between;
 }
 
+.progress-bar-container{
+    width: 100%;
+    background-color: var(--expense-primary-color);
+}
 .progress-bar{
     position: relative;
     border: 1px solid var(--secondary-color);
-    background-color: var(--expense-primary-color);
+    background-color: var(--income-primary-color);
     color: var(--background-color);
     font-weight: 700;
     z-index: 1;
     padding-block: 10px;
-}
-.progress-bar::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 30%;
-    background-color: var(--income-primary-color);
-    z-index: -1;
 }

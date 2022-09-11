@@ -65,12 +65,12 @@ const GlobalDataProvider = (props) => {
 
         let newTotal = 0
         copy['expenses'].forEach(element => {
-            newTotal += parseFloat(element['expenseValue'])
+            newTotal += element['expenseValue']
         })
         copy['expense_total'] = parseFloat(newTotal.toFixed(2))
 
-        let newSurplus = copy.income_total - newTotal
-        copy['surplus'] = parseFloat(newSurplus.toFixed(2))
+        let newSurplus = copy.income_total - copy.expense_total
+        copy['surplus'] = newSurplus
         setActiveBudget(copy)
     }
 

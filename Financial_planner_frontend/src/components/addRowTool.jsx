@@ -127,9 +127,8 @@ const AddRowTool = (props) => {
         if (expenseRow.expenseName && expenseRow.expenseValue && expenseRow.expensePriority){
             let copy = {...expenseRow}
             copy['index'] = props.index
-            let expenseParsed = parseFloat(expenseRow['expenseValue'])
-
             // convert values to numbers for calculations in other places
+            let expenseParsed = parseFloat(expenseRow['expenseValue'])
             copy['expenseValue'] = parseFloat(expenseParsed.toFixed(2))
             copy['term'] = parseFloat(expenseRow['term'])
             copy['apr'] = parseFloat(expenseRow.apr)
