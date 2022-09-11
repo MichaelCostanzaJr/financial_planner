@@ -29,7 +29,11 @@ const AddRowTool = (props) => {
         "expenseValue": 0,
         "expensePriority": '',
         "term": 0,
-        "index": props.index
+        "index": props.index,
+        "pay_off_value": 0,
+        "start_date": '',
+        "last_update_date:": '',
+        "pay_off_date": ''
     })
 
     let activeBudget = useContext(DataContext).activeBudget
@@ -124,12 +128,34 @@ const AddRowTool = (props) => {
             let copy = {...expenseRow}
             copy['index'] = props.index
             let expenseParsed = parseFloat(expenseRow['expenseValue'])
+
+            // convert values to numbers for calculations in other places
             copy['expenseValue'] = parseFloat(expenseParsed.toFixed(2))
+            copy['term'] = parseFloat(expenseRow['term'])
+            copy['apr'] = parseFloat(expenseRow.apr)
+
+            // convert date for math later
+            let startDate = new Date(copy['start_date'])
+            let today = new Date()
+            copy['start_date'] = startDate.toUTCString()
+            copy['last_update_date'] = today.toUTCString()
+
+            // calculate payoff value
+            let payOff = copy.term * copy.expenseValue
+            copy['pay_off_value'] = payOff
+
+            // calculate payoff date
+            let payoff_date = new Date(startDate.setMonth( startDate.getMonth() + copy.term))
+            copy['pay_off_date'] = payoff_date.toUTCString()
+            console.log(payoff_date)
+
             props.getIndex()
             insertExpenseRow(copy)
             setExpenseRow({})
             clearInputs()
-            return
+            console.log(copy)
+            // let lapsedTime = new Date(new Date(copy['last_update_date']) - new Date(copy['start_date']))
+            // console.log(lapsedTime.getMonth())
         }else{
             alert("You must complete all fields")
         }
@@ -216,7 +242,9 @@ const AddRowTool = (props) => {
                         <>
                             <div className="label">Loan data</div>
                             <input name="apr" type='number' onChange={onChangeExpense} className='input' step={'0.01'} placeholder="APR %"/>
-                            <input name="term" type="number" onChange={onChangeExpense} className='input' step={'1'} placeholder="Payment Months Remaining"/>
+                            <input name="term" type="number" onChange={onChangeExpense} className='input' step={'1'} placeholder="Loan Length (Months)"/>
+                            <label className="label">Loan Start Date</label>
+                            <input name="start_date" type="date" className="input" onChange={onChangeExpense}/>
                         </>
                         }
                     <button className="add-row-btn" onClick={addExpenseRow}>Add Row</button>

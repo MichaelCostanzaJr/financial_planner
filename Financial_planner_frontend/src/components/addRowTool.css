@@ -22,7 +22,7 @@
 
 .expense-input-container.open{
     opacity: 1;
-    max-height: 175px;
+    max-height: 220px;
     pointer-events: auto;
     margin-bottom: 10px;
 }

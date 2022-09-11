@@ -82,12 +82,17 @@ const FinancialGoals = () => {
             <button className="open-add-goal-tool-btn" onClick={toggle}>Open Add Goal Tool</button>
             <div className="add-goal-tool">
                 <div className="input-container">
-                    <input name="title" type="text" className="goal-title" onChange={onChange} placeholder="Goal Title"/>
+                    <input name="title" type="text" className="goal-title input" onChange={onChange} placeholder="Goal Title"/>
                     <select name="goal_type" onChange={onChange}>
-                        <option value=""></option>
+                        <option value="">Goal Type</option>
                         <option value="debt">Debt Goal</option>
-                        <option value="surplus">Surplus Goal</option>
+                        <option value="savings">Savings Goal</option>
                     </select>
+
+
+                    {/* -------------- debt menu  ------------ */}
+
+
                     {inputData.goal_type === 'debt' &&
                     <>
                         <select name="debt_type"  onChange={onChange}>
@@ -108,6 +113,11 @@ const FinancialGoals = () => {
                             
                         </>
                         }
+                    </>
+                    }
+                    {inputData.goal_type === 'savings' &&
+                    <>
+                        <input type="number" className="input" step={'0.01'} placeholder="What is your Savings goal?"/>
                     </>
                     }
                 </div>
