@@ -6,13 +6,20 @@ const MortgageCalculator = () => {
 
     let navigate = useNavigate()
 
-    const [mortgageRow, setMortgageRow] = useState({})
+    const [mortgageRow, setMortgageRow] = useState({
+        "property-tax": 0,
+        "insurance": 0,
+        "down-payment": 0
+    })
 
     const [mortgagePayment, setMortgagePayment] = useState(0)
 
     const onChangeMortgage = (e) => {
         let name = e.target.name
         let val = e.target.value
+        if(name !== 'va_loan'){
+            val = parseFloat(val)
+        }
     
         setMortgageRow(prev => ({...prev, [name]:val}))
         
@@ -22,19 +29,38 @@ const MortgageCalculator = () => {
 
         let principle = 0
         let term = 0
-        let interestRate = 0
-        let propertyTax = 0
-        let insurance = 0
-        let downPayment = 0
+        let interestRate
+        let propertyTax
+        let insurance
+        let downPayment
+        let mortgageInsurance 
         let wmortgagePayment = 0
        
 
-        principle = parseFloat(mortgageRow["principle"])
-        term = parseFloat(mortgageRow["term"])
-        interestRate = parseFloat(mortgageRow["interest-rate"])
-        propertyTax = parseFloat(mortgageRow["property-tax"])
-        insurance = parseFloat(mortgageRow["insurance"])
-        downPayment = parseFloat(mortgageRow["down-payment"])
+        principle = mortgageRow.principle
+        term = mortgageRow["term"]
+        interestRate = mortgageRow["interest_rate"]
+
+        if (mortgageRow["property_tax"]){
+            propertyTax = mortgageRow["property_tax"]
+        }else{
+            propertyTax = parseFloat(0)
+        }
+        if (mortgageRow.insurance){
+            insurance = mortgageRow["insurance"]
+        }else{
+            insurance = parseFloat(0)
+        }
+        if (mortgageRow["down_payment"]){
+            downPayment = mortgageRow["down_payment"]
+        }else{
+            downPayment = parseFloat(0)
+        }
+        if (mortgageRow.mortgage_insurance && mortgageRow.va_loan !== 'yes'){
+            mortgageInsurance = mortgageRow.mortgage_insurance
+        }else{
+            mortgageInsurance = parseFloat(0)
+        }
 
         
 
@@ -42,16 +68,20 @@ const MortgageCalculator = () => {
 
         let newPropertyTax = (parseFloat(propertyTax) / 12)
 
-        
-        
-        
-
-        let newPrinciple = principle - downPayment
-        console.log(downPayment)
+        // console.log("Principle: " + [principle] + " " + principle.type)
+        // console.log("term: " + term + " " )
+        // console.log("interestRate: " + interestRate + " " + interestRate.type)
+        // console.log("propertyTax: " + propertyTax + " " + propertyTax.type)
+        // console.log("insurance: " + insurance + " " + insurance.type)
+        // console.log("downPayment: " + downPayment + " " + downPayment.type)
+    
+        console.log(principle)
+        let newPrinciple = principle - downPayment + propertyTax + mortgageInsurance
+        console.log(newPrinciple)
 
         let newTerm = term * 12
 
-        let i1 = Math.pow(1+interest, newTerm)
+        let i1 = Math.pow(1 + interest, newTerm)
 
         // Original math equation 
         // m = P [interest(1+interst)^newTerm] / [(1+interest)^ newTerm - 1]
@@ -61,10 +91,11 @@ const MortgageCalculator = () => {
 
 
         let newMortgagePayment = wmortgagePayment + insurance
-
-        setMortgagePayment(newMortgagePayment.toFixed(2))
-
+        
         console.log(newMortgagePayment)
+
+        setMortgagePayment(parseFloat(newMortgagePayment.toFixed(2)))
+        console.log(mortgageRow)
         
 
         
@@ -79,20 +110,19 @@ const MortgageCalculator = () => {
                     <input name="principle" type="number" placeholder="Enter Home Price" className="price" onChange={onChangeMortgage} />
                 <select className="dropdown" name="term" id="term" onChange={onChangeMortgage}>
                     <option value="" >Term</option>
-                    <option value="30">30 Year</option>
-                    <option value="15">15 Year</option>
-                    <option value="10">10 Year</option>
+                    <option value={30}>30 Year</option>
+                    <option value={15}>15 Year</option>
                 </select>
-                <input name="interest-rate" type="number" step={'0.01'} placeholder="APR %" onChange={onChangeMortgage}/>
-                <input name="property-tax" type="number" step={'0.01'} placeholder="Property Tax (Optional)" onChange={onChangeMortgage}/>
+                <input name="interest_rate" type="number" step={'0.01'} placeholder="APR %" onChange={onChangeMortgage}/>
+                <input name="property_tax" type="number" step={'0.01'} placeholder="Property Tax (Optional)" onChange={onChangeMortgage}/>
                 <input name="insurance" type="number" step={'0.01'} placeholder="Insurance (Optional)" onChange={onChangeMortgage}/>
-                <input name="down-payment" type="number" step={'0.01'} placeholder="Down Payment" onChange={onChangeMortgage}/>
-                <select className="dropdown" name="va" id="va">
+                <input name="down_payment" type="number" step={'0.01'} placeholder="Down Payment" onChange={onChangeMortgage}/>
+                <select name="va_loan" className="dropdown" onChange={onChangeMortgage}>
                     <option value="">VA Loan?</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                 </select>
-                <input name="mortgage-insurance" type="number" step={'0.01'} placeholder="Mortgage Insurance (Optional)" onChange={onChangeMortgage}/>
+                <input name="mortgage_insurance" type="number" step={'0.01'} placeholder="Mortgage Insurance (Optional)" onChange={onChangeMortgage}/>
                 </div>
                 <div className="btn-container">
                 <button className="btn" onClick={mortgagePaymentCalc}>Calculate</button>
