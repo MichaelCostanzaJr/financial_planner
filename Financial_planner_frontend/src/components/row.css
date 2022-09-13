@@ -1,6 +1,6 @@
 .row{
     display: grid;
-    grid-template-columns: 40px repeat(2, calc(50% - 45px)) 40px;
+    grid-template-columns: 40px calc(50% - 45px)  calc(50% - 45px) 40px;
     align-items: center;
     gap: 3px;
     margin-bottom: 4px;
@@ -24,6 +24,7 @@
 
 .row .row-name{
     background-color: var(--secondary-color);
+    height: 100%;
 }
 
 .income{
@@ -32,4 +33,60 @@
 
 .expense{
     background-color: var(--expense-primary-color);
+}
+.info-container{
+    position: relative;
+    padding-top: 0!important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--secondary-color);
+    padding-right: 7px;
+}
+.info-container :nth-child(1){
+    text-align: center;
+    flex: 8;
+}
+.info-conatiner :nth-child(2){
+    text-align: center;
+    flex: 1;
+}
+.info{
+    color: var(--background-color);
+    border: 2px solid var(--background-color);
+    width: 40px;
+    border-radius: 50%;
+    font-weight: 700;
+    height: 25px;
+    width: 25px;
+    padding-top: 0!important;
+    /* padding-top: 0px!important; */
+}
+
+.info-box-container{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    left: 0;
+    min-height: 100%;
+    min-width: 100%;
+    backdrop-filter: blur(5px);
+    /* background-color: var(--background-color);
+    color: var(--secondary-color); */
+    z-index: 1000;
+}
+.info-box{
+    flex: 1;
+    background-color: var(--background-color);
+    color: var(--secondary-color);
+    padding: 20px;
+    border: 2px solid var(--nav-light);
+    border-radius: 20px;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+.info-name{
+    color: var(--primary-color);
 }
