@@ -3,7 +3,9 @@
     color: var(--primary-color);
     font-size: 1.4rem;
 }
-.note {
+.container h3 {
     color: var(--secondary-color);
     background-color: var(--background-color)!important;
+    margin-bottom: 20px;
+    
 }
