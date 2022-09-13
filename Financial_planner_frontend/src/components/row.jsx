@@ -14,8 +14,26 @@ const Row = (props) => {
 
         keys.forEach((element, index)=> {
             let obj = {}
-            obj[element] = values[index]
-            copy.push(obj)
+            if (element !== 'index' && element !== 'last_update_date'){
+                if(element === 'apr'){
+                    obj['Annual Percentage Rate'] = values[index]
+                }if(element === 'expenseName'){
+                    obj['Expense Name'] = values[index]
+                }if(element === 'expensePriority'){
+                    obj['Priority'] = values[index]
+                }if(element === 'pay_off_date'){
+                    obj['Payoff Date'] = values[index]
+                }if(element === 'pay_off_value'){
+                    obj['Payoff Value'] = values[index]
+                }if(element === 'start_date'){
+                    obj['Loan Start Date'] = values[index]
+                }if(element === 'term'){
+                    obj['Length of Loan'] = values[index]
+                }if(element === 'expenseValue'){
+                    obj['Monthly Amount'] = values[index]
+                }
+                copy.push(obj)
+            }
         })
         
         setData(copy)
