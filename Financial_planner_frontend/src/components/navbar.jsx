@@ -61,6 +61,12 @@ const Navbar = () => {
             let path = "/budget/home"
             navigate(path)
             
+        }else if(e.target.matches('.financial-goals')){
+
+            toggle_menu(e, currentDropDown)
+            let path = "/financial-goals"
+            navigate(path)
+
 
         }else if(e.target.matches('.debt-snowball')){
 
@@ -129,6 +135,7 @@ const Navbar = () => {
                             <hr className="horizontal-line" />
                             <div onClick={menu_Click} className="dont-disable home">Home</div>
                             <div onClick={menu_Click} className="dont-disable budget-home">Budget Home</div>
+                            <div onClick={menu_Click} className="dont-disable financial-goals">Financial Goals</div>
                             <div onClick={menu_Click} className="dont-disable budget-optimizer">Budget Optimizer</div>
                             <div onClick={menu_Click} className="dont-disable debt-snowball">Debt Snowball</div>
                             <div onClick={menu_Click} className="dont-disable mortgage-calc">Mortgage Calculator</div>
@@ -140,7 +147,6 @@ const Navbar = () => {
                         </>
                     }
                 </div>
-                
             </div>
         </div>
     )

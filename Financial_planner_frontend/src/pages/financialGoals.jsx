@@ -26,11 +26,12 @@ const FinancialGoals = () => {
                     let start = new Date(expense.start_date)
                     let paidYears = today.getFullYear() - start.getFullYear()
                     let paidMonths = today.getMonth() - start.getMonth()
-                    if (paidMonths < 0){
-                        paidYears -= 1
-                    }
+                    // if (paidMonths < 0){
+                    //     paidYears -= 1
+                    // }
                     let monthsPaid = (paidYears * 12) + paidMonths
                     console.log("years paid: " + paidYears)
+                    expense['months_to_paid'] = expense.term - monthsPaid
                     console.log(monthsPaid)
                     let paidValue = monthsPaid * expense.expenseValue
                     expense['paid_value'] = paidValue
@@ -163,10 +164,10 @@ const FinancialGoals = () => {
                         </div>
                         <div className="progress-bar-container">
                             <div className="progress-bar">
-                                Monthly payment: {userDebts[inputData.debt_index].paid_value}
+                                ${userDebts[inputData.debt_index].paid_value}
                             </div>
                         </div>
-                        <div className="time-to-goal">You will reach your goal in: {userDebts[inputData.debt_index].term} months.</div>
+                        <div className="time-to-goal">You will reach your goal in: {userDebts[inputData.debt_index].months_to_paid} months.</div>
                     </>
                 }
             </div>

@@ -32,7 +32,7 @@ const AddRowTool = (props) => {
         "index": props.index,
         "pay_off_value": 0,
         "start_date": '',
-        "last_update_date:": '',
+        "last_update_date": '',
         "pay_off_date": ''
     })
 
@@ -193,7 +193,7 @@ const AddRowTool = (props) => {
                 <>
                     <button className="toggle-show-btn income-show-btn" onClick={toggle}>Open Add Income Tool</button>
                     <div className="income-input-container">
-                        <div className="note">Fields with a red border are required</div>
+                        <div className="instruction">Fields with a red border are required</div>
                         <input name="source" type="text" className="source input required" onChange={onChangeIncome} placeholder="Income Source"/>
                         <input name="value" type="number" className="value input required number" onChange={onChangeIncome} step={'0.01'} placeholder="$0.00"/>
                         <select name="frequency" onChange={onChangeIncome} className="frequency input dropdown required">
@@ -225,7 +225,7 @@ const AddRowTool = (props) => {
                 <>
                 <button className="toggle-show-btn expense-show-btn" onClick={toggle}>Open Add Expense Tool</button>
                     <div className="expense-input-container">
-                    <div className="note">Fields with a red border are required</div>
+                    <div className="instruction">Fields with a red border are required</div>
                         <input name="expenseName" type="text" className="expenseName input required" onChange={onChangeExpense} placeholder="Expense Name"/>
                         <input name="expenseValue" type="number" className="value input required" onChange={onChangeExpense} step={'0.01'} placeholder="$0.00"/>
                         <select name="expensePriority" onChange={onChangeExpense} className="expensePriority input required">
