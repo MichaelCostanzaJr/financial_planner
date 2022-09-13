@@ -82,6 +82,8 @@ const AddRowTool = (props) => {
 
     const convertToMonthly = () => {
 
+        // fix tax calculation based of frequency 
+        
         let value = parseFloat(incomeRow.value)
         let hours = incomeRow.hours
         let newValue = 0
