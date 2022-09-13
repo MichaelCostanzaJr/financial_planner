@@ -62,40 +62,21 @@ const MortgageCalculator = () => {
             mortgageInsurance = parseFloat(0)
         }
 
-        
-
         let interest = (parseFloat(interestRate) / 12) / 100
 
         let newPropertyTax = (parseFloat(propertyTax) / 12)
-
-        // console.log("Principle: " + [principle] + " " + principle.type)
-        // console.log("term: " + term + " " )
-        // console.log("interestRate: " + interestRate + " " + interestRate.type)
-        // console.log("propertyTax: " + propertyTax + " " + propertyTax.type)
-        // console.log("insurance: " + insurance + " " + insurance.type)
-        // console.log("downPayment: " + downPayment + " " + downPayment.type)
     
-        console.log(principle)
-        let newPrinciple = principle - downPayment + propertyTax + mortgageInsurance
-        console.log(newPrinciple)
+        let newPrinciple = principle - downPayment + newPropertyTax + mortgageInsurance
 
         let newTerm = term * 12
 
         let i1 = Math.pow(1 + interest, newTerm)
 
-        // Original math equation 
-        // m = P [interest(1+interst)^newTerm] / [(1+interest)^ newTerm - 1]
-
-
         wmortgagePayment = newPrinciple * (interest * i1)/(i1 - 1)
 
-
         let newMortgagePayment = wmortgagePayment + insurance
-        
-        console.log(newMortgagePayment)
 
         setMortgagePayment(parseFloat(newMortgagePayment.toFixed(2)))
-        console.log(mortgageRow)
         
 
         
@@ -114,8 +95,8 @@ const MortgageCalculator = () => {
                     <option value={15}>15 Year</option>
                 </select>
                 <input name="interest_rate" type="number" step={'0.01'} placeholder="APR %" onChange={onChangeMortgage}/>
-                <input name="property_tax" type="number" step={'0.01'} placeholder="Property Tax (Optional)" onChange={onChangeMortgage}/>
-                <input name="insurance" type="number" step={'0.01'} placeholder="Insurance (Optional)" onChange={onChangeMortgage}/>
+                <input name="property_tax" type="number" step={'0.01'} placeholder="Annual Property Tax (Optional)" onChange={onChangeMortgage}/>
+                <input name="insurance" type="number" step={'0.01'} placeholder="Monthly Insurance (Optional)" onChange={onChangeMortgage}/>
                 <input name="down_payment" type="number" step={'0.01'} placeholder="Down Payment" onChange={onChangeMortgage}/>
                 <select name="va_loan" className="dropdown" onChange={onChangeMortgage}>
                     <option value="">VA Loan?</option>
