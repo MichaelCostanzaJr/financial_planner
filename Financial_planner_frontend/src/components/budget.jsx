@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import DataContext from "../context/dataContext"
 import Row from "../components/row"
@@ -18,8 +18,16 @@ const Budget = () => {
     const [editIndex, setEditIndex] = useState(0)
     const [edit, setEdit] = useState(false)
     const [editRow, setEditRow] = useState({})
+    const [showInfo, setShowInfo] = useState(false)
+    const [infoData, setInfoData] = useState([])
 
     let navigate = useNavigate()
+
+    const loadData = (data) => {
+        console.log("data: " + Object.values(data[0]))
+        setInfoData(data)
+        toggleInfo()
+    }
 
     const saveBudget = async() => {
 
@@ -67,11 +75,23 @@ const Budget = () => {
         setEditIndex(id)
     }
 
+    const toggleInfo = () => {
+        // if (showInfo){
+        //     setShowInfo(false)
+        // }else{
+        //     setShowInfo(true)
+        // }
+
+        
+    }
+
+
+
     return (
-        <div className="budget">
+        <div className="budget container">
             {edit &&
                 <div className="edit-background">
-                    <div className="edit-container container">
+                    <div className="edit-container ">
                         <h3 className="header">Edit Row</h3>
                         <div className="edit-form form">
                             <input name="name" className="edit-name-input input" type="text" onChange={onChange} placeholder="New Source"/>
@@ -84,8 +104,25 @@ const Budget = () => {
                     </div>
                 </div>
             }
+            {/* {showInfo &&
+                <div className="info-box-container" onClick={toggleInfo}>
+                    <div className="info-box">
+                        {
+                            infoData.map((item, index) => (
+                                <>
+                                    <div key={Object.keys(item) + index} className="expense-info-container">
+                                        <p key={Object.keys(item)} className='info-name'>{Object.keys(item)}: </p >
+                                        <p key={Object.values(item)} className='info-value'>{Object.values(item)}</p>
+                                    </div>
+                                    
+                                </>
+                            ))
+                        }
+                    </div>
+                </div>
+            } */}
 
-            <div className="container">
+            <div className="">
                 <h2 className="budget-title">{budget.title}</h2>
                 
                 <AddRowTool getIndex={getIndex} index={index} type="income"/>
@@ -107,7 +144,7 @@ const Budget = () => {
                 <div className="expense-table">
                     {budget.expenses &&
                         budget.expenses.map(item => (
-                            <Row key={item.index} type="expense" updateRow={toggleEdit} deleteRow={deleteRow} id={item.index} data={item}></Row>
+                            <Row key={item.index} type="expense" toggleInfo={toggleInfo} updateRow={toggleEdit} deleteRow={deleteRow} id={item.index} data={item}></Row>
                         ))
                     }
                     <div className="expense-total">

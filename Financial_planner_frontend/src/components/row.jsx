@@ -16,21 +16,25 @@ const Row = (props) => {
             let obj = {}
             if (element !== 'index' && element !== 'last_update_date'){
                 if(element === 'apr'){
-                    obj['Annual Percentage Rate'] = values[index]
+                    obj['Annual Percentage Rate'] = values[index] + '%'
                 }if(element === 'expenseName'){
                     obj['Expense Name'] = values[index]
                 }if(element === 'expensePriority'){
                     obj['Priority'] = values[index]
                 }if(element === 'pay_off_date'){
-                    obj['Payoff Date'] = values[index]
+                    let temp = new Date(values[index])
+                    let date = temp.getDay()+ "/" + temp.getMonth() + "/" + temp.getFullYear()
+                    obj['Payoff Date'] = date
                 }if(element === 'pay_off_value'){
-                    obj['Payoff Value'] = values[index]
+                    obj['Payoff Value'] = '$' + values[index].toFixed(2)
                 }if(element === 'start_date'){
-                    obj['Loan Start Date'] = values[index]
+                    let temp = new Date(values[index])
+                    let date = temp.getDay()+ "/" + temp.getMonth() + "/" + temp.getFullYear()
+                    obj['Loan Start Date'] = date
                 }if(element === 'term'){
-                    obj['Length of Loan'] = values[index]
+                    obj['Length of Loan'] = values[index] + ' months'
                 }if(element === 'expenseValue'){
-                    obj['Monthly Amount'] = values[index]
+                    obj['Monthly Amount'] = '$' + values[index].toFixed(2)
                 }
                 copy.push(obj)
             }
@@ -59,6 +63,7 @@ const Row = (props) => {
         }else{
             setToggleActive(true)
         }
+        // props.toggleInfo(id)
     }
 
     return (
@@ -75,7 +80,7 @@ const Row = (props) => {
             <>
                 <button className="edit-btn btn" onClick={updateRow}><i className="far fa-edit"></i></button>
                 <div className="info-container">
-                    <div className="row-name budget-data">{props.data.expenseName} / {props.data.expensePriority}</div>
+                    <div className="row-name budget-data">{props.data.expenseName}</div>
                     <div className="info" onClick={toggleInfo}>
                         <i className="fa-solid fa-info"></i>
                     </div>
@@ -85,17 +90,18 @@ const Row = (props) => {
             </>
             }
             {toggleActive &&
-            <>
                 <div className="info-box-container" onClick={toggleInfo}>
                     <div className="info-box">
                         {
-                            data.map(item => (
-                                <p><span className='info-name'>{Object.keys(item)}: </span>{Object.values(item)}</p>
+                            data.map((item, index) => (
+                                <div key={Object.keys(item) + index} className="expense-info-container">
+                                    <p key={Object.keys(item)} className='info-name'>{Object.keys(item)}: </p >
+                                    <p key={Object.values(item)} className='info-value'>{Object.values(item)}</p>
+                                </div>
                             ))
                         }
                     </div>
                 </div>
-            </>
             }
         </div>
     )
