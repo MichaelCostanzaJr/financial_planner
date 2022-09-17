@@ -55,8 +55,8 @@ const Home = () => {
                 <button className="tile goals-btn" onClick={financialGoals}>Financial Goals</button>
                 <button className="tile alt-tile">Debt Snowball</button>
                 <button className="tile alt-tile" onClick={budgetOptimizer}>Budget Optimization</button>
-                <button className="tile " onClick={mortgageCalculator}>Mortgage Calculator</button>
-                <button className="tile " onClick={autoCalculator}>Auto Finance Calculator</button>
+                <button className="tile ma-tile" onClick={mortgageCalculator}>Mortgage Calculator</button>
+                <button className="tile ma-tile" onClick={autoCalculator}>Auto Finance Calculator</button>
             </div>
         </div>
     )

@@ -31,6 +31,50 @@
     font-size: 1.5em;
 }
 
+@media only screen and (min-width: 768px){
+    .home .container .budget-btn {
+        box-shadow: 0 0 10px 0px var(--background-color) inset, 0 0 10px 4px var(--background-color);
+        -webkit-transition: all 150ms ease-in-out;
+        transition: all 150ms ease-in-out;
+  }
+    .home .container .budget-btn:hover {
+        box-shadow: 0 0 10px 10px var(--background-color) inset, 0 0 0 0 var(--background-color);
+        font-size: 1.4em;
+        
+  }
+    .home .container .goals-btn {
+        box-shadow: 0 0 5px 0px var(--income-secondary-color) inset, 0 0 5px 2px var(--income-secondary-color);
+        -webkit-transition: all 150ms ease-in-out;
+        transition: all 150ms ease-in-out;
+
+  }
+    .home .container .goals-btn:hover {
+        box-shadow: 0 0 10px 10px var(--income-secondary-color) inset, 0 0 0 0 var(--income-secondary-color);
+        font-size: 1.15em;
+    }
+
+    .home .container .alt-tile{
+        box-shadow: 0 0 5px 0px var(--nav-light) inset, 0 0 5px 2px var(--nav-light);
+        -webkit-transition: all 150ms ease-in-out;
+        transition: all 150ms ease-in-out;
+    }
+    .home .container .alt-tile:hover{
+        box-shadow: 0 0 10px 10px black inset, 0 0 0 0 black;
+        font-size: .95em;
+    }
+
+    .home .container .ma-tile{
+        box-shadow: 0 0 5px 0px var(--background-color) inset, 0 0 5px 2px var(--background-color);
+        -webkit-transition: all 150ms ease-in-out;
+        transition: all 150ms ease-in-out;
+    }
+    .home .container .ma-tile:hover{
+        box-shadow: 0 0 10px 10px black inset, 0 0 0 0 black;
+        font-size: .95em;
+    }
+}
+
+
 .home .container .goals-btn{
     grid-column: 1 / 3;
     padding-block: 10%;
