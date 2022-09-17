@@ -36,7 +36,8 @@ const AutoCalculator = () => {
 
         principle = autoRow["principle"]
         term = autoRow["term"]
-        interestRate = autoRow["interest-rate"]
+        interestRate = autoRow["interest_rate"]
+
         if (autoRow.insurance){
             insurance = autoRow["insurance"]
         }else{
