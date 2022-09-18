@@ -74,7 +74,8 @@ const AutoCalculator = () => {
         principle = principle - tradeIn - downPayment
 
         let tax = principle * autoRow.tax
-        breakDownCopy.push(tax)
+        console.log(autoRow.tax)
+        breakDownCopy.push(tax.toFixed(2))
         total += tax
         breakDownCopy.push(total.toFixed(2))
         console.log(tax)
@@ -149,8 +150,8 @@ const AutoCalculator = () => {
                     <h3 className="breakdown-header">Receipt</h3>
                     <div className="receipt">
                         <div className="breakdown-label">Purchase Price</div><div className="breakdown-value">${breakdown[0]}</div>
-                        <div className="breakdown-label">Trade-in Value</div><div className="breakdown-value">${breakdown[1]}</div>
-                        <div className="breakdown-label">Down Payment</div><div className="breakdown-value">${breakdown[2]}</div>
+                        <div className="breakdown-label">Trade-in Value</div><div className="breakdown-value">-${breakdown[1]}</div>
+                        <div className="breakdown-label">Down Payment</div><div className="breakdown-value">-${breakdown[2]}</div>
                         <div className="breakdown-label">Sales Tax (est. 8%)</div><div className="breakdown-value">${breakdown[3]}</div>
                         <div className="breakdown-label">Total</div><div className="breakdown-value">${breakdown[4]}</div>
                     </div>
