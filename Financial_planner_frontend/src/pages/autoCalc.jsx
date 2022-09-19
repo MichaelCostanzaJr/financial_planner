@@ -141,7 +141,7 @@ const AutoCalculator = () => {
                     <button className="btn" type="submit" onClick={monthPaymentCalc}>Calculate</button>
                 </div>
                 {monthlyPayment &&
-                    <div className="monthlyPayment">
+                    <div className="monthly-payment">
                         Monthly Payment ${monthlyPayment} 
                     </div>
                 }

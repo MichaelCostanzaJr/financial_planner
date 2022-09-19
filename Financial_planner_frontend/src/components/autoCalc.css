@@ -1,13 +1,18 @@
-.monthlyPayment {
-    margin-top: 40px;
+.monthly-payment {
+    margin-top: 20px;
     color: var(--primary-color);
     font-size: 1.4rem;
 }
-.container h3 {
+.container .note {
     color: var(--secondary-color);
     background-color: var(--background-color)!important;
     margin-bottom: 20px;
-    
+    width: 80%;
+    align-self: center;
+}
+
+.amount-color{
+    color: var(--expense-primary-color);
 }
 
 .loan-overview .breakdown-header{
