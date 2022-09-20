@@ -75,8 +75,10 @@
     background-color: var(--income-primary-color);
     color: var(--background-color);
     font-weight: 700;
+    min-height: 40px;
     z-index: 1;
-    padding-block: 10px;
+    padding: 5px;
+    text-align: right;
 }
 
 /* .debt-display::before{

@@ -274,7 +274,7 @@ def debt_snowball():
     data = request.get_json()
     # print(data)
     working = True
-    count = 1
+    count = 0
     snowball = data[0]
     print(data)
     overpayment = 0
