@@ -304,7 +304,7 @@ const BudgetOptimizer = () => {
         <div className="budget-optimizer container">
             <h1 className="header">Budget Optimizer</h1>
             <div className="budgets">
-                <h3>Select a Budget to Optimize</h3>
+                <h3 className="title">Select a Budget to Optimize</h3>
                 <select name="budget_select" className="budget-select" onChange={onChange}>
                     <option value=""></option>
                 {
@@ -315,7 +315,7 @@ const BudgetOptimizer = () => {
             </div>
             <div className="optimizer-options ">
                 <h3 className="current-surplus">Current Surplus: <span className="surplus-span">{budget['surplus']}</span></h3>
-                <h3>Select an Optimization Method</h3>
+                <h3 className="title">Select an Optimization Method</h3>
                 <select name="optimization-option" className="optimization-option" onChange={onOptimizeSelect}>
                     <option value=""></option>
                     <option value="surplus">Surplus Goal</option>

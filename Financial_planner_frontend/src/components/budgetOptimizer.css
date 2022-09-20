@@ -12,6 +12,11 @@
     padding-top: 8px;
 }
 
+.title {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
 .current-surplus{
     color: var(--primary-color);
 }
@@ -34,6 +39,7 @@
 
 .expense-header{
     margin-block: 10px;
+    color: var(--primary-color);
 }
 
 .budgets{
