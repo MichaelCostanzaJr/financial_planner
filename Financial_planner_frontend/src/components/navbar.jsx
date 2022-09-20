@@ -70,7 +70,9 @@ const Navbar = () => {
 
         }else if(e.target.matches('.debt-snowball')){
 
-            // add logic
+            toggle_menu(e, currentDropDown)
+            let path = "/debt-snowball"
+            navigate(path)
 
         }else if(e.target.matches('.budget-optimizer')){
             toggle_menu(e, currentDropDown)

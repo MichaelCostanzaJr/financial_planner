@@ -26,9 +26,6 @@ const FinancialGoals = () => {
                     let start = new Date(expense.start_date)
                     let paidYears = today.getFullYear() - start.getFullYear()
                     let paidMonths = today.getMonth() - start.getMonth()
-                    // if (paidMonths < 0){
-                    //     paidYears -= 1
-                    // }
                     let monthsPaid = (paidYears * 12) + paidMonths
                     console.log("years paid: " + paidYears)
                     expense['months_to_paid'] = expense.term - monthsPaid

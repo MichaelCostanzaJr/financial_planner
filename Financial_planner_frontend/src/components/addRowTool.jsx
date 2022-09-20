@@ -150,6 +150,11 @@ const AddRowTool = (props) => {
             copy['pay_off_date'] = payoff_date.toUTCString()
             console.log(payoff_date)
 
+            // calculate financed amount
+            // let principle = 
+            // let financed = expenseRow.expenseValue * expenseRow.term
+            // copy['financed_amount'] = financed
+
             props.getIndex()
             insertExpenseRow(copy)
             setExpenseRow({})
@@ -246,6 +251,7 @@ const AddRowTool = (props) => {
                             <input name="term" type="number" onChange={onChangeExpense} className='input' step={'1'} placeholder="Loan Length (Months)"/>
                             <label className="label">Loan Start Date</label>
                             <input name="start_date" type="date" className="input" onChange={onChangeExpense}/>
+                            {/* <input type="number" className="financed_amount input" step={'0.01'} placeholder="Financed Amount" onChange={onChangeExpense}/> */}
                         </>
                         }
                     <button className="add-row-btn" onClick={addExpenseRow}>Add Row</button>

@@ -11,7 +11,7 @@
 .budget-home .budget-tiles .sub-tile{
     background-color: var(--nav-light);
     border-radius: 20px;
-    border: 1px solid var(--secondary-color);
+    border: 1px solid var(--nav-);
     color: var(--primary-color);
     padding-block: 20%;
 }

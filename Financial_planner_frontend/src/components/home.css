@@ -31,9 +31,9 @@
     font-size: 1.5em;
 }
 
-/* @media only screen and (min-width: 768px){
+@media only screen and (min-width: 768px){
     .home .container .budget-btn {
-        box-shadow: 0 0 5px 0px var(--background-color) inset, 0 0 5px 0px var(--background-color);
+        /* box-shadow: 0 0 5px 0px var(--background-color) inset, 0 0 5px 0px var(--background-color); */
         -webkit-transition: all 150ms ease-in-out;
         transition: all 150ms ease-in-out;
   }
@@ -42,7 +42,7 @@
         font-size: 1.4em;
   }
     .home .container .goals-btn {
-        box-shadow: 0 0 5px 0px var(--income-secondary-color) inset, 0 0 5px 2px var(--income-secondary-color);
+        /* box-shadow: 0 0 5px 0px var(--income-secondary-color) inset, 0 0 5px 2px var(--income-secondary-color); */
         -webkit-transition: all 150ms ease-in-out;
         transition: all 150ms ease-in-out;
 
@@ -71,7 +71,7 @@
         box-shadow: 0 0 7px 7px black inset, 0 0 0 0 black;
         font-size: .95em;
     }
-} */
+}
 
 
 .home .container .goals-btn{

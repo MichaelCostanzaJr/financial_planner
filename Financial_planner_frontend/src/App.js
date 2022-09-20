@@ -19,6 +19,7 @@ import NewBudget from "./pages/newBudget"
 import AutoCalculator from "./pages/autoCalc";
 import BudgetOptimizer from "./pages/budgetOptimizer";
 import FinancialGoals from "./pages/financialGoals";
+import DebtSnowball from "./pages/debtSnowball";
 
 // add logic to get token when user logs in.  If no toke, prevent access to some pages and redirect to home if user attempts to access unauthorized pages
 
@@ -44,6 +45,7 @@ function App() {
               <Route path= "/new-budget" exact element= {<NewBudget/>}/>
               <Route path= "/budget-optimizer" exact element= {<BudgetOptimizer/>}/>
               <Route path= "/financial-goals" exact element= {<FinancialGoals/>}/>
+              <Route path= "/debt-snowball" exact element= {<DebtSnowball/>}/>
             </Routes>
         </Router>
       </GlobalDataProvider>
