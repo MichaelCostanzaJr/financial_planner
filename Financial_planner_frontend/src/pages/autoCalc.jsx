@@ -142,12 +142,12 @@ const AutoCalculator = () => {
                 </div>
                 {monthlyPayment &&
                     <div className="monthly-payment">
-                        Monthly Payment ${monthlyPayment} 
+                        Monthly Payment <span className="amount-color">${monthlyPayment}</span> 
                     </div>
                 }
                 {breakdown.length > 0 &&
                 <div className="loan-overview">
-                    <h3 className="breakdown-header">Receipt</h3>
+                    <h3 className="breakdown-header">Price Breakdown</h3>
                     <div className="receipt">
                         <div className="breakdown-label">Purchase Price</div><div className="breakdown-value">${breakdown[0]}</div>
                         <div className="breakdown-label">Trade-in Value</div><div className="breakdown-value">-${breakdown[1]}</div>
@@ -157,16 +157,11 @@ const AutoCalculator = () => {
                     </div>
 
                     <h3 className="breakdown-header">Monthly Breakdown</h3>
-                    <div className="breakdown-container">
-                        <div className="breakdown-principle-container">
-                            <div className="breakdown-label">Principle</div><div className="breakdown-value">${breakdown[5]}</div>
-                        </div>
-                        <div className="breakdown-interest-container">
-                            <div className="breakdown-label">Interest</div><div className="breakdown-value">${breakdown[6]}</div>
-                        </div>
-                        <div className="breakdown-insurance-container">
-                            <div className="breakdown-label">Insurance</div><div className="breakdown-value">${breakdown[7]}</div>
-                        </div>
+                    <div className="receipt">
+                        <div className="breakdown-label">Principle</div><div className="breakdown-value">${breakdown[5]}</div>
+                        <div className="breakdown-label">Interest</div><div className="breakdown-value">${breakdown[6]}</div>
+                        <div className="breakdown-label">Insurance</div><div className="breakdown-value">${breakdown[7]}</div>
+                        <div className="breakdown-label">Monthly Payment</div><div className="breakdown-value">${breakdown[8]}</div>
                     </div> 
                     <h3 className="breakdown-header">Payoff Breakdown</h3>
                     <div className="receipt bottom">
