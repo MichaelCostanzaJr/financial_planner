@@ -13,6 +13,7 @@
 
 .debt-snowball .input-container .snowball-amount-label{
     flex: 3;
+    padding-top: 9px;
     background-color: var(--primary-color);
 }
 
