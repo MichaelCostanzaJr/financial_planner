@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react"
 import DataContext from "../context/dataContext"
+import DataService from "../services/dataService"
 import "../components/debtSnowball.css"
 
 
@@ -26,21 +27,45 @@ const DebtSnowball = () => {
                     expense['debt_index'] = debtIndex
                     debtIndex += 1
                     let today = new Date()
-                    let start = new Date(expense.start_date)
+                    let start = new Date(expense.loan_start_date)
                     let paidYears = today.getFullYear() - start.getFullYear()
                     let paidMonths = today.getMonth() - start.getMonth()
+                    if (today.getMonth() < start.getMonth()){
+                        paidMonths = paidMonths + 12
+                        paidYears = paidYears - 1
+                    }
+                    expense['months_paid'] = paidMonths
                     let monthsPaid = (paidYears * 12) + paidMonths
                     console.log("years paid: " + paidYears)
                     expense['months_to_paid'] = expense.term - monthsPaid
-                    console.log(monthsPaid)
+                    // console.log(monthsPaid)
                     let paidValue = monthsPaid * expense.expenseValue
-                    expense['paid_value'] = paidValue
-                    expense['last_updated_date'] = today.toUTCString()
-                    expense['current_balance'] = expense.pay_off_value - expense.paid_value
+                    expense['total_payments_made'] = paidValue
+                    expense['last_updated_date'] = today.toDateString()
+                    if (expense.is_mortgage === 'yes'){
+                        let adjustedPayment = expense.expenseValue - expense.insurance - expense.mortgage_insurance - (expense.property_tax / 12)
+                        let newCurrentPrincipleBalance = (expense.current_principle_balance - (adjustedPayment * monthsPaid)).toFixed(2)
+                        expense['current_principle_balance'] = parseFloat(newCurrentPrincipleBalance)
+                    }
                     expense['new_payoff_date'] = "N/A"
                     debtsCopy.push(expense)
                 }
             })
+            let changesNeeded = true
+            while (changesNeeded){
+                changesNeeded = false
+                for (let i = 1; i < debtsCopy.length; i++){
+                    if (i === debtsCopy.length){
+                        i = 0
+                    }
+                    if (debtsCopy[i - 1].months_to_paid > debtsCopy[i].months_to_paid){
+                        let temp = debtsCopy[i]
+                        debtsCopy[i] = debtsCopy[i - 1]
+                        debtsCopy[i - 1] = temp
+                        changesNeeded = true
+                    }
+                }
+            }
         }
         console.log(debtsCopy)
         setUserDebts(debtsCopy)
@@ -51,39 +76,39 @@ const DebtSnowball = () => {
         getUserDebts()
     }, [])
 
-    const setDebtEndPoints = () => {
-        //***** Move calculation to backend *****//
+    const setDebtEndPoints = async() => {
 
-        // compute new debt payoff dates based off applied extra payments (Snowball)
-        // if paid off loop - debt['new_months_until_paid'] & debt['new_payoff_date']
-        let complete = true
-        userDebts.forEach(debt => {
-            if(debt.pay_off_value > 0){
-                complete = false
-                let monthlyInterest = debt.expenseValue * (debt.apr / 12)
-                let principle = debt.expenseValue - monthlyInterest
-    
-                principle = snowball + overpayment
-                setOverpayment(0)
-                debt.pay_off_value -= principle
-    
-                if (debt.pay_off_value <= 0){
-                    setOverpayment(debt.pay_off_value * -1)
-                    debt['end_point'] = counter
-                    let today = new Date()
-                    let payoff_date = new Date(today.setMonth( today.getMonth() + debt.counter))
-                    debt['new_payoff_date'] = payoff_date.toUTCString()
-                    let newSnowball = snowball + debt.expenseValue
-                    setSnowball(newSnowball)
+        console.log("Snowball value being sent: " + snowball['snowball'])
+
+        let copy = [...userDebts]
+        let changesNeeded = true
+        while (changesNeeded === true){
+            console.log(copy[0])
+            changesNeeded = false
+            for (let i = 1; i < copy.length; i++){
+                if (i === copy.length){
+                    i = 0
+                }
+                if (copy[i - 1].months_to_paid > copy[i].months_to_paid){
+                    let temp = copy[i]
+                    copy[i] = copy[i - 1]
+                    copy[i - 1] = temp
+                    changesNeeded = true
                 }
             }
-        })
-
-        setCounter(counter + 1)
-
-        if (!complete){
-            setDebtEndPoints()
         }
+
+        let payload = []
+        payload.push(snowball)
+        copy.forEach(debt => {
+            payload.push(debt)
+        })
+        let service = new DataService()
+        let data = await service.snowball(payload)
+
+        console.log(data)
+
+        updateProgressValue(data)
 
         // monthly payment                                            Get monthly payment
         // * interest rate as percent                                 * get interest rate
@@ -100,29 +125,29 @@ const DebtSnowball = () => {
     }
 
     const onChange = (e) => {
-
-        let val = e.target.val
-
-        if (val){
-            setSnowball(val)
-        }
+        let name = e.target.name
+        let val = e.target.value
+        val = parseFloat(val)
+        setSnowball(val)
+        console.log("Value is: " + val)
     }
 
-    const updateProgressValue = () => {
+    const updateProgressValue = (data) => {
         // let element = document.querySelector('.debt-display')
         let elements = document.querySelectorAll('.debt-display')
 
         for (let i = 0; i < elements.length; i++){
-            // let newWidth = (parseFloat(userDebts[i].end_point) / parseFloat(userDebts[i].months_to_paid)) * 100
-            let newWidth = 50
+            let newWidth = (data[i].new_end_point / parseInt(userDebts[i].months_to_paid)) * 100
+            if (newWidth > 100){
+                newWidth = 100
+            }
             console.log(newWidth)
             elements[i].style.width =  newWidth + '%'
         }
     }
 
-    const applySnowball = () => {
-        // setDebtEndPoints()
-        updateProgressValue()
+    const applySnowball = async() => {
+        await setDebtEndPoints()
     }
 
     return (
@@ -142,7 +167,11 @@ const DebtSnowball = () => {
                                 <h4 className="debt-title">{debt.expenseName}</h4>
                             </div>
                             <div className="debt-range">
-                                <label className="range-lable">{debt.current_balance}</label>
+                                <label>Current Balance</label>
+                                <label>Payoff</label>
+                            </div>
+                            <div className="debt-range">
+                                <label className="range-lable">{debt.current_principle_balance.toFixed(2)}</label>
                                 <label className="range-lable">0</label>
                             </div>
                             <div className="debt-display-container">

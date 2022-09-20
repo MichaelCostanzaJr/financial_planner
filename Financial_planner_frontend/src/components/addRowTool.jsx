@@ -6,6 +6,7 @@ import { useEffect } from "react"
 const AddRowTool = (props) => {
 
     let budget = useContext(DataContext).activeBudget
+    const [isMortgage, setIsMortgage] = useState('')
     // const [index, setIndex] = useState(props.getIndex)
 
     // useEffect(()=>{
@@ -51,6 +52,10 @@ const AddRowTool = (props) => {
     const onChangeExpense = (e) => {
         let name = e.target.name
         let val = e.target.value
+
+        if (name === 'is_mortgage'){
+            setIsMortgage(val)
+        }
 
         setExpenseRow(prev => ({...prev, [name]:val}))
     }
@@ -135,11 +140,47 @@ const AddRowTool = (props) => {
             copy['term'] = parseFloat(expenseRow['term'])
             copy['apr'] = parseFloat(expenseRow.apr)
 
+            if (copy['is_mortgage'] === 'yes'){
+                copy['insurance'] = parseFloat(parseFloat(expenseRow.insurance).toFixed(2))
+                copy['mortgage_insurance'] = parseFloat(parseFloat(expenseRow.mortgage_insurance).toFixed(2))
+                copy['property_tax'] = parseFloat(parseFloat(expenseRow.property_tax).toFixed(2))
+            }
+
             // convert date for math later
-            let startDate = new Date(copy['start_date'])
+            let startDate = new Date(copy['loan_start_date'])
+            console.log("original start date: " + startDate.getFullYear())
             let today = new Date()
-            copy['start_date'] = startDate.toUTCString()
-            copy['last_update_date'] = today.toUTCString()
+            copy['loan_start_date'] = startDate.toDateString()
+            copy['created_date'] = today.toDateString()
+            
+            // calculate financed payment info
+            let paidYears = today.getFullYear() - startDate.getFullYear()
+            console.log(today.getFullYear())
+            console.log(startDate.getFullYear())
+            console.log("Paid years: " + paidYears)
+            let paidMonths = today.getMonth() - startDate.getMonth()
+            console.log("Paid months: " + paidMonths)
+            if (today.getMonth() < startDate.getMonth()){
+                paidMonths = paidMonths + 12
+                paidYears = paidYears - 1
+            }
+            let monthsPaid = (paidYears * 12) + paidMonths
+            copy['months_to_paid'] = copy.term - monthsPaid
+
+            let adjustedPayment = copy['expenseValue']
+            if (copy['is_mortgage'] === 'yes'){
+                adjustedPayment = copy['expenseValue'] - copy['insurance'] - copy['mortgage_insurance'] - (copy['property_tax'] / 12)
+            }
+            copy['adjusted_payment'] = adjustedPayment
+            let paymentAppliedToInterest = adjustedPayment * (copy['apr'] / 12)
+            let paymentAppliedToPrinciple = adjustedPayment - paymentAppliedToInterest
+            let originalPrinciple = paymentAppliedToPrinciple * copy['term']
+            copy['payment_applied_to_interest'] = paymentAppliedToInterest
+            copy['payment_applied_to_principle'] = paymentAppliedToPrinciple
+            copy['current_principle_balance'] = originalPrinciple - (paymentAppliedToPrinciple * monthsPaid)
+            copy['amount_paid_in_interest'] = paymentAppliedToInterest * monthsPaid
+            copy['total_payments_made'] = copy.expenseValue * monthsPaid
+            copy['financed_amount'] = originalPrinciple
 
             // calculate payoff value
             let payOff = copy.term * copy.expenseValue
@@ -147,13 +188,9 @@ const AddRowTool = (props) => {
 
             // calculate payoff date
             let payoff_date = new Date(startDate.setMonth( startDate.getMonth() + copy.term))
-            copy['pay_off_date'] = payoff_date.toUTCString()
+            copy['pay_off_date'] = payoff_date.toDateString()
             console.log(payoff_date)
 
-            // calculate financed amount
-            // let principle = 
-            // let financed = expenseRow.expenseValue * expenseRow.term
-            // copy['financed_amount'] = financed
 
             props.getIndex()
             insertExpenseRow(copy)
@@ -245,13 +282,28 @@ const AddRowTool = (props) => {
                             <option className="option" value="6">6 - luxury</option>
                         </select>
                         {expenseRow.expensePriority == '2' &&
-                        <>
-                            <div className="label">Loan data</div>
-                            <input name="apr" type='number' onChange={onChangeExpense} className='input' step={'0.01'} placeholder="APR %"/>
-                            <input name="term" type="number" onChange={onChangeExpense} className='input' step={'1'} placeholder="Loan Length (Months)"/>
-                            <label className="label">Loan Start Date</label>
-                            <input name="start_date" type="date" className="input" onChange={onChangeExpense}/>
-                            {/* <input type="number" className="financed_amount input" step={'0.01'} placeholder="Financed Amount" onChange={onChangeExpense}/> */}
+                        <> 
+                            <div className="mortgage-selection-label label">Is this a mortgage?</div>
+                             <select name="is_mortgage" className="loan-type input required" onChange={onChangeExpense}>
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                            <div className="label">Annual Percentage Rate</div>
+                            <input name="apr" type='number' onChange={onChangeExpense} className='input required' step={'0.01'} placeholder="APR %"/>
+                            <div className="label">Length Of Loan ( Months )</div>
+                            <input name="term" type="number" onChange={onChangeExpense} className='input required' step={'1'} placeholder="# Months"/>
+                            <label className="label">First Payment Date</label>
+                            <input name="loan_start_date" type="date" className="input required" onChange={onChangeExpense}/>
+                            {isMortgage == 'yes' &&
+                            <>
+                                <div className="mortgage-label label">Monthly Insurance</div>
+                                <input name="insurance" type="number" className="insurance-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpense}/>
+                                <div className="mortgage-label label">Annual Property Tax</div>
+                                <input name="property_tax" type="number" className="tax-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpense}/>
+                                <div className="mortgage-label label">Mortgage Insurance</div>
+                                <input name="mortgage_insurance" type="number" className="mortgage-insurance-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpense}/>
+                            </>
+                            }
                         </>
                         }
                     <button className="add-row-btn" onClick={addExpenseRow}>Add Row</button>

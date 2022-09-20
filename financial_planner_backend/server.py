@@ -267,5 +267,54 @@ def reset_password():
     recoverData.append(True)
     return json.dumps(recoverData)
 
+@app.post('/api/debt-snowball')
+def debt_snowball():
+    
+    returnData = []
+    data = request.get_json()
+    # print(data)
+    working = True
+    count = 1
+    snowball = data[0]
+    print(data)
+    overpayment = 0
+    debts = []
+    
+    for i, debt in enumerate(data):
+        if i != 0:
+            debts.append(debt)
+    
+    while working:
+        working = False
+        for debt in debts:
+            if debt['current_principle_balance'] > 0:
+                working = True
+                
+                monthly_interest = debt['adjusted_payment'] * (debt['apr'] / 12)
+                principle = debt['adjusted_payment'] - monthly_interest
+                principle = principle + snowball + overpayment
+                overpayment = 0
+                debt['current_principle_balance'] -= principle
+                debt['total_payments_made'] += debt['expenseValue']
+                # debt['current_principle_balance'] = debt['total_payments_made']
+                
+                if debt['current_principle_balance'] <= 0:
+                    print(snowball)
+                    overpayment = debt['current_principle_balance'] * -1
+                    print('overpayment value')
+                    print(overpayment)
+                    debt['current_principle_balance'] = 0
+                    debt['total_payments_made'] -= overpayment
+                    debt['new_end_point'] = count
+                    # debt['months_to_paid'] = count
+                    returnData.append(debt)
+                    print("A debt has been paid off after:")
+                    print(count)
+                    snowball = snowball + float(debt['expenseValue'])
+    
+        count = count + 1
+        
+    return json.dumps(returnData)
+    
 
 app.run(debug=True)

@@ -85,6 +85,17 @@ class DataService{
 
         return data
     }
+
+    async snowball(debtsArray){
+        console.log("Attempting to calculate endpoints for debt snowball...")
+        let data
+        await axios.post("http://127.0.0.1:5000/api/debt-snowball", debtsArray).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
+
+        return data
+    }
 }
 
 export default DataService
