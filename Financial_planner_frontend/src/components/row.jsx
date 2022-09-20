@@ -70,15 +70,15 @@ const Row = (props) => {
         <div className="row">
             {props.type === 'income' &&
             <>
-                <button className="edit-btn btn" onClick={updateRow}><i className="far fa-edit"></i></button>
+                <button className="edit-btn row-btn" onClick={updateRow}><i className="far fa-edit"></i></button>
                 <div className="row-name budget-data">{props.data.source}</div>
                 <div className={props.type}>${props.data.value.toFixed(2)}</div>
-                <button className="delete-btn btn" onClick={deleteRow}><i className="fas fa-trash-alt"></i></button>
+                <button className="delete-btn row-btn" onClick={deleteRow}><i className="fas fa-trash-alt"></i></button>
             </>
             }
             {props.type === 'expense' &&
             <>
-                <button className="edit-btn btn" onClick={updateRow}><i className="far fa-edit"></i></button>
+                <button className="edit-btn row-btn" onClick={updateRow}><i className="far fa-edit"></i></button>
                 <div className="info-container">
                     <div className="row-name budget-data">{props.data.expenseName}</div>
                     <div className="info" onClick={toggleInfo}>
@@ -86,7 +86,7 @@ const Row = (props) => {
                     </div>
                 </div>
                 <div className={props.type}>${props.data.expenseValue.toFixed(2)}</div>
-                <button className="delete-btn btn" onClick={deleteRow}><i className="fas fa-trash-alt"></i></button>
+                <button className="delete-btn row-btn" onClick={deleteRow}><i className="fas fa-trash-alt"></i></button>
             </>
             }
             {toggleActive &&

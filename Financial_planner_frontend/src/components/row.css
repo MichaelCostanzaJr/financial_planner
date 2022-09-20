@@ -128,3 +128,10 @@
     border-bottom: 2px solid var(--nav-light);
     margin-block: 5px;
 }
+
+.row-btn{
+    border: none;
+    background-color: var(--background-color);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}

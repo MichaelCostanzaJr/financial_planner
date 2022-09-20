@@ -3,7 +3,7 @@
 }
 
 @media only screen and (min-width: 768px) {
-    .login .btn {
+    .btn {
         transition: all .5s ease;
         color: var(--primary-color);
         border: 1px solid var(--primary-color);
@@ -18,11 +18,11 @@
         outline: none;
         border-radius: 10px;
     }
-    .login .btn:hover {
+    .btn:hover {
         color: #001F3F;
         background-color: var(--primary-color);
     }
-    .login .btn-recovery {
+    .btn-recovery {
         transition: all .5s ease;
         color: var(--income-primary-color);
         font-family:'Montserrat', sans-serif;
@@ -36,7 +36,7 @@
         outline: none;
         border-radius: 10px;
     }
-    .login .btn-recovery:hover{
+    .btn-recovery:hover{
         color: var(--primary-color);
         background-color: transparent;
     }
