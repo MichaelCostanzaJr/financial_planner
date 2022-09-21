@@ -165,7 +165,7 @@ const DebtSnowball = () => {
                                 </div>
                             </div>
                             <div className="debt-info">
-                                New payoff date: {debt.new_end_point}
+                                New months to payoff: {debt.new_end_point}
                                 <div className="savings">
                                     Total savings: ${(debt.pay_off_value - debt.total_payments_made).toFixed(2)}
                                 </div>
