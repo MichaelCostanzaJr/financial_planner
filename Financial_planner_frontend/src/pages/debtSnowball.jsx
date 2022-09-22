@@ -24,7 +24,7 @@ const DebtSnowball = () => {
         if (activeBudget.expenses){
             activeBudget.expenses.forEach(expense => {
                 console.log(expense.expenseName)
-                if (expense.expensePriority === '2'){
+                if (expense.expensePriority === '5'){
                     expense['debt_index'] = debtIndex
                     debtIndex += 1
                     let today = new Date()
@@ -86,6 +86,7 @@ const DebtSnowball = () => {
         copy.forEach(debt => {
             payload.push(debt)
         })
+        console.log(payload)
         let service = new DataService()
         let data = await service.snowball(payload)
 

@@ -26,7 +26,7 @@ const Row = (props) => {
                     let date = temp.getDay()+ "/" + temp.getMonth() + "/" + temp.getFullYear()
                     obj['Payoff Date'] = date
                 }if(element === 'pay_off_value'){
-                    obj['Payoff Value'] = '$' + values[index].toFixed(2)
+                    obj['Payoff Value'] = '$' + values[index]
                 }if(element === 'start_date'){
                     let temp = new Date(values[index])
                     let date = temp.getDay()+ "/" + temp.getMonth() + "/" + temp.getFullYear()

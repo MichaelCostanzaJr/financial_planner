@@ -22,7 +22,7 @@
 
 .expense-input-container.open{
     opacity: 1;
-    max-height: 440px;
+    max-height: 495px;
     pointer-events: auto;
     margin-bottom: 10px;
 }
@@ -98,6 +98,17 @@
 
 .income-input-container :nth-last-child(1){
     grid-column: 1/4;
+}
+
+.basic-expense-info{
+    grid-column: 1/4;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.basic-expense-info > * {
+    flex: 1;
 }
 
 .expense-input-container :nth-last-child(1){
