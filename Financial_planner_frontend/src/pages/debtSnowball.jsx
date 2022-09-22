@@ -92,6 +92,23 @@ const DebtSnowball = () => {
 
         console.log(data)
 
+        data.forEach(debt => {
+
+            // let deductions = parseFloat(0)
+
+            // if (debt.is_mortgage === 'yes'){
+            //     deductions = (debt.insurance + debt.mortgage_insurance + debt.property_tax) * debt.term
+            // }
+
+            let totalPayments = debt.total_payments_made
+            let totalInterestPaidSnowball = totalPayments - debt.financed_amount
+            debt['total_interest_snowball'] = totalInterestPaidSnowball
+
+            let totalPaymentsOriginal = debt.pay_off_value
+            let totalInterestPaidOriginal = totalPaymentsOriginal - debt.financed_amount
+            debt['total_interest_original'] = totalInterestPaidOriginal
+        })
+
         setSnowballedUserDebts(data)
 
         updateProgressValue(data)
@@ -168,7 +185,7 @@ const DebtSnowball = () => {
                             <div className="debt-info">
                                 New months to payoff: {debt.new_end_point}
                                 <div className="savings">
-                                    Total savings: ${(debt.pay_off_value - debt.total_payments_made).toFixed(2)}
+                                    Total savings: ${(debt.total_interest_original - debt.total_interest_snowball).toFixed(2)}
                                 </div>
                             </div>
                         </div>

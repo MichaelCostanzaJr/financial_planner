@@ -294,6 +294,7 @@ def debt_snowball():
                 
                 monthly_interest = debt['current_principle_balance'] * ((debt['apr'] / 12) / 100)
                 principle = debt['adjusted_payment'] - round(monthly_interest, 2)
+                debt['amount_paid_in_interest'] = round(debt['amount_paid_in_interest'] + monthly_interest, 2)
                 print(principle)
                 principle = round(principle, 2) + snowball + overpayment
                 debt['current_principle_balance'] -= round(principle, 2)
@@ -303,7 +304,7 @@ def debt_snowball():
                     overpayment = 0
                 
                 if not overpaymentTrigger:
-                    debt['total_payments_made'] = debt['total_payments_made'] + debt['expenseValue'] + snowball 
+                    debt['total_payments_made'] = debt['total_payments_made'] + debt['expenseValue']  
                 
                 newPrinciple = round(debt['current_principle_balance'], 2)
                 if newPrinciple <= 0:
