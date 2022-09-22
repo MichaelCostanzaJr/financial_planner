@@ -274,7 +274,7 @@ def debt_snowball():
     data = request.get_json()
     # print(data)
     working = True
-    count = 0
+    count = 1
     snowball = data[0]
     print(data)
     overpayment = 0
@@ -288,13 +288,15 @@ def debt_snowball():
         working = False
         overpaymentTrigger = False
         for debt in debts:
-            if debt['current_principle_balance'] > 0:
+            current_principle = round(debt['current_principle_balance'], 2)
+            if current_principle > 0:
                 working = True
                 
-                monthly_interest = debt['current_principle_balance'] * (debt['apr'] / 12 / 100)
+                monthly_interest = debt['current_principle_balance'] * ((debt['apr'] / 12) / 100)
                 principle = debt['adjusted_payment'] - round(monthly_interest, 2)
+                print(principle)
                 principle = round(principle, 2) + snowball + overpayment
-                debt['current_principle_balance'] -= principle
+                debt['current_principle_balance'] -= round(principle, 2)
                 if overpaymentTrigger:
                     debt['total_payments_made'] = debt['total_payments_made'] + debt['expenseValue'] + snowball + overpayment
                     overpaymentTrigger = False
@@ -303,13 +305,14 @@ def debt_snowball():
                 if not overpaymentTrigger:
                     debt['total_payments_made'] = debt['total_payments_made'] + debt['expenseValue'] + snowball 
                 
-                
-                if debt['current_principle_balance'] <= 0:
+                newPrinciple = round(debt['current_principle_balance'], 2)
+                if newPrinciple <= 0:
+                    print(newPrinciple)
                     overpaymentTrigger = True
                     overpayment = round(debt['current_principle_balance'] * -1, 2)
                     debt['current_principle_balance'] = 0
-                    # newTotalPayment = debt['total_payments_made'] - overpayment - (debt['expenseValue'] - overpayment)
-                    newTotalPayment = debt['total_payments_made'] - debt['expenseValue'] 
+                    newTotalPayment = debt['total_payments_made'] - overpayment
+                    # newTotalPayment = debt['total_payments_made'] - debt['expenseValue'] 
                     debt['total_payments_made'] = round(newTotalPayment, 2)
                     debt['new_end_point'] = count
                     # debt['months_to_paid'] = count

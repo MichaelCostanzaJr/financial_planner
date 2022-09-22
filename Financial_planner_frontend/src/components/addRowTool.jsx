@@ -138,10 +138,10 @@ const AddRowTool = (props) => {
             let expenseParsed = parseFloat(expenseRow['expenseValue'])
             copy['expenseValue'] = parseFloat(expenseParsed.toFixed(2))
             copy['term'] = parseFloat(expenseRow['term'])
-            let interest = parseFloat(((parseFloat(copy['apr']) / 12) / 100).toFixed(4))
+            let interest = (parseFloat(copy['apr']) / 12) / 100
             copy['apr'] = parseFloat(copy['apr'])
             let i1 = Math.pow(1 + interest, copy['term'])
-            let monthlyPayment = copy['expenseValue'] * ((interest * i1)/(i1 - 1))
+            let monthlyPayment = copy['expenseValue'] * (interest * i1)/(i1 - 1)
 
             
 
@@ -182,7 +182,7 @@ const AddRowTool = (props) => {
 
             copy['financed_amount'] = copy['expenseValue']
             let paymentAppliedToInterest = copy['expenseValue'] * ((copy['apr'] / 12) / 100)
-            let paymentAppliedToPrinciple = monthlyPayment - paymentAppliedToInterest
+            let paymentAppliedToPrinciple = adjustedPayment - paymentAppliedToInterest
             copy['payment_applied_to_interest'] = parseFloat(paymentAppliedToInterest.toFixed(2))
             copy['payment_applied_to_principle'] = parseFloat(paymentAppliedToPrinciple.toFixed(2))
             copy['current_principle_balance'] = parseFloat((copy['financed_amount'] - (paymentAppliedToPrinciple * monthsPaid)).toFixed(2))
