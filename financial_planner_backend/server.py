@@ -289,7 +289,9 @@ def debt_snowball():
         overpaymentTrigger = False
         for debt in debts:
             current_principle = round(debt['current_principle_balance'], 2)
-            if current_principle > 0:
+            
+            # value set to 0.01 to fix error with rounding.  0.01 offset is reapplied with if newPrinciple == 0.01
+            if current_principle > 0.01:
                 working = True
                 
                 monthly_interest = debt['current_principle_balance'] * ((debt['apr'] / 12) / 100)
@@ -304,15 +306,17 @@ def debt_snowball():
                     overpayment = 0
                 
                 if not overpaymentTrigger:
-                    debt['total_payments_made'] = debt['total_payments_made'] + debt['expenseValue']  
+                    debt['total_payments_made'] = round(debt['total_payments_made'] + debt['expenseValue'], 2)  
                 
                 newPrinciple = round(debt['current_principle_balance'], 2)
-                if newPrinciple <= 0:
+                if newPrinciple <= 0.01:
                     print(newPrinciple)
                     overpaymentTrigger = True
-                    overpayment = round(debt['current_principle_balance'] * -1, 2)
+                    overpayment = newPrinciple * -1
                     debt['current_principle_balance'] = 0
-                    newTotalPayment = debt['total_payments_made'] - overpayment
+                    newTotalPayment = round(debt['total_payments_made'], 2) - overpayment
+                    if newPrinciple == 0.01:
+                        newTotalPayment = newTotalPayment - 0.01
                     # newTotalPayment = debt['total_payments_made'] - debt['expenseValue'] 
                     debt['total_payments_made'] = round(newTotalPayment, 2)
                     debt['new_end_point'] = count
@@ -320,7 +324,7 @@ def debt_snowball():
                     returnData.append(debt)
                     print("A debt has been paid off after:")
                     print(count)
-                    snowball = snowball + float(debt['expenseValue'])
+                    snowball = snowball + round(float(debt['expenseValue']), 2)
 
         count = count + 1
         
