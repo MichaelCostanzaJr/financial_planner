@@ -11,9 +11,8 @@ const DebtSnowball = () => {
     })
     const [userDebts, setUserDebts] = useState([])
     const [snowballedUserDebts, setSnowballedUserDebts] = useState([])
-    const [overpayment, setOverpayment] = useState(0)
     const [snowball, setSnowball] = useState(0)
-    const [counter, setCounter] = useState(1)
+    const [snowballApplied, setSnowballApplied] = useState(false)
 
     let activeBudget = useContext(DataContext).activeBudget
 
@@ -150,13 +149,14 @@ const DebtSnowball = () => {
     }
 
     const applySnowball = async() => {
+        setSnowballApplied(true)
         await setDebtEndPoints()
     }
 
     return (
         <div className="debt-snowball container">
             <div className="input-container">
-                <label className="snowball-amount-label">Additional Payment</label>
+                <label className="snowball-amount-label label">Additional Payment</label>
                 <input name="snowball" className="snowball" type="number" step={'0.01'} placeholder="Amount" onChange={onChange}/>
             </div>
             <div className="btn-container">
@@ -182,12 +182,14 @@ const DebtSnowball = () => {
                                     {debt.new_end_point}
                                 </div>
                             </div>
+                            {snowballApplied &&
                             <div className="debt-info">
                                 New months to payoff: {debt.new_end_point}
-                                <div className="savings">
-                                    Total savings: ${(debt.total_interest_original - debt.total_interest_snowball).toFixed(2)}
-                                </div>
+                                    <div className="savings">
+                                        Total savings: ${(debt.total_interest_original - debt.total_interest_snowball).toFixed(2)}
+                                    </div>
                             </div>
+                            }
                         </div>
                     ))
                 }

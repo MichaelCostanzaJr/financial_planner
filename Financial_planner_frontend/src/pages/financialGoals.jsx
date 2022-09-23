@@ -19,20 +19,27 @@ const FinancialGoals = () => {
         if (activeBudget.expenses){
             activeBudget.expenses.forEach(expense => {
                 console.log(expense.expenseName)
-                if (expense.expensePriority === '2'){
+                if (expense.expensePriority === '5'){
                     expense['debt_index'] = debtIndex
                     debtIndex += 1
                     let today = new Date()
-                    let start = new Date(expense.start_date)
+                    let start = new Date(expense.loan_start_date)
                     let paidYears = today.getFullYear() - start.getFullYear()
                     let paidMonths = today.getMonth() - start.getMonth()
+                    if (today.getMonth() < start.getMonth()){
+                        paidMonths = paidMonths + 12
+                        paidYears = paidYears - 1
+                    }
+                    expense['months_paid'] = paidMonths
+                    expense['balance_before_snowball'] = expense.current_principle_balance
                     let monthsPaid = (paidYears * 12) + paidMonths
                     console.log("years paid: " + paidYears)
                     expense['months_to_paid'] = expense.term - monthsPaid
-                    console.log(monthsPaid)
+                    // console.log(monthsPaid)
                     let paidValue = monthsPaid * expense.expenseValue
-                    expense['paid_value'] = paidValue
-                    expense['last_updated_date'] = today.toUTCString()
+                    expense['total_payments_made'] = paidValue
+                    expense['last_updated_date'] = today.toDateString()
+                    expense['new_payoff_date'] = "N/A"
                     debtsCopy.push(expense)
                 }
             })
@@ -89,7 +96,7 @@ const FinancialGoals = () => {
 
     const updateProgressValue = () => {
         let element = document.querySelector('.progress-bar')
-        let newWidth = 100 - (((userDebts[inputData.debt_index].pay_off_value - userDebts[inputData.debt_index].paid_value) / userDebts[inputData.debt_index].pay_off_value) * 100)
+        let newWidth = (((userDebts[inputData.debt_index].total_payments_made) / userDebts[inputData.debt_index].pay_off_value) * 100)
         console.log(newWidth)
         element.style.width =  newWidth + '%'
     }
@@ -156,12 +163,12 @@ const FinancialGoals = () => {
                             <label>Start</label><label>End</label>
                         </div>
                         <div className="range">
-                            <label>${userDebts[inputData.debt_index].expenseValue * userDebts[inputData.debt_index].term}</label>
+                            <label>${userDebts[inputData.debt_index].current_principle_balance}</label>
                             <label>0</label>
                         </div>
                         <div className="progress-bar-container">
                             <div className="progress-bar">
-                                ${userDebts[inputData.debt_index].paid_value}
+                                ${userDebts[inputData.debt_index].total_payments_made}
                             </div>
                         </div>
                         <div className="time-to-goal">You will reach your goal in: {userDebts[inputData.debt_index].months_to_paid} months.</div>

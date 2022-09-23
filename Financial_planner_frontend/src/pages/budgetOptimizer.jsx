@@ -80,6 +80,8 @@ const BudgetOptimizer = () => {
     }
 
     const optimize = () => {
+        // move logic to backend.  Pre-sort expense list to greatly simplify operation
+        reset()
 
         let neededCuts = goal - activeBudget.surplus
         let luxuryExpenses = []

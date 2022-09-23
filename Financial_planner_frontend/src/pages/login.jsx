@@ -73,10 +73,10 @@ const Login = () => {
         <div className="login">
             <h1 className="header">Financial Planner</h1>
             <img src={logo} alt="" className="logo" />
-            <div className="container">
+            <form className="container">
                 <div className="form">
-                    <input type="text" className="user-name" name="user_name" onChange={onChange} placeholder="Username" />
-                    <input type="password" className="user-password" name="user_password" onChange={onChange} placeholder="Password" />
+                    <input type="text" className="user-name" name="user_name" autoComplete="username" onChange={onChange} placeholder="Username" />
+                    <input type="password" className="user-password" name="user_password" autoComplete="current-password" onChange={onChange} placeholder="Password" />
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={login}>Login</button>
@@ -86,7 +86,7 @@ const Login = () => {
                     <button className="btn-recovery" onClick={recoverUsername}>Forgot User Name</button>
                     <button className="btn-recovery" onClick={recoverPassword}>Forgot Password</button>
                 </div>
-            </div>
+            </form>
         </div>
 
     )

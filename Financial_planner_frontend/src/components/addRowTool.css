@@ -46,6 +46,7 @@
     padding-top: 7px;
     background-color: var(--primary-color);
     grid-column: 1 / 3;
+    color: var(--background-color);
 }
 
 .hours-label{

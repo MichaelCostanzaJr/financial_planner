@@ -52,6 +52,7 @@
     border-bottom: 2px solid var(--nav-light);
     margin-bottom: 5px;
     padding-bottom: 10px;
+    text-transform: uppercase;
 }
 
 .debt-range{
