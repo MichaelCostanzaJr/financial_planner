@@ -31,6 +31,21 @@
     font-size: 1.5em;
 }
 
+.home .container .goals-btn{
+    grid-column: 1 / 3;
+    padding-block: 10%;
+    /* background-color: var(--income-secondary-color); */
+    color: var(--income-secondary-color);
+    border-color: var(--income-secondary-color);
+    font-weight: 700;
+    font-size: 1.25em;
+}
+
+.home .container .alt-tile{
+    background-color: var(--nav-light);
+}
+
+
 @media only screen and (min-width: 768px){
     .home .container .budget-btn {
         /* box-shadow: 0 0 5px 0px var(--background-color) inset, 0 0 5px 0px var(--background-color); */
@@ -71,19 +86,40 @@
         box-shadow: 0 0 7px 7px black inset, 0 0 0 0 black;
         font-size: .95em;
     }
+    .home .container{
+        display: grid;
+        grid-template-columns: calc(33% - 10px) calc(33% - 10px) calc(33% - 10px);
+        grid-template-rows: repeat(4, calc(150px - 10px));
+        gap: 20px;
+        align-content: center center;
+        margin-top: 50px;
+        max-height: 100vh;
+    }
+    .home .container .budget-btn{
+        grid-column: 2 / 4;
+        grid-row: 1 / 3;
+        padding-block: 10%;
+        color: var(--background-color);
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        font-weight: 700;
+        font-size: 1.5em;
+    }
+
+    .home .container .goals-btn{
+        grid-column: 1 / 3;
+        grid-row: 3 / 5;
+        padding-block: 10%;
+        /* background-color: var(--income-secondary-color); */
+        color: var(--income-secondary-color);
+        border-color: var(--income-secondary-color);
+        font-weight: 700;
+        font-size: 1.25em;
+    }
+
+    .tile{
+        padding-block: 0;
+    }
 }
 
 
-.home .container .goals-btn{
-    grid-column: 1 / 3;
-    padding-block: 10%;
-    /* background-color: var(--income-secondary-color); */
-    color: var(--income-secondary-color);
-    border-color: var(--income-secondary-color);
-    font-weight: 700;
-    font-size: 1.25em;
-}
-
-.home .container .alt-tile{
-    background-color: var(--nav-light);
-}
