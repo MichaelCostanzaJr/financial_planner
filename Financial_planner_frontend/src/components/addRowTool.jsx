@@ -151,6 +151,7 @@ const AddRowTool = (props) => {
 
             copy['term'] = parseFloat(expenseRow['term'])
             let interest = (parseFloat(copy['apr']) / 12) / 100
+            interest = parseFloat(interest.toFixed(4))
             copy['apr'] = parseFloat(copy['apr'])
             let i1 = Math.pow(1 + interest, copy['term'])
             let monthlyPayment = copy['expenseValue'] * (interest * i1)/(i1 - 1)
