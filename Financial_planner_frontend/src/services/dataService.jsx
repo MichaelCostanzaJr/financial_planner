@@ -96,6 +96,28 @@ class DataService{
 
         return data
     }
+
+    async calculateExpenseData(payload){
+        console.log("Attempting to calculate expense data...")
+        let data
+        await axios.post("http://127.0.0.1:5000/api/calculate-expense", payload).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
+
+        return data
+    }
+
+    async updateExpenseData(payload){
+        console.log("Attempting to calculate expense data...")
+        let data
+        await axios.post("http://127.0.0.1:5000/api/update-expense", payload).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
+
+        return data
+    }
 }
 
 export default DataService

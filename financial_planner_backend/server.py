@@ -6,6 +6,8 @@ from bson import ObjectId
 from flask_cors import CORS
 import hashlib
 import os
+import math
+import datetime
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
@@ -286,49 +288,233 @@ def debt_snowball():
     
     while working:
         working = False
-        overpaymentTrigger = False
         for debt in debts:
-            current_principle = round(debt['current_principle_balance'], 2)
-            
-            # value set to 0.01 to fix error with rounding.  0.01 offset is reapplied with if newPrinciple == 0.01
-            if current_principle > 0.01:
+            if round(debt['current_principle_balance'], 2) > 0:
+                print('current principle: ')
+                print(round(debt['current_principle_balance'], 2))
                 working = True
                 
-                monthly_interest = debt['current_principle_balance'] * ((debt['apr'] / 12) / 100)
-                principle = debt['adjusted_payment'] - round(monthly_interest, 2)
-                debt['amount_paid_in_interest'] = round(debt['amount_paid_in_interest'] + monthly_interest, 2)
-                print(principle)
-                principle = round(principle, 2) + snowball + overpayment
+                monthly_interest = round(round(debt['current_principle_balance'], 2) * debt['monthly_interest_rate'], 2)
+                print(monthly_interest)
+                principle = round(debt['adjusted_payment'], 2) - round(monthly_interest, 2)
+                print('monthly payment amount:')
+                print(round(monthly_interest + principle, 2))
+                print(principle) 
+                principle = principle + snowball + overpayment
+                overpayment = 0
+                
+                debt['total_principle_paid'] += round(principle, 2)
+                debt['total_interest_paid_snowball'] += round(monthly_interest, 2)
                 debt['current_principle_balance'] -= round(principle, 2)
-                if overpaymentTrigger:
-                    debt['total_payments_made'] = debt['total_payments_made'] + debt['expenseValue'] + snowball + overpayment
-                    overpaymentTrigger = False
-                    overpayment = 0
+                debt['total_paid'] += round(principle + monthly_interest, 2) 
+                debt['current_principle_balance'] = round(debt['current_principle_balance'], 2)
                 
-                if not overpaymentTrigger:
-                    debt['total_payments_made'] = round(debt['total_payments_made'] + debt['expenseValue'], 2)  
-                
-                newPrinciple = round(debt['current_principle_balance'], 2)
-                if newPrinciple <= 0.01:
-                    print(newPrinciple)
-                    overpaymentTrigger = True
-                    overpayment = newPrinciple * -1
+                if round(debt['current_principle_balance'], 2) <= 0:
+                    print(debt['current_principle_balance'])
+                    overpayment = round(debt['current_principle_balance'], 2) * -1
                     debt['current_principle_balance'] = 0
-                    newTotalPayment = round(debt['total_payments_made'], 2) - overpayment
-                    if newPrinciple == 0.01:
-                        newTotalPayment = newTotalPayment - 0.01
-                    # newTotalPayment = debt['total_payments_made'] - debt['expenseValue'] 
-                    debt['total_payments_made'] = round(newTotalPayment, 2)
+                    debt['total_paid'] -= round(overpayment, 2)
+                    debt['total_principle_paid'] -= round(overpayment, 2)
+                    debt['total_principle_paid'] = round(debt['total_principle_paid'], 2)
                     debt['new_end_point'] = count
-                    # debt['months_to_paid'] = count
+                    debt['total_interest_paid_snowball'] = round(debt['total_interest_paid_snowball'], 2)
+                    debt['total_paid'] = round(debt['total_paid'], 2)
+                    debt['total_principle_paid'] = round(debt['total_principle_paid'], 2)
                     returnData.append(debt)
                     print("A debt has been paid off after:")
                     print(count)
                     snowball = snowball + round(float(debt['expenseValue']), 2)
-
+                    
         count = count + 1
         
     return json.dumps(returnData)
+    
+@app.post('/api/calculate-expense')
+def calculate_expense():
+    returnData = {}
+    data = request.get_json()
+    
+    #  ********  Date conversions  *********
+    # need front end to provide year, month, and day as a number
+    # keys:  month = %m  year = %Y  
+    
+    start_date = datetime.datetime(data['loan_start_date_year'], data['loan_start_date_month'], data['loan_start_date_day'])
+    today = datetime.datetime.now()
+    today_years = int(today.strftime("%Y"))
+    today_months = int(today.strftime("%m"))
+    start_date_years = int(start_date.strftime("%Y"))
+    start_date_months = int(start_date.strftime("%m"))
+    
+    paid_years = today_years - start_date_years
+    paid_months = today_months - start_date_months
+    
+    if start_date_months > today_months or paid_months == 0:
+        paid_years -= 1
+        paid_months += 12
+        
+    total_paid_months = (paid_years * 12) + paid_months
+    data['months_paid'] = total_paid_months
+    data['months_to_paid'] = data['term'] - total_paid_months
+    
+    # convert apr to monthly interest
+    monthly_interest_rate = (data['apr'] / 100) / 12
+    data['monthly_interest_rate'] = monthly_interest_rate
+    
+    # compute interest utility
+    i1 = math.pow(1 + monthly_interest_rate, data['term'])
+    
+    # compute monthly expense
+    
+    monthly_payment = data['financed_amount'] * ((monthly_interest_rate * i1) / (i1 - 1))
+    
+    data['adjusted_payment'] = round(monthly_payment, 2)
+    
+    # calculate payment already made info
+    total_interest_paid = 0
+    total_principle_paid = 0
+    pay_off_value = 0
+    
+    for i in range(data['term']):
+        print("starting financed amount")
+        print(data['financed_amount'])
+        monthly_payment_interest = round(data['financed_amount'], 2) * monthly_interest_rate
+        monthly_payment_principle = round(data['adjusted_payment'], 2) - round(monthly_payment_interest, 2)
+        
+        total_interest_paid += round(monthly_payment_interest, 2)
+        total_principle_paid += round( monthly_payment_principle, 2)
+        
+        data['financed_amount'] -= round(monthly_payment_principle, 2) 
+        data['financed_amount'] = round(data['financed_amount'], 2)
+        print("Ending financed amount")
+        print(data['financed_amount'])
+        pay_off_value += round(data['adjusted_payment'], 2)
+    
+    data['total_interest_at_min_payment'] = round(total_interest_paid, 2)
+    data['pay_off_value'] = round(pay_off_value, 2)
+    
+    data['financed_amount'] = round(data['loan_amount'], 2)
+    total_interest_paid = 0
+    total_principle_paid = 0
+    
+    for i in range(total_paid_months):
+        monthly_payment_interest = round(data['financed_amount'], 2) * monthly_interest_rate
+        monthly_payment_principle = round(data['adjusted_payment'], 2) - round(monthly_payment_interest, 2)
+        
+        total_interest_paid += round(monthly_payment_interest, 2)
+        total_principle_paid += round(monthly_payment_principle, 2)
+        
+        data['financed_amount'] -= round(monthly_payment_principle, 2) 
+        data['financed_amount'] = round(data['financed_amount'], 2)
+
+    data['total_principle_paid'] = round(total_principle_paid, 2)
+    data['total_interest_paid_snowball'] = round(total_interest_paid, 2)
+    data['current_principle_balance'] -= round(total_principle_paid, 2)
+    data['current_principle_balance'] = round(data['current_principle_balance'], 2)
+    data['total_paid'] += round(total_interest_paid + total_principle_paid, 2)
+    data['financed_amount'] = round(data['loan_amount'], 2)
+    
+    if data['is_mortgage'] == 'yes':
+        property_tax = round((data['property_tax'] / 12), 2)
+        data['expenseValue'] = round(monthly_payment + data['insurance'] + data['mortgage_insurance'] + property_tax, 2)
+    else:
+        data['expenseValue'] = round(monthly_payment, 2)
+        
+    returnData = data
+    return json.dumps(returnData)
+        
+    
+@app.post('/api/update-expense')
+def update_expense():
+    responseData = []
+    data = request.get_json()
+    # data = request[1]
+    index = 0
+    debts = []
+    
+    
+    for i, debt in enumerate(data):
+        debts.append(debt)
+    
+    for debt in debts:
+        if debt['expensePriority'] == '5':
+            # ****** Local Variable setup  ********
+            debt['debt_index'] = index
+            index += 1
+            debt['total_paid'] = 0
+            
+            #  ********  Date conversions  *********
+            # need front end to provide year, month, and day as a number
+            # keys:  month = %m  year = %Y  
+            
+            start_date = datetime.datetime(debt['loan_start_date_year'], debt['loan_start_date_month'], debt['loan_start_date_day'])
+            today = datetime.datetime.now()
+            today_years = int(today.strftime("%Y"))
+            today_months = int(today.strftime("%m"))
+            start_date_years = int(start_date.strftime("%Y"))
+            start_date_months = int(start_date.strftime("%m"))
+            
+            paid_years = today_years - start_date_years
+            paid_months = today_months - start_date_months
+            
+            if start_date_months > today_months or paid_months == 0:
+                paid_years -= 1
+                paid_months += 12
+                
+            total_paid_months = (paid_years * 12) + paid_months
+            debt['months_paid'] = total_paid_months
+            debt['months_to_paid'] = debt['term'] - total_paid_months
+    
+            monthly_interest_rate = debt['monthly_interest_rate']
+            
+            # compute interest utility
+            i1 = math.pow(1 + monthly_interest_rate, debt['term'])
+            
+            # compute monthly expense
+            
+            monthly_payment = round(debt['financed_amount'] * ((monthly_interest_rate * i1) / (i1 -1)), 2)
+            
+            debt['adjusted_payment'] = round(monthly_payment, 2)
+            
+            # calculate payment already made info
+            total_interest_paid = 0
+            total_principle_paid = 0
+            
+            for i in range(total_paid_months):
+                monthly_payment_interest = debt['financed_amount'] * monthly_interest_rate
+                monthly_payment_principle = monthly_payment - monthly_payment_interest
+                
+                total_interest_paid += monthly_payment_interest
+                total_principle_paid += monthly_payment_principle
+                
+                debt['financed_amount'] -= monthly_payment_principle 
+
+            debt['total_principle_paid'] = round(total_principle_paid, 2)
+            debt['todays_principle'] = round(debt['financed_amount'], 2)
+            debt['total_interest_paid_snowball'] = round(total_interest_paid, 2)
+            debt['current_principle_balance'] = round(debt['financed_amount'], 2)
+            debt['total_paid'] += round(total_interest_paid + total_principle_paid, 2)
+            debt['financed_amount'] = round(debt['loan_amount'], 2)
+            
+            if debt['is_mortgage'] == 'yes':
+                property_tax = round((debt['property_tax'] / 12), 2)
+                debt['expenseValue'] = round(monthly_payment + debt['insurance'] + debt['mortgage_insurance'] + property_tax, 2)
+            else:
+                debt['expenseValue'] = round(monthly_payment, 2)
+    
+    for i in range(1, len(debts)):
+        if debts[i - 1]['months_to_paid'] > debts[i]['months_to_paid']:
+            temp = debts[i]
+            debts[i] = debts[i - 1]
+            debts[i - 1] = temp
+    responseData = debts
+    return json.dumps(responseData)
+            
+    
+    
+    
+        
+        
+    
     
 
 app.run(debug=True)

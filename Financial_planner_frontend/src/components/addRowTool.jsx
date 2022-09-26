@@ -2,6 +2,7 @@ import { useState, useContext } from "react"
 import DataContext from "../context/dataContext"
 import "../components/addRowTool.css"
 import { useEffect } from "react"
+import DataService from "../services/dataService"
 
 const AddRowTool = (props) => {
 
@@ -50,6 +51,13 @@ const AddRowTool = (props) => {
         if (name === 'is_mortgage'){
             setIsMortgage(val)
         }
+
+        setExpenseRow(prev => ({...prev, [name]:val}))
+    }
+
+    const onChangeExpenseNumber = (e) => {
+        let name = e.target.name
+        let val = parseFloat(e.target.value)
 
         setExpenseRow(prev => ({...prev, [name]:val}))
     }
@@ -124,109 +132,64 @@ const AddRowTool = (props) => {
         alert("You must complete all fields")
     }
 
-    const addExpenseRow = () => {
+    const addExpenseRow = async() => {
+
+        let copy = {...expenseRow}
+        copy['index'] = props.index 
+        let data = {}
+
+        if ( expenseRow.expensePriority === '5'){
+            if (!expenseRow.expenseName || !expenseRow.loan_amount || !expenseRow.expensePriority
+                || !expenseRow.apr || !expenseRow.term || !expenseRow.loan_start_date){
+                    return alert("You must complete all fields")
+            }
+            copy['debt_index'] = parseFloat(0)
+            // swap expenseValue
+            copy['expenseValue'] = parseFloat(copy.loan_amount)
+            copy['financed_amount'] = parseFloat(copy.loan_amount)
+
+            // setup keys for use in backend
+            let today = new Date()
+            let startDate = new Date(copy['loan_start_date'])
+            copy['loan_start_date'] = startDate.toDateString()
+            copy['loan_start_date_year'] = startDate.getFullYear()
+            copy['loan_start_date_month'] = startDate.getMonth()
+            copy['loan_start_date_day'] = startDate.getDay()
+            copy['today'] = today.toDateString()
+            copy['monthly_interest_rate'] = parseFloat(0)
+            copy['months_to_paid'] = parseFloat(0)
+            copy['adjusted_payment'] = parseFloat(0)
+            copy['current_principle_balance'] = parseFloat(copy.loan_amount)
+            copy['total_interest_at_min_payment'] = parseFloat(0)
+            copy['total_interest_paid_snowball'] = parseFloat(0)
+            copy['total_principle_paid'] = parseFloat(0)
+            copy['total_paid'] = parseFloat(0)
+            copy['pay_off_value'] = parseFloat(0)
+            copy['new_end_point'] = parseFloat(0)
+            copy['todays_principle'] = parseFloat(0)
+            if (!copy['is_mortgage']) copy['is_mortgage'] = 'no'
+            if (!copy['insurance']) copy['insurance'] = parseFloat(0);
+            if (!copy['mortgage_insurance']) copy['mortgage_insurance'] = parseFloat(0)
+            if (!copy['property_tax'])copy['property_tax'] = parseFloat(0)
+
+            let service = new DataService()
+            let payload = copy
+            data = await service.calculateExpenseData(payload)
+        }
 
         if ( expenseRow.expensePriority !== '5'){
             if (!expenseRow.expenseName || !expenseRow.expenseValue || !expenseRow.expensePriority){
                 return alert('You must complete all fields')
             }
+
+            data = copy
         }
-
-        
-        if ( expenseRow.expensePriority === '5'){
-            if (!expenseRow.expenseName || !expenseRow.loan_amount || !expenseRow.expensePriority
-                || !expenseRow.apr || !expenseRow.term || !expenseRow.loan_start_date){
-                    return alert("You must complete all fields")
-                }
-            expenseRow['expenseValue'] = expenseRow.loan_amount
-        }
-            
-        let copy = {...expenseRow}
-        copy['index'] = props.index
-        // convert values to numbers for calculations in other places
-        let expenseParsed = parseFloat(expenseRow['expenseValue'])
-        copy['expenseValue'] = parseFloat(expenseParsed.toFixed(2))
-
-        if ( expenseRow.expensePriority === '5'){
-
-            copy['term'] = parseFloat(expenseRow['term'])
-            let interest = (parseFloat(copy['apr']) / 12) / 100
-            interest = parseFloat(interest.toFixed(4))
-            copy['apr'] = parseFloat(copy['apr'])
-            let i1 = Math.pow(1 + interest, copy['term'])
-            let monthlyPayment = copy['expenseValue'] * (interest * i1)/(i1 - 1)
-    
-            
-    
-            if (copy['is_mortgage'] === 'yes'){
-                copy['insurance'] = parseFloat(parseFloat(expenseRow.insurance).toFixed(2))
-                copy['mortgage_insurance'] = parseFloat(parseFloat(expenseRow.mortgage_insurance).toFixed(2))
-                copy['property_tax'] = parseFloat(parseFloat(expenseRow.property_tax).toFixed(2))
-            }
-    
-            // convert date for math later
-            let startDate = new Date(copy['loan_start_date'])
-            console.log("original start date: " + startDate.getFullYear())
-            let today = new Date()
-            copy['loan_start_date'] = startDate.toDateString()
-            copy['created_date'] = today.toDateString()
-            
-            // calculate financed payment info
-            let paidYears = today.getFullYear() - startDate.getFullYear()
-            console.log(today.getFullYear())
-            console.log(startDate.getFullYear())
-            console.log("Paid years: " + paidYears)
-            let paidMonths = today.getMonth() - startDate.getMonth()
-            console.log("today get months: " + today.getMonth())
-            console.log("start date months: " + startDate.getMonth())
-            console.log("Paid months: " + paidMonths)
-            if (today.getMonth() < startDate.getMonth()){
-                paidMonths = paidMonths + 12
-                paidYears = paidYears - 1
-            }
-            let monthsPaid = (paidYears * 12) + paidMonths
-            copy['months_to_paid'] = copy.term - monthsPaid
-    
-            let adjustedPayment = parseFloat(monthlyPayment.toFixed(2))
-            // if (copy['is_mortgage'] === 'yes'){
-            //     adjustedPayment = copy['expenseValue'] - copy['insurance'] - copy['mortgage_insurance'] - (copy['property_tax'] / 12)
-            // }
-            copy['adjusted_payment'] = adjustedPayment
-    
-            copy['financed_amount'] = copy['expenseValue']
-            let paymentAppliedToInterest = copy['expenseValue'] * ((copy['apr'] / 12) / 100)
-            let paymentAppliedToPrinciple = adjustedPayment - paymentAppliedToInterest
-            copy['payment_applied_to_interest'] = parseFloat(paymentAppliedToInterest.toFixed(2))
-            copy['payment_applied_to_principle'] = parseFloat(paymentAppliedToPrinciple.toFixed(2))
-            copy['current_principle_balance'] = parseFloat((copy['financed_amount'] - (paymentAppliedToPrinciple * monthsPaid)).toFixed(2))
-            copy['amount_paid_in_interest'] = parseFloat((paymentAppliedToInterest * monthsPaid).toFixed(2))
-    
-            let monthlyPropertyTax = copy.property_tax / 12
-            copy['total_payments_made'] = parseFloat((monthlyPayment * monthsPaid).toFixed(2))
-            if (copy.is_mortgage === 'yes'){
-                adjustedPayment = adjustedPayment + copy.insurance + copy.mortgage_insurance + monthlyPropertyTax
-                copy['expenseValue'] = parseFloat(adjustedPayment.toFixed(2))
-            }else{
-                copy['expenseValue'] = adjustedPayment
-            }
-    
-            // calculate payoff value
-            let payOff = copy.term * adjustedPayment
-            console.log("term of loan: " + copy.term + "monthly payment: " + adjustedPayment)
-            copy['pay_off_value'] = parseFloat(payOff.toFixed(2))
-    
-            // calculate payoff date
-            let payoff_date = new Date(startDate.setMonth( startDate.getMonth() + copy.term))
-            copy['pay_off_date'] = payoff_date.toDateString()
-            console.log(payoff_date)
-        }
-
 
         props.getIndex()
-        insertExpenseRow(copy)
+        insertExpenseRow(data)
         setExpenseRow({})
         clearInputs()
-        console.log(copy)
+        console.log(data)
         // let lapsedTime = new Date(new Date(copy['last_update_date']) - new Date(copy['start_date']))
         // console.log(lapsedTime.getMonth())
     }
@@ -310,32 +273,32 @@ const AddRowTool = (props) => {
                         {expenseRow.expensePriority != '5' &&
                             <>
                                 <div className="label">Monthly Expense Amount</div>
-                                <input name="expenseValue" type="number" className="value input required" onChange={onChangeExpense} step={'0.01'} placeholder="$0.00"/>
+                                <input name="expenseValue" type="number" className="value input required" onChange={onChangeExpenseNumber} step={'0.01'} placeholder="$0.00"/>
                             </>
                         }
                         {expenseRow.expensePriority == '5' &&
                         <> 
                             <div className="label">Loan Amount</div>
-                            <input name="loan_amount" type="number" className="value input required" onChange={onChangeExpense} step={'0.01'} placeholder="$0.00"/>
+                            <input name="loan_amount" type="number" className="value input required" onChange={onChangeExpenseNumber} step={'0.01'} placeholder="$0.00"/>
                             <div className="mortgage-selection-label label">Is this a mortgage?</div>
                              <select name="is_mortgage" className="loan-type input required" onChange={onChangeExpense}>
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
                             </select>
                             <div className="label">Annual Percentage Rate</div>
-                            <input name="apr" type='number' onChange={onChangeExpense} className='input required' step={'0.01'} placeholder="APR %"/>
+                            <input name="apr" type='number' onChange={onChangeExpenseNumber} className='input required' step={'0.01'} placeholder="APR %"/>
                             <div className="label">Length Of Loan ( Months )</div>
-                            <input name="term" type="number" onChange={onChangeExpense} className='input required' step={'1'} placeholder="# Months"/>
+                            <input name="term" type="number" onChange={onChangeExpenseNumber} className='input required' step={'1'} placeholder="# Months"/>
                             <label className="label">First Payment Date</label>
                             <input name="loan_start_date" type="date" className="input required" onChange={onChangeExpense}/>
                             {isMortgage == 'yes' &&
                             <>
                                 <div className="mortgage-label label">Monthly Insurance</div>
-                                <input name="insurance" type="number" className="insurance-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpense}/>
+                                <input name="insurance" type="number" className="insurance-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpenseNumber}/>
                                 <div className="mortgage-label label">Annual Property Tax</div>
-                                <input name="property_tax" type="number" className="tax-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpense}/>
+                                <input name="property_tax" type="number" className="tax-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpenseNumber}/>
                                 <div className="mortgage-label label">Mortgage Insurance</div>
-                                <input name="mortgage_insurance" type="number" className="mortgage-insurance-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpense}/>
+                                <input name="mortgage_insurance" type="number" className="mortgage-insurance-field input required" placeholder="Amount" step={'0.01'} onChange={onChangeExpenseNumber}/>
                             </>
                             }
                         </>

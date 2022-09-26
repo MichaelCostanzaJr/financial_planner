@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react"
 import DataContext from "../context/dataContext"
 import DataService from "../services/dataService"
 import "../components/debtSnowball.css"
+import { act } from "react-dom/test-utils"
 
 
 const DebtSnowball = () => {
@@ -16,56 +17,20 @@ const DebtSnowball = () => {
 
     let activeBudget = useContext(DataContext).activeBudget
 
-    const getUserDebts = () => {
-        let debtIndex = 0
+    const getUserDebts = async() => {
+        let payload = []
         console.log(activeBudget)
-        let debtsCopy = [...userDebts]
         if (activeBudget.expenses){
             activeBudget.expenses.forEach(expense => {
-                console.log(expense.expenseName)
-                if (expense.expensePriority === '5'){
-                    expense['debt_index'] = debtIndex
-                    debtIndex += 1
-                    let today = new Date()
-                    let start = new Date(expense.loan_start_date)
-                    let paidYears = today.getFullYear() - start.getFullYear()
-                    let paidMonths = today.getMonth() - start.getMonth()
-                    if (today.getMonth() < start.getMonth()){
-                        paidMonths = paidMonths + 12
-                        paidYears = paidYears - 1
-                    }
-                    expense['months_paid'] = paidMonths
-                    expense['balance_before_snowball'] = expense.current_principle_balance
-                    let monthsPaid = (paidYears * 12) + paidMonths
-                    console.log("years paid: " + paidYears)
-                    expense['months_to_paid'] = expense.term - monthsPaid
-                    // console.log(monthsPaid)
-                    let paidValue = monthsPaid * expense.expenseValue
-                    expense['total_payments_made'] = paidValue
-                    expense['last_updated_date'] = today.toDateString()
-                    expense['new_payoff_date'] = "N/A"
-                    debtsCopy.push(expense)
-                }
+                payload.push(expense)
             })
-            let changesNeeded = true
-            while (changesNeeded){
-                changesNeeded = false
-                for (let i = 1; i < debtsCopy.length; i++){
-                    if (i === debtsCopy.length){
-                        i = 0
-                    }
-                    if (debtsCopy[i - 1].months_to_paid > debtsCopy[i].months_to_paid){
-                        let temp = debtsCopy[i]
-                        debtsCopy[i] = debtsCopy[i - 1]
-                        debtsCopy[i - 1] = temp
-                        changesNeeded = true
-                    }
-                }
-            }
         }
-        console.log(debtsCopy)
-        setUserDebts(debtsCopy)
-        setSnowballedUserDebts(debtsCopy)
+        let service = new DataService()
+        let data = await service.updateExpenseData(payload)
+       
+        console.log(data)
+        setUserDebts(data)
+        setSnowballedUserDebts(data)
 
     }
 
@@ -91,39 +56,9 @@ const DebtSnowball = () => {
 
         console.log(data)
 
-        data.forEach(debt => {
-
-            // let deductions = parseFloat(0)
-
-            // if (debt.is_mortgage === 'yes'){
-            //     deductions = (debt.insurance + debt.mortgage_insurance + debt.property_tax) * debt.term
-            // }
-
-            let totalPayments = debt.total_payments_made
-            let totalInterestPaidSnowball = totalPayments - debt.financed_amount
-            debt['total_interest_snowball'] = totalInterestPaidSnowball
-
-            let totalPaymentsOriginal = debt.pay_off_value
-            let totalInterestPaidOriginal = totalPaymentsOriginal - debt.financed_amount
-            debt['total_interest_original'] = totalInterestPaidOriginal
-        })
-
         setSnowballedUserDebts(data)
 
         updateProgressValue(data)
-
-        // monthly payment                                            Get monthly payment
-        // * interest rate as percent                                 * get interest rate
-        // = monthly interest                                         let monthlyInterest = result
-        // monthly payment - interest = principle                     principle = monthlyPayment - monthlyInterest
-        // newPrinciple = principle + extraPayment                    newPrinciple = principle + extraPayment
-        // new Total balance = total balance - newPrinciple           newTotatBalance = totalBalance - newPrinciple
-
-        // add key to debt object to store debtsnowball amount -- default to user input for first debt -- 0 if none provided
-        // add usestate boolean to track overpayment.  
-        // add usestate to hold overpayment value
-        // apply overpayment to next debt and switch overpayment back to false
-        // check if balance <= 0
     }
 
     const onChange = (e) => {
@@ -174,7 +109,7 @@ const DebtSnowball = () => {
                                 <label>Months To Paid</label>
                             </div>
                             <div className="debt-range">
-                                <label className="range-lable">{debt.balance_before_snowball.toFixed(2)}</label>
+                                <label className="range-lable">{debt.todays_principle}</label>
                                 <label className="range-lable">{debt.months_to_paid}</label>
                             </div>
                             <div className="debt-display-container">
@@ -186,7 +121,7 @@ const DebtSnowball = () => {
                             <div className="debt-info">
                                 New months to payoff: {debt.new_end_point}
                                     <div className="savings">
-                                        Total savings: ${(debt.total_interest_original - debt.total_interest_snowball).toFixed(2)}
+                                        Total savings: ${(debt.total_interest_at_min_payment - debt.total_interest_paid_snowball).toFixed(2)}
                                     </div>
                             </div>
                             }
