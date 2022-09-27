@@ -118,6 +118,17 @@ class DataService{
 
         return data
     }
+
+    async optimize(payload){
+        console.log("Attempting to optimize budget...")
+        let data
+        await axios.post("http://127.0.0.1:5000/api/optimize-budget", payload).then(res =>{
+            console.log(res.data)
+            data = res.data
+        })
+
+        return data
+    }
 }
 
 export default DataService

@@ -96,7 +96,7 @@ const FinancialGoals = () => {
 
     const updateProgressValue = () => {
         let element = document.querySelector('.progress-bar')
-        let newWidth = (((userDebts[inputData.debt_index].total_payments_made) / userDebts[inputData.debt_index].pay_off_value) * 100)
+        let newWidth = (((userDebts[inputData.debt_index].total_paid) / userDebts[inputData.debt_index].pay_off_value) * 100)
         console.log(newWidth)
         element.style.width =  newWidth + '%'
     }
@@ -163,12 +163,12 @@ const FinancialGoals = () => {
                             <label>Start</label><label>End</label>
                         </div>
                         <div className="range">
-                            <label>${userDebts[inputData.debt_index].current_principle_balance}</label>
+                            <label>${userDebts[inputData.debt_index].loan_amount}</label>
                             <label>0</label>
                         </div>
                         <div className="progress-bar-container">
                             <div className="progress-bar">
-                                ${userDebts[inputData.debt_index].total_payments_made}
+                                ${userDebts[inputData.debt_index].current_principle_balance}
                             </div>
                         </div>
                         <div className="time-to-goal">You will reach your goal in: {userDebts[inputData.debt_index].months_to_paid} months.</div>

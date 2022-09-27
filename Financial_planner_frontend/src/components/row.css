@@ -1,4 +1,4 @@
-.row{
+.row {
     display: grid;
     grid-template-columns: 40px calc(50% - 45px)  calc(50% - 45px) 40px;
     align-items: center;

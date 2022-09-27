@@ -1,4 +1,5 @@
 import json
+from urllib import response
 from flask import Flask, Response, abort, request
 # from mock_data import budgets
 from config import database
@@ -104,13 +105,17 @@ def save_budget():
         response = []
         old_budget = database.budgets.find_one({"title": budget['title']})
         
+        def get_priority(expense):
+            return int(expense['expensePriority'])
+        
         if not old_budget:
             
             if not budget['title']:
                 response.append(False)
                 response.append("ERROR! Budget must have a title")
                 return json.dumps(response)
-                
+            
+            budget['expenses'].sort(key=get_priority)
             database.budgets.insert_one(budget)
             response.append(True)
             response.append('New budget posted.')
@@ -426,14 +431,14 @@ def calculate_expense():
 @app.post('/api/update-expense')
 def update_expense():
     responseData = []
-    data = request.get_json()
+    debts = request.get_json()
     # data = request[1]
     index = 0
-    debts = []
+    # debts = []
     
     
-    for i, debt in enumerate(data):
-        debts.append(debt)
+    # for i, debt in enumerate(data):
+    #     debts.append(debt)
     
     for debt in debts:
         if debt['expensePriority'] == '5':
@@ -500,7 +505,11 @@ def update_expense():
                 debt['expenseValue'] = round(monthly_payment + debt['insurance'] + debt['mortgage_insurance'] + property_tax, 2)
             else:
                 debt['expenseValue'] = round(monthly_payment, 2)
+                
+    def get_months_paid(debt):
+        return debt['months_to_paid']
     
+    debts.sort(key=get_months_paid)
     for i in range(1, len(debts)):
         if debts[i - 1]['months_to_paid'] > debts[i]['months_to_paid']:
             temp = debts[i]
@@ -509,12 +518,177 @@ def update_expense():
     responseData = debts
     return json.dumps(responseData)
             
+@app.post('/api/optimize-budget')
+def optimize_budget():   
     
+    responseData = []
+    data = request.get_json()
+    option = data[0]
+    goal = data[1]
+    current_surplus = data[2]
+    expenses = data[3]
+    savings = current_surplus
+    total_value_of_all_expenses = 0
     
-    
+    if current_surplus >= goal:
+        responseData.append(False)
+        responseData.append('You already reached your goal. Great job!')
+        return json.dumps(responseData)
         
+    # stillSorting = True
+    # while stillSorting:
+    #     stillSorting = False
+    #     for i in range(len(expenses) - 1):
+    #         if int(data[i]['expensePriority']) < int(data[i + 1]['expensePriority']):
+    #             stillSorting = True
+    #             temp = data[i]
+    #             data[i] = data[i + 1]
+    #             data[i + 1] = temp
+
+
+    def get_value(something):
+        return int(something['expenseValue'])
+    
+    def get_priority(something):
+        return int(something['expensePriority'])
+    
+    for expense in expenses:
+        if expense['expensePriority'] != '5' or expense['expensePriority'] != '1':
+            total_value_of_all_expenses += expense['expenseValue']
+    
+    if option == 'surplus_priority':
+        expenses.sort(key=get_priority, reverse=True)
+        if total_value_of_all_expenses < (goal - current_surplus):
+            responseData.append(False)
+            responseData.append('Unable to optimize your budget. Goal is unobtainable.')
+            return json.dumps(responseData)
         
+        for expense in expenses:
+            if expense['expensePriority'] != '5':
+                print(expense['expenseName'])
+                savings += expense['expenseValue']
+                expense['new_value'] = 0
+                if savings >= goal:
+                    responseData.append(True)
+                    responseData.append(expenses)
+                    responseData.append(savings)
+                    responseData.append("Optimization finished!")
+                    return json.dumps(responseData)
+                if expense['expensePriority'] == '1':
+                    responseData.append(False)
+                    responseData.append('Goal unobtainable with current budget. Try setting a more realistic goal.')
+                    return json.dumps(responseData)
+        responseData.append(False)
+        responseData.append('You suck at programming')
+        return json.dumps(responseData)
     
-    
+    elif option == 'surplus_spread':
+        expenses.sort(key=get_value)
+        needed_savings = goal - current_surplus
+        luxury_value = 0
+        luxury_count = 0
+        low_value = 0
+        low_count = 0
+        medium_value = 0
+        medium_count = 0
+        reduction = 0
+        for expense in expenses:
+            if expense['expensePriority'] == '4':
+                luxury_value += expense['expenseValue']
+                luxury_count += 1
+            if expense['expensePriority'] == '3':
+                low_value += expense['expenseValue']
+                low_count += 1
+            if expense['expensePriority'] == '2':
+                medium_value += expense['expenseValue']
+                medium_count += 1
+        
+        if (luxury_value + low_value + medium_value) < needed_savings:
+            responseData.append(False)
+            responseData.append('Goal unobtainable with current budget. Try setting a more realistic goal.')
+            return json.dumps(responseData)
+        
+        elif luxury_value >= needed_savings:
+            for expense in expenses:
+                if expense['expensePriority'] == '4':
+                    reduction = needed_savings / luxury_count 
+                    if expense['expenseValue'] >= reduction:
+                        needed_savings -=  reduction
+                        expense['new_value'] -= reduction
+                        luxury_count -= 1
+                    else:
+                        luxury_count -= 1
+                        needed_savings -= expense['expenseValue']
+                        expense['new_value'] = 0
+                 
+            responseData.append(True)       
+            responseData.append(expenses)
+            responseData.append(goal)
+            responseData.append('Budget Optimization complete!')
+            return json.dumps(responseData)
+        
+        elif (low_value + luxury_value) >= needed_savings:
+            print(needed_savings)
+            print(luxury_value)
+            
+            needed_savings -= luxury_value
+            for expense in expenses:
+                if expense['expensePriority'] == '4':
+                    expense['new_value'] = 0
+
+                if expense['expensePriority'] == '3':
+                    reduction = needed_savings / low_count 
+                    if expense['expenseValue'] >= reduction:
+                        needed_savings -=  reduction
+                        expense['new_value'] -= reduction
+                        low_count -= 1
+                    else:
+                        low_count -= 1
+                        needed_savings -= expense['expenseValue']
+                        expense['new_value'] = 0
+                        
+            responseData.append(True)  
+            responseData.append(expenses)
+            responseData.append(goal)
+            responseData.append('Budget Optimization complete!')
+            return json.dumps(responseData)
+        
+        else:
+            needed_savings -= (luxury_value + low_value)
+            for expense in expenses:
+                if expense['expensePriority'] == '4' or expense['expensePriority'] == '3':
+                    expense['new_value'] = 0
+
+                if expense['expensePriority'] == '3':
+                    reduction = needed_savings / medium_count 
+                    if expense['expenseValue'] >= reduction:
+                        needed_savings -=  reduction
+                        expense['new_value'] -= reduction
+                        medium_count -= 1
+                    else:
+                        medium_count -= 1
+                        needed_savings -= expense['expenseValue']
+                        expense['new_value'] = 0
+            
+            responseData.append(True)
+            responseData.append(expenses)
+            responseData.append(goal)
+            responseData.append('Budget Optimization complete!')
+            return json.dumps(responseData)
+
+    elif option == 'luxuries':
+        reduction = 0
+        
+        for expense in expenses:
+            if expense['expensePriority'] == '4':
+                reduction += expense['expenseValue']
+                expense['new_value'] = 0
+                
+        new_surplus = reduction + current_surplus
+        responseData.append(True)
+        responseData.append(expenses)
+        responseData.append(new_surplus)
+        responseData.append('Budget optimization complete!')
+        return json.dumps(responseData)
 
 app.run(debug=True)

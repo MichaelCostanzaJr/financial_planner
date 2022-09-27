@@ -22,7 +22,9 @@ const DebtSnowball = () => {
         console.log(activeBudget)
         if (activeBudget.expenses){
             activeBudget.expenses.forEach(expense => {
-                payload.push(expense)
+                if (expense.expensePriority === '5'){
+                    payload.push(expense)
+                }
             })
         }
         let service = new DataService()
