@@ -3,7 +3,6 @@
 }
 
 @media only screen and (min-width: 768px) {
-    
     .btn {
         transition: all .5s ease;
         color: var(--primary-color);
@@ -19,8 +18,7 @@
         outline: none;
         border-radius: 10px;
     }
-    .btn:hover,
-    .btn:focus {
+    .btn:hover {
         color: #001F3F;
         background-color: var(--primary-color);
     }
@@ -31,15 +29,14 @@
         text-transform: uppercase;
         text-align: center;
         line-height: 1;
-        font-size: 1rem;
+        font-size: 17px;
         background-color : transparent;
         padding: 10px;
         margin-bottom: 10px;
         outline: none;
         border-radius: 10px;
     }
-    .btn-recovery:hover,
-    .btn-recovery:focus{
+    .btn-recovery:hover{
         color: var(--primary-color);
         background-color: transparent;
     }

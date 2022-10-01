@@ -75,8 +75,8 @@ const Login = () => {
             <img src={logo} alt="" className="logo" />
             <form className="container">
                 <div className="form">
-                    <input type="text" className="user-name input" name="user_name" autoComplete="username" onChange={onChange} placeholder="Username" />
-                    <input type="password" className="user-password input" name="user_password" autoComplete="current-password" onChange={onChange} placeholder="Password" />
+                    <input type="text" className="user-name" name="user_name" autoComplete="username" onChange={onChange} placeholder="Username" />
+                    <input type="password" className="user-password" name="user_password" autoComplete="current-password" onChange={onChange} placeholder="Password" />
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={login}>Login</button>

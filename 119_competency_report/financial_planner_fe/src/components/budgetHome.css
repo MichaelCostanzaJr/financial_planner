@@ -1,0 +1,30 @@
+.budget-home .budget-tiles{
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - 10px));
+    gap: 20px;
+}
+
+.budget-home .budget-tiles :only-child{
+    grid-column: 1 / 3;
+}
+
+.budget-home .budget-tiles .sub-tile{
+    background-color: var(--nav-light);
+    border-radius: 20px;
+    border: 1px solid var(--nav-);
+    color: var(--primary-color);
+    padding-block: 20%;
+}
+
+.new-tile{
+    grid-column: 1 / 3;
+    padding-block: 10%;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.view-span{
+    position: relative;
+    top: calc(50% - 8px);
+    transform: translate(-50%, -50%);
+}

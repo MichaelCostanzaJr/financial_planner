@@ -23,17 +23,13 @@ const FinancialGoals = () => {
                     expense['debt_index'] = debtIndex
                     debtIndex += 1
                     let today = new Date()
-                    console.log(today)
                     let start = new Date(expense.loan_start_date)
-                    console.log(start)
                     let paidYears = today.getFullYear() - start.getFullYear()
-                    console.log("Paid years: " + paidYears)
                     let paidMonths = today.getMonth() - start.getMonth()
-                    console.log("Paid months: " + paidMonths)
-                    // if (today.getMonth() < start.getMonth()){
-                    //     paidMonths = paidMonths + 12
-                    //     paidYears = paidYears - 1
-                    // }
+                    if (today.getMonth() < start.getMonth()){
+                        paidMonths = paidMonths + 12
+                        paidYears = paidYears - 1
+                    }
                     expense['months_paid'] = paidMonths
                     expense['balance_before_snowball'] = expense.current_principle_balance
                     let monthsPaid = (paidYears * 12) + paidMonths

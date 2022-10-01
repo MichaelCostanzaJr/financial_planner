@@ -1,0 +1,84 @@
+.budget-title{
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.edit-background{
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    height: 200%;
+    width: 100%;
+    backdrop-filter: blur(5px);
+}
+
+.edit-container{
+    position: sticky;
+    background-color: var(--background-color);
+    border: 3px solid var(--primary-color);
+    padding: 30px;
+    border-radius: 20px;
+    top: 25%;
+    height: 400px;
+    /* transform: translate(-50%, -50%); */
+}
+
+.table-title{
+    margin: 0;
+    padding-block: 5px;
+    border: 1px solid var(--primary-color);
+    border-bottom: 5px solid var(--background-color);
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.income-table :nth-child(even) .income{
+    background-color: var(--income-secondary-color);
+}
+
+.expense-table :nth-child(odd) .expense{
+    background-color: var(--expense-secondary-color);
+}
+
+.divider{
+    margin-block: 40px;
+    border: none;
+    border-top: 3px solid var(--nav-light);
+    height: 3px;
+}
+
+.income-total,
+.expense-total{
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.income-total-label,
+.expense-total-label{
+    background-color: var(--primary-color);
+    padding-block: 5px;
+}
+
+.income-total-value,
+.expense-total-value{
+    padding-block: 5px;
+}
+
+.surplus-table{
+    border-radius: 10px;
+    overflow: hidden;
+}
+.surplus-table > * {
+    padding-block: 5px;
+}
+
+.surplus-title{
+    background-color: var(--primary-color);
+    padding-block: 5px;
+}
+
+.budget .btn-container{
+    margin-top: 40px;
+}

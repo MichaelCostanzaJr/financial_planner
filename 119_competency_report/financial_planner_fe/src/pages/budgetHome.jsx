@@ -43,20 +43,19 @@ const BudgetHome = () => {
     return (
         <div className="budget-home container">
             <div className="budget-tiles">
-                <div className="new-tile" onClick={newBudget}>New Budget</div>
-                <div className="my-budgets-container">
-                    {
-                        userBudgets.map(budget => (
-                            <div className="tile my-budget-tile" key={budget._id} value={budget._id} onClick={() => {
-                                setActiveBudget(budget)
-                                let path = "/view-budget"
-                                navigate(path)
-                            }}>
-                                <span className="view-span">View {budget.title}</span>
-                            </div>
-                        ))
-                    }
-                </div>
+                <div className="tile new-tile" onClick={newBudget}>New Budget</div>
+                
+                {
+                    userBudgets.map(budget => (
+                        <div className="sub-tile" key={budget._id} value={budget._id} onClick={() => {
+                            setActiveBudget(budget)
+                            let path = "/view-budget"
+                            navigate(path)
+                        }}>
+                            <span className="view-span">View {budget.title}</span>
+                        </div>
+                    ))
+                }
                 
             </div>
         </div>

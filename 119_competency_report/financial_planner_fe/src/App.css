@@ -41,16 +41,16 @@
   /* margin-bottom: 20px; */
 }
 
-.input {
+.form > * {
   text-align: center;
   margin-bottom: 20px;
   height: 40px;
   border-radius: 10px;
   border: none;
-  background-color: var(--nav-light);
+  background-color: var(--secondary-color);
 }
 
-.input::placeholder {
+.form > *::placeholder {
   color: var(--text-dark);
 }
 
@@ -85,11 +85,5 @@
   justify-content: space-between;
   border: none;
   background-color: var(--background-color);
+
 }
-
-
-.input:active,
-    .input:focus{
-        outline: none;
-        border: 2px solid var(--income-primary-color);
-    }

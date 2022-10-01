@@ -36,7 +36,7 @@ const NewBudget = () => {
             {!activeBudget.title &&
             <>
                 <div className="container form">
-                    <input type="text" className="input" onChange={onChange} placeholder="Enter Budget Name"/>
+                    <input type="text" onChange={onChange} placeholder="Enter Budget Name"/>
                 </div>
                 <div className="container btn-container">
                     <button className="btn" onClick={updateTitle}>Apply Budget Name</button>

@@ -64,8 +64,8 @@ const Register = () => {
             <h1 className="header">Register</h1>
             <div className="container">
                 <div className="form">
-                    <input type="text" name="user_email" className="error-field input email-field" onChange={onChange} placeholder='Enter Your Email' />
-                    <select name="email_provider" className="input email-domain" onChange={onChange}>
+                    <input type="text" name="user_email" className="error-field" onChange={onChange} placeholder='Enter Your Email' />
+                    <select name="email_provider" onChange={onChange}>
                         <option value="@gmail.com">@gmail.com</option>
                         <option value="@outlook.com">@outlook.com</option>
                         <option value="@aol.com">@aol.com</option>
@@ -74,9 +74,9 @@ const Register = () => {
                         <option value="@hotmail.com">@hotmail.com</option>
                         <option value="@protonmail.com">@protonmail.com</option>
                     </select>
-                    <input type="text" name="user_name" className="error-field input" onChange={onChange} placeholder='Create a User Name' />
-                    <input type="password" name="user_password" className="error-field input" onChange={onChange} placeholder='Enter a Password' />
-                    <input type="password" name="user_re_password" className="error-field input" onChange={onChange} placeholder='Re Enter Password' />
+                    <input type="text" name="user_name" className="error-field" onChange={onChange} placeholder='Create a User Name' />
+                    <input type="password" name="user_password" className="error-field" onChange={onChange} placeholder='Enter a Password' />
+                    <input type="password" name="user_re_password" className="error-field" onChange={onChange} placeholder='Re Enter Password' />
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={saveUser}>Register</button>

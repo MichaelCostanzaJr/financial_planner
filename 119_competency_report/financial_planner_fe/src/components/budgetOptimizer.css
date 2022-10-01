@@ -1,0 +1,125 @@
+.headers{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.headers > *{
+    flex: 1;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    height: 40px;
+    padding-top: 8px;
+}
+
+.title {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.current-surplus{
+    color: var(--primary-color);
+}
+
+.surplus-span{
+    color: var(--income-primary-color);
+}
+
+.headers > .header{
+    margin: 0;
+}
+
+.header-1{
+    border-radius: 20px 0 0 0;
+}
+
+.header-3{
+    border-radius: 0 20px 0 0;
+}
+
+.expense-header{
+    margin-block: 10px;
+    color: var(--primary-color);
+}
+
+.budgets{
+    display: flex;
+    flex-direction: column;
+}
+
+.budget > * {
+    flex: 1;
+}
+
+.budget-select{
+    background-color: var(--background-color);
+    color: var(--expense-secondary-color);
+    text-align: center;
+    border: 1px solid var(--expense-secondary-color);
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.optimization-option{
+    background-color: var(--background-color);
+    color: var(--income-primary-color);
+    text-align: center;
+    border: 1px solid var(--income-primary-color);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.expense-optimizer-table > :nth-last-child(1) :nth-child(1){
+    border-radius: 0 0 0 20px;
+}
+
+.expense-optimizer-table > :nth-last-child(1) :nth-last-child(1){
+    border-radius: 0 0 20px 0;
+}
+
+.expense-container{
+    display: flex;
+    flex-direction: row;
+    margin-top: 3px;
+    gap: 5px;
+}
+
+.expense-container > * {
+    flex: 1;
+    height: 40px;
+    padding-top: 9px;
+}
+
+.budget-optimizer .budget-data{
+    background-color: var(--secondary-color);
+}
+
+.new-value{
+    background-color: var(--secondary-color);
+}
+
+.adjusted {
+    background-color: var(--income-primary-color);
+}
+
+.new-surplus-container{
+    margin-top: 30px;
+    border-radius: 20px;
+    border: 1px solid var(--primary-color);
+    overflow: hidden;
+    margin-bottom: 50px;
+}
+
+.new-surplus-container > * {
+    height: 40px;
+    padding-top: 7px;
+}
+
+.new-surplus-label{
+    background-color: var(--primary-color);
+}
+
+.new-surplus{
+    background-color: var(--income-primary-color);
+}

@@ -1,25 +1,24 @@
 .home .container{
     display: grid;
-    grid-template-columns: repeat(2, calc(50% - 5px));
-    gap: 10px;
-    align-content: center;
+    grid-template-columns: repeat(2, calc(50% - 10px));
+    gap: 20px;
+    align-content: center center;
     margin-top: 50px;
+    max-height: 100vh;
 }
 
 .tile{
     position: relative;
-    font-size: 3cqw;
+    font-size: 1em;
     padding-block: calc(50% - 30px);
     padding-inline: 20px;
     background-color: var(--background-color);
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    /* border-radius: 20px; */
+    border: 1px solid var(--secondary-color);
+    border-radius: 20px;
     font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
-    /* force single word lines to avoid shifting behavior on hover */
-    word-spacing: 50000px;
 }
 
 .home .container .budget-btn{
@@ -34,30 +33,20 @@
 
 .home .container .goals-btn{
     grid-column: 1 / 3;
-    grid-row: 4 / 5;
     padding-block: 10%;
     /* background-color: var(--income-secondary-color); */
-    color: var(--background-color);
-    background-color: var(--income-secondary-color);
+    color: var(--income-secondary-color);
     border-color: var(--income-secondary-color);
     font-weight: 700;
     font-size: 1.25em;
-    transition: grid-column 1s ease;
 }
 
 .home .container .alt-tile{
-    color: var(--income-secondary-color);
-    background-color: var(--background-color);
-    border: 1px solid var(--income-secondary-color);
+    background-color: var(--nav-light);
 }
 
 
 @media only screen and (min-width: 768px){
-
-    .tile{
-        font-size: 1rem;
-    }
-
     .home .container .budget-btn {
         /* box-shadow: 0 0 5px 0px var(--background-color) inset, 0 0 5px 0px var(--background-color); */
         -webkit-transition: all 150ms ease-in-out;

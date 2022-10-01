@@ -1,0 +1,69 @@
+.monthly-payment {
+    margin-top: 20px;
+    color: var(--primary-color);
+    font-size: 1.4rem;
+}
+.container .note {
+    color: var(--secondary-color);
+    background-color: var(--background-color)!important;
+    margin-bottom: 20px;
+    width: 80%;
+    align-self: center;
+}
+
+.amount-color{
+    color: var(--expense-primary-color);
+}
+
+.loan-overview .breakdown-header{
+    color: var(--primary-color);
+    margin-top: 20px;
+}
+
+.receipt{
+    display: grid;
+    grid-template-columns:repeat(2, 50%);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.receipt > * {
+    padding: 10px;
+    border: 1px solid var(--background-color);
+}
+
+.breakdown-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.breakdown-container > * {
+    display: flex;
+    width: 100%;
+    
+}
+.breakdown-container > * > * {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--background-color);
+}
+
+.breakdown-label{
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.breakdown-value{
+    background-color: var(--secondary-color);
+
+}
+
+.bottom{
+    margin-bottom: 50px;
+}

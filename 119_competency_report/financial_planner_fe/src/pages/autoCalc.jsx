@@ -143,8 +143,8 @@ const AutoCalculator = () => {
             <h1 className="header">Auto Calculator</h1>
             <h3 className="note">Optional fields use national average if no value is provided.</h3>
                 <div className="form">
-                    <input name="principle" type="number" placeholder="Enter Car Price" className="price required input" onChange={onChangeAuto}/>
-                    <select className="dropdown required input" name="term" id="term" onChange={onChangeAuto}>
+                    <input name="principle" type="number" placeholder="Enter Car Price" className="price required" onChange={onChangeAuto}/>
+                    <select className="dropdown required" name="term" id="term" onChange={onChangeAuto}>
                         <option value="" >Term</option>
                         <option value="12">12 Months</option>
                         <option value="24">24 Months</option>
@@ -153,10 +153,10 @@ const AutoCalculator = () => {
                         <option value="60">60 Months</option>
                         <option value="72">72 Months</option>
                     </select>
-                    <input name="interest_rate" type="number" step={'0.01'} placeholder="APR %" className="required input" onChange={onChangeAuto}/>
-                    <input name="insurance" className="input" type="number" step={'0.01'} placeholder="Insurance Cost (Optional)" onChange={onChangeAuto}/>
-                    <input name="trade_in" className="input" type="number" step={'0.01'} placeholder="Trade In Value" onChange={onChangeAuto}/>
-                    <input name="down_payment" className="input" type="number" step={'0.01'} placeholder="Down Payment" onChange={onChangeAuto}/>
+                    <input name="interest_rate" type="number" step={'0.01'} placeholder="APR %" className="required" onChange={onChangeAuto}/>
+                    <input name="insurance" type="number" step={'0.01'} placeholder="Insurance Cost (Optional)" onChange={onChangeAuto}/>
+                    <input name="trade_in" type="number" step={'0.01'} placeholder="Trade In Value" onChange={onChangeAuto}/>
+                    <input name="down_payment" type="number" step={'0.01'} placeholder="Down Payment" onChange={onChangeAuto}/>
                 </div>
                 <div className="btn-container">
                     <button className="btn" type="submit" onClick={monthPaymentCalc}>Calculate</button>

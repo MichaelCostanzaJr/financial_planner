@@ -1,15 +1,28 @@
 .register .form{
     display: grid;
-    grid-template-columns: calc(66% - 5px) calc(33% - 3px);
-    gap: 10px;
+    grid-template-columns: repeat(2, calc(50% - 5px));
+    column-gap: 5px;
+    /* gap: 10px; */
 }
 
-.register .form :nth-child(3),
-.register .form :nth-child(4),
-.register .form :nth-child(5){
+.register .form .input{
     grid-column: 1 / 3;
 }
 
 .error{
     background-color: var(--expense-primary-color);
+}
+
+.email-field{
+    text-align: right!important;
+    grid-column: 1/2!important;
+    padding-inline: 5px;
+    border-radius: 10px 0 0 10px;
+}
+
+.email-domain{
+    text-align: left!important;
+    grid-column: 2 / 3!important;
+    background-color: var(--primary-color)!important;
+    border-radius: 0 10px 10px 0;
 }

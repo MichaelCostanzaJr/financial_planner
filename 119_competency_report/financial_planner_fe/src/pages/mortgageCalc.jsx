@@ -151,22 +151,22 @@ const MortgageCalculator = () => {
             <h3 className="note">Optional fields use national average if no value is provided Required fields are outlined in red.</h3>
             <div className="">
                 <div className="form">
-                    <input name="principle" type="number" placeholder="Enter Home Price" className="price required input" onChange={onChangeMortgage} />
-                <select className="dropdown required input" name="term" id="term" onChange={onChangeMortgage}>
+                    <input name="principle" type="number" placeholder="Enter Home Price" className="price required" onChange={onChangeMortgage} />
+                <select className="dropdown required" name="term" id="term" onChange={onChangeMortgage}>
                     <option value="" >Term</option>
                     <option value={30}>30 Year</option>
                     <option value={15}>15 Year</option>
                 </select>
-                <input name="interest_rate" type="number" step={'0.01'} placeholder="APR %" className="required input" onChange={onChangeMortgage}/>
-                <select name="va_loan" className="dropdown required input" onChange={onChangeMortgage}>
+                <input name="interest_rate" type="number" step={'0.01'} placeholder="APR %" className="required" onChange={onChangeMortgage}/>
+                <select name="va_loan" className="dropdown required" onChange={onChangeMortgage}>
                     <option value="">VA Loan?</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                 </select>
-                <input name="property_tax" className="input" type="number" step={'0.01'} placeholder="Annual Property Tax (Optional)" onChange={onChangeMortgage}/>
-                <input name="insurance" className="input" type="number" step={'0.01'} placeholder="Monthly Insurance (Optional)" onChange={onChangeMortgage}/>
-                <input name="down_payment" className="input" type="number" step={'0.01'} placeholder="Down Payment" onChange={onChangeMortgage}/>
-                <input name="mortgage_insurance" className="input" type="number" step={'0.01'} placeholder="Mortgage Insurance (Optional)" onChange={onChangeMortgage}/>
+                <input name="property_tax" type="number" step={'0.01'} placeholder="Annual Property Tax (Optional)" onChange={onChangeMortgage}/>
+                <input name="insurance" type="number" step={'0.01'} placeholder="Monthly Insurance (Optional)" onChange={onChangeMortgage}/>
+                <input name="down_payment" type="number" step={'0.01'} placeholder="Down Payment" onChange={onChangeMortgage}/>
+                <input name="mortgage_insurance" type="number" step={'0.01'} placeholder="Mortgage Insurance (Optional)" onChange={onChangeMortgage}/>
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={mortgagePaymentCalc}>Calculate</button>

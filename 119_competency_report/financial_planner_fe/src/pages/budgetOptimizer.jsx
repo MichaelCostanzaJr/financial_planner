@@ -157,7 +157,7 @@ const BudgetOptimizer = () => {
                 </select>
                 {optimizationMethod !== 'luxuries' &&
                     <div className="form">
-                        <input type="number" className="input" placeholder="Enter Your Surplus Goal" step={'0.01'} onChange={onGoalChange}/>
+                        <input type="number" placeholder="Enter Your Surplus Goal" step={'0.01'} onChange={onGoalChange}/>
                     </div>
                 }
                 <div className="btn-container">
