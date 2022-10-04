@@ -102,7 +102,7 @@
     }
     .home .container{
         display: grid;
-        grid-template-columns: calc(33% - 10px) calc(33% - 10px) calc(33% - 10px);
+        grid-template-columns: calc(33% - 13px) calc(34% - 14px) calc(33% - 13px);
         grid-template-rows: repeat(4, calc(150px - 10px));
         gap: 20px;
         align-content: center center;

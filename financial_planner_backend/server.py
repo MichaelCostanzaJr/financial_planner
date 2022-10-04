@@ -534,17 +534,7 @@ def optimize_budget():
         responseData.append(False)
         responseData.append('You already reached your goal. Great job!')
         return json.dumps(responseData)
-        
-    # stillSorting = True
-    # while stillSorting:
-    #     stillSorting = False
-    #     for i in range(len(expenses) - 1):
-    #         if int(data[i]['expensePriority']) < int(data[i + 1]['expensePriority']):
-    #             stillSorting = True
-    #             temp = data[i]
-    #             data[i] = data[i + 1]
-    #             data[i + 1] = temp
-
+    
 
     def get_value(something):
         return int(something['expenseValue'])

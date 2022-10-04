@@ -64,32 +64,8 @@ const FinancialGoals = () => {
         let copy = {...inputData}
         copy[name] = val
         setInputData(copy)
-
-        // if (inputData.debt_index){
-        //     preFillGoalFields(val)
-        // }
         console.log(copy)
     }
-
-    // const onDebtSelect = (e) => {
-    //     let name = e.target.name
-    //     let index = e.target.value
-
-    //     let copy = {...inputData}
-    //     copy[name] = index
-    //     setInputData(copy)
-    //     preFillGoalFields(index)
-    // }
-
-    // const preFillGoalFields = (index) => {
-    //     let debt = userDebts[index]
-
-    //     console.log(index)
-    //     console.log(debt)
-    //     let startingValue = document.querySelector('.starting-value')
-    //     let totalDebt = debt.expenseValue * debt.term
-    //     startingValue.value = totalDebt
-    // }
 
     const toggle = () => {
         let element = document.querySelector('.add-goal-tool')
@@ -117,7 +93,7 @@ const FinancialGoals = () => {
             <div className="add-goal-tool">
                 <div className="input-container">
                     <input name="title" type="text" className="goal-title input" onChange={onChange} placeholder="Goal Title"/>
-                    <select name="goal_type" onChange={onChange}>
+                    <select name="goal_type" className="input" onChange={onChange}>
                         <option value="">Goal Type</option>
                         <option value="debt">Debt Goal</option>
                         <option value="savings">Savings Goal</option>
@@ -129,7 +105,7 @@ const FinancialGoals = () => {
 
                     {inputData.goal_type === 'debt' &&
                     <>
-                        <select name="debt_type"  onChange={onChange}>
+                        <select name="debt_type" className="input"  onChange={onChange}>
                             <option value="">Specific Debt or Total Debt Goal?</option>
                             <option value='specific'>Specific</option>
                             <option value='total'>Total</option>
@@ -137,7 +113,7 @@ const FinancialGoals = () => {
                         {inputData.debt_type === 'specific' &&
                         <>
                             {/* map through existing debts in users budget */}
-                            <select name="debt_index" onChange={onChange}>
+                            <select name="debt_index" className="input" onChange={onChange}>
                                 <option value="">Select the debt you wish to set a goal for</option>
                                 {
                                     userDebts.map(debt => (

@@ -2,7 +2,10 @@
     border-bottom: 1px solid var(--nav-light);
     padding-block: 10px;
 }
-
+.financial-goals .input{
+    border-radius: 0;
+    margin-bottom: 0;
+}
 .open-add-goal-tool-btn{
     width: 100%;
     height: 40px;
