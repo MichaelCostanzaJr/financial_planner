@@ -1,8 +1,9 @@
 import pymongo
 import certifi
+import os
 
 # the string will be the link for the mongodb
-connection_string = "mongodb+srv://costanza:OUgzQ1c7RkqcNEpG@financialplannerdb.azlh9n9.mongodb.net/?retryWrites=true&w=majority"
+connection_string = os.environ.get('SERVER_CONNECTION_STRING')
 
 client = pymongo.MongoClient(connection_string, tlsCAFile=certifi.where())
 
