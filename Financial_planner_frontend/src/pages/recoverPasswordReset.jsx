@@ -64,9 +64,9 @@ const RecoverPasswordReset = () => {
                 <h1 className="header">Reset Password</h1>
                 <h3 className="text">Check your email for your temporary password</h3>
                 <div className="form">
-                    <input name="temp_password" className="temp-password error-field" onChange={onChange} type="text" placeholder="Enter temporary/current password"/>
-                    <input name="new_password" className="new-password error-field" onChange={onChange} type="password" placeholder="Enter a new password"/>
-                    <input className="confirm-password error-field" type="password" placeholder="Enter new password again"/>
+                    <input name="temp_password" className="temp-password error-field input" onChange={onChange} type="text" placeholder="Enter temporary/current password"/>
+                    <input name="new_password" className="new-password error-field input" onChange={onChange} type="password" placeholder="Enter a new password"/>
+                    <input className="confirm-password error-field input" type="password" placeholder="Enter new password again"/>
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={reset}>Reset</button>

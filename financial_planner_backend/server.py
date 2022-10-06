@@ -1,10 +1,10 @@
 import json
 from urllib import response
-from flask import Flask, Response, abort, request
+from flask import Flask, Response, abort, request, send_from_directory
 # from mock_data import budgets
 from config import database
 from bson import ObjectId
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import hashlib
 import os
 import math
@@ -12,12 +12,13 @@ import datetime
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-app = Flask("Financial_Planner_React")
+app = Flask("Financial_Planner_React", static_folder='Financial_planner_frontend/build', static_url_path='')
 CORS(app)
 
 @app.route("/")
-def home():
-    return "This is the home"
+@cross_origin()
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.post("/register")
 

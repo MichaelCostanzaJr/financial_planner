@@ -49,7 +49,7 @@ function RecoverUsername () {
             <div className="container">
                 <h1 className="header">Recover Username</h1>
                 <div className="form">
-                    <input className="user-email" name="user_email" onChange={onChange} type="text" placeholder="Enter Your Email"/>
+                    <input className="user-email input" name="user_email" onChange={onChange} type="text" placeholder="Enter Your Email"/>
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={send}>Send</button>

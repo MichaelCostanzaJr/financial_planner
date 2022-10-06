@@ -147,7 +147,7 @@ const BudgetOptimizer = () => {
                 </select>
             </div>
             <div className="optimizer-options ">
-                <h3 className="current-surplus">Current Surplus: <span className="surplus-span">{budget['surplus'].toFixed(2)}</span></h3>
+                <h3 className="current-surplus">Current Surplus: <span className="surplus-span">{budget['surplus']}</span></h3>
                 <h3 className="title">Select an Optimization Method</h3>
                 <select name="optimization-option" className="optimization-option" onChange={onOptimizeSelect}>
                     <option value=""></option>

@@ -51,8 +51,8 @@ function RecoverPassword() {
             <div className="container">
                 <h1 className="header">Recover Password</h1>
                 <div className="form">
-                    <input className="user-name" name="user_name" type="text" onChange={onChange} placeholder="Enter Your Username"/>
-                    <input className="user-email" name="user_email" type="text" onChange={onChange} placeholder="Enter Your Email"/>
+                    <input className="user-name input" name="user_name" type="text" onChange={onChange} placeholder="Enter Your Username"/>
+                    <input className="user-email input" name="user_email" type="text" onChange={onChange} placeholder="Enter Your Email"/>
                 </div>
                 <div className="btn-container">
                     <button className="btn" onClick={send}>Send</button>
